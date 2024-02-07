@@ -29,14 +29,8 @@ urlpatterns = [
     path("", include("atc_site.backend.atc.urls"), name="atc_site"),
 
     path("", include("atc_site.backend.chatbot.urls"), name="chatbot"),
-
-    # path("", main.index, name="index"),
-    # path("radar", main.radar, name="radar"),
-    # path("routes", main.routes, name="routes"),
-    # path("search", main.search, name="search"),
-    # path("search/<str:location>", views.search_location, name="search_location"),
-    # path("saved", main.saved, name="saved"),
-    # path("search/", main.search, name="search"),
+    
+    path("", include("atc_site.backend.weather_app.urls"), name="chatbot"),
     
     path('login', views.loginView, name='login'),
     
