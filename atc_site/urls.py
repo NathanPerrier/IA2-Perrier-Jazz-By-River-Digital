@@ -26,7 +26,7 @@ from .backend.views import stream_video, get_user_location
 from .backend.chatbot.views import chat
 
 urlpatterns = [
-    path("", include("atc_site.backend.atc_site.urls"), name="atc_site"),
+    path("", include("atc_site.backend.atc.urls"), name="atc_site"),
 
     path("", include("atc_site.backend.chatbot.urls"), name="chatbot"),
 

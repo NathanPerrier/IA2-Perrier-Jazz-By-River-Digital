@@ -1,7 +1,8 @@
 from django.contrib.auth import login as loginRequest
 from django.contrib.auth import authenticate
 from ....models import CustomUserManager
-from ...main import login_page, index
+from ...main import login_page
+from ...atc.main import index
 
 def loginView(request, error=None):
     if request.method == 'POST':

@@ -1,0 +1,54 @@
+:root {
+    --primary: #144283;
+    --secondary: #37883e;
+    --light: #f4f7fe;
+    --dark: #000000;
+  }
+  
+  .tab {
+    display: none;
+  }
+  
+  .step {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;  
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.5;
+  }
+  
+  .step.active {
+    opacity: 1;
+  }
+  
+  .step.finish {
+    background-color: var(--secondary);
+  }
+  .text {
+    text-align: center;
+  }
+  
+  
+  
+  .button__text  {
+    transition: all 0.2s;
+  }
+  
+
+
+  .tab {
+    background-color: var(--dark);
+  }
+
+  
+form, .tab {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+}
+
+.hide {
+  display: none !important;
+}

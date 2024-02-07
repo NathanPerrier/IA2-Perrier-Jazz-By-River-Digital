@@ -1,0 +1,123 @@
+
+p, h1, h2, h3, h4, h5 {
+    font-family: url(../../fonts/Tungsten-Bold.ttf);
+    color: var(--light);
+}
+
+
+
+.submit, #nextBtn {
+  text-transform: uppercase;
+  outline: 0;
+  background: var(--primary); 
+  width: 300px;
+  border: 0;
+  padding: 15px;
+  font-weight: 500;
+  color: var(--light);
+  font-size: 1rem;
+  -webkit-transition: all 0.2 ease;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.submit:hover,.submit:active,.submit:focus, 
+#nextBtn:hover, #nextBtn:active, #nextBtn:focus {
+  background: var(--secondary); 
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-a {
+  text-decoration: none;
+  border: 0;
+  padding: 15px 0px;
+  cursor: pointer;
+  display: block;
+}
+
+.button_text {
+    font-size: 1.2em;
+}
+
+.go_back {
+  background-color: #292929;
+  text-transform: uppercase;
+  text-decoration: none;
+  outline: 0;
+  text-align: center;
+  width: 300px;
+  border: 0;
+  padding: 15px 0px;
+  font-weight: 500;
+  color: var(--light);
+  font-size: 1rem;
+  -webkit-transition: all 0.5 ease;
+  transition: all ease-in-out 0.2s;
+  cursor: pointer;
+  display: block;
+}
+.go_back:hover, .go_back:active, .go_back:focus {
+  background-color: #3c3c3c;
+  color: var(--light);
+  transition: all ease-in-out 0.2s;
+}
+
+.form .message {
+  margin: 15px 0 0;
+  color: #6e6e6e;
+  font-size: 12px;
+}
+
+
+.form .message a {
+  color: var(--secondary);
+  font-weight: 400;
+  text-decoration: none;
+}
+.form .register-form {
+  display: none;
+}
+
+
+
+
+.container .info {
+  margin: 50px auto;
+  text-align: center;
+}
+
+.container .info h1 {
+  margin: 0 0 15px;
+  padding: 0;
+  font-size: 36px;
+  font-weight: 500; 
+  color: var(--dark);
+}
+
+.container .info span {
+  color: #4d4d4d;
+  font-size: 12px;
+}
+
+.container .info span a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.container .info span .fa {
+  color: #EF3B3A;
+}
+
+
+.hyperlink {
+  margin-left: 71.5%;
+  padding-bottom: 5%; 
+  padding-top: .1%;
+
+}
+
+.hyperlink a {
+  font-size: 11px;
+  text-decoration: none;
+  color: var(--primary);
+  background: #ffffff;
+}

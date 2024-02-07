@@ -1,0 +1,43 @@
+:root {
+    --primary: #144283; /* #a60301 */
+    --secondary: #37883e;
+    --light: #fff;
+    --dark: #000;
+}
+
+.font-netflix-bold {
+    font-family: url(../fonts/NetflixSans-Bold.ttf);
+}
+
+.font-netflix-light {
+    font-family: url(../fonts/NetflixSans-Light.ttf);
+}
+
+.font-netflix-medium {
+    font-family: url(../fonts/NetflixSans-Medium.ttf);
+}
+
+.font-netflix-regular {
+    font-family: url(../fonts/NetflixSans-Regular.ttf);
+}
+
+.font-tungston-bold {
+    font-family: url(../fonts/Tungsten-Bold.ttf);
+}
+
+p {
+    color: var(--light);
+}
+
+
+.form-control{
+    box-shadow: none !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+#welcome-screen {
+    display: none !important;
+}

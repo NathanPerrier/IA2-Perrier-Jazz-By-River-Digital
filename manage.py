@@ -7,7 +7,7 @@ from django.core.management import call_command
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "weather_app.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "atc_site.settings")
     try:
         from django.core.management import execute_from_command_line
 

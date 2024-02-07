@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import logout
 
 from ...main import *
+from ...atc.main import *
 from ....models import CustomUser, CustomUserManager
 from ...auth.forgot_password.models import ForgotPasswordAuth
 

@@ -1,0 +1,346 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+
+p {
+	color: grey;
+}
+
+#heading {
+	text-transform: uppercase;
+}
+
+#msform {
+    text-align: center;
+    position: relative;
+    margin-top: 20px;
+}
+
+#msform fieldset {
+
+    border: 0 none;
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 20px;
+
+    /*stacking fieldsets above each other*/
+    position: relative;
+}
+
+.form-card {
+	text-align: left;
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+    display: none;
+}
+
+#msform input, #msform textarea {
+    padding: 8px 15px 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    margin-bottom: 25px;
+    margin-top: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #2C3E50;
+    background-color: #ECEFF1;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+#msform input:focus, #msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid var(--primary);
+    outline-width: 0;
+}
+
+/*Next Buttons*/
+#msform .action-button {
+    width: 100px;
+    background: var(--primary);
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 0px 10px 5px;
+    float: right;
+}
+
+#msform .action-button:hover, #msform .action-button:focus {
+    background-color: #311B92;
+}
+
+/*Previous Buttons*/
+#msform .action-button-previous {
+    width: 100px;
+    background: #616161;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 0px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px 10px 0px;
+    float: right;
+}
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    background-color: #000000;
+}
+
+/*The background card*/
+.card {
+    z-index: 0;
+    border: none;
+    position: relative;
+}
+
+/*FieldSet headings*/
+.fs-title {
+    font-size: 25px;
+    color: var(--primary);
+    margin-bottom: 15px;
+    font-weight: normal;
+    text-align: left;
+}
+
+.purple-text {
+	color: var(--primary);
+    font-weight: normal;
+}
+
+/*Step Count*/
+.steps {
+	font-size: 25px;
+    color: gray;
+    margin-bottom: 10px;
+    font-weight: normal;
+    text-align: right;
+}
+
+/*Field names*/
+.fieldlabels {
+	color: gray;
+	text-align: left;
+}
+
+/*Icon progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgrey;
+}
+
+#progressbar .active {
+    color: var(--primary);
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 15px;
+    width: 25%; /*25% for four steps, and so on*/
+    float: left;
+    position: relative;
+    font-weight: 400;
+}
+
+/*Icons in the ProgressBar*/
+#progressbar #account:before {
+    font-weight: 900;
+    content: "1";
+}
+
+#progressbar #personal:before {
+    /*font-family: FontAwesome;
+    content: "\f007";*/
+    font-weight: 900;
+    content: "2";
+}
+
+#progressbar #payment:before {
+    font-weight: 900;
+    content: "3";
+}
+
+#progressbar #confirm:before {
+    font-weight: 900;
+    content: "4";
+}
+
+/*Icon ProgressBar before any progress*/
+#progressbar li:before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px;
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1;
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: var(--primary);
+}
+
+/*Animated Progress Bar*/
+.progress {
+	height: 20px;
+}
+
+.progress-bar {
+	background-color: var(--primary);
+}
+
+/*Fit image in bootstrap div*/
+.fit-image{
+    width: 100%;
+    object-fit: cover;
+}
+
+
+:root {
+    --primary: #144283;
+    --secondary: #37883e;
+    --light: #f4f7fe;
+    --dark: #14183e;
+  }
+  
+  .tab {
+    display: none;
+  }
+  
+
+  .text {
+    text-align: center;
+  }
+  
+  
+  h1, h2, h3, h3, h5, h6 {
+    font-family: 'Arvo';
+    src: url(/frontend/static/fonts/Arvo-Regular.ttf);
+  }
+  
+  .button {
+    position: relative;
+  
+  }
+  
+  .button:active {
+    background: var(--primary);
+    color: var(--primary);
+  
+  }
+  
+  .button__text  {
+    transition: all 0.2s;
+  }
+  
+   
+  
+  
+  .button--loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+  }
+  
+  @keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+  
+    to {
+        transform: rotate(1turn);
+    }
+  }
+
+
+
+/* CSS */
+.categories-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .categories-input input {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .selected-categories {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  
+  .selected-category {
+    display: flex;
+    align-items: center;
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .selected-category span {
+    margin-right: 5px;
+    font-weight: bold;
+  }
+  
+  .selected-category button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #999;
+  }
+  
+  .selected-category button:hover {
+    color: #333;
+  }
+
+  .is-invalid {
+    border-color: #dc3545;
+  }

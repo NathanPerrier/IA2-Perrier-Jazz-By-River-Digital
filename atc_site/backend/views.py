@@ -11,7 +11,7 @@ import re
 
 from .main import *
 from .auth.views import *
-from .atc_site.main import *
+from .atc.main import *
 # from .weather.main import RetrieveWeather
 
 def register_view(request):
@@ -35,3 +35,36 @@ def stream_video(request, video_path):
     response['Content-Type'] = 'video/mp4'
     return response
 
+
+@require_POST
+def get_user_location(request):
+    if request.method == 'POST':
+        print(request.POST['latitude'], request.POST['longitude'])
+        cache.set('latitude', request.POST['latitude'])
+        cache.set('longitude', request.POST['longitude'])
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+def split_location(location):
+    
+    # List of Australian state abbreviations
+    states = ['ACT', 'NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA']
+
+    # Create a regular expression pattern that matches any of the state abbreviations
+    pattern = '|'.join(states)
+    
+    location = urllib.parse.unquote(location)
+    
+    location = re.split(',', location)[0]
+
+    # Split the location at the state abbreviation
+    location_parts = re.split(pattern, location)
+
+    # The first part of the split location is the city
+    city = location_parts[0].strip()
+    
+    city = city.replace(' ', '+')
+
+    return city
