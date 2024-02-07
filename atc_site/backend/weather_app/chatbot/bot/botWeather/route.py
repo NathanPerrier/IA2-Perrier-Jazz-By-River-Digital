@@ -3,7 +3,7 @@ from decouple import config
 
 from ...models import Route
 from ....weather.main import RetrieveWeather
-from ....location.main import GetLocation
+from .....location.main import GetLocation
 from ..get_zip import PostcodeDatabase
 from .__init__ import *
 from .requestError import handle_errors

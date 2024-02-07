@@ -3,7 +3,7 @@ from decouple import config
 from django.db import models
 import json
 
-from ...location.main import GetLocation
+from atc_site.backend.location.main import GetLocation
 from .botWeather.route import GetWeatherOnRoute
 from .botWeather.forecast import GetWeatherForecast
 from .botWeather.history import GetWeatherHistory

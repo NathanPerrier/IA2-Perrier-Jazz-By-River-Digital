@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from decouple import config
 
 from ..location.main import *
-from ..weather.main import RetrieveWeather
+from .weather.main import RetrieveWeather
 from .locationImage.Dalle3.main import GenerateLocationImage
 
 @csrf_protect

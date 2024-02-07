@@ -4,7 +4,7 @@ from django.test import TestCase
 class MessageModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        from atc_site.backend.chatbot.models import Message
+        from atc_site.backend.weather_app.chatbot.models import Message
         cls.message = Message
         # Set up non-modified objects used by all test methods
         Message.objects.create(content='Hello', role='User')

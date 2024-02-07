@@ -10,7 +10,7 @@ import urllib.parse
 import re
 
 from .main import *
-from ..weather.main import RetrieveWeather
+from .weather.main import RetrieveWeather
 
 def search_location(request, location):
     if location:

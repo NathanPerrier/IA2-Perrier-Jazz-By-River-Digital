@@ -11,7 +11,7 @@ from .models import Message, Route
 from .bot.data import BotData
 
 from .bot.__init__ import GPT_MODEL
-from ..location.main import GetLocation
+from ...location.main import GetLocation
 
 
 @csrf_exempt

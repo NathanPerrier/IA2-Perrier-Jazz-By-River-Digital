@@ -55,7 +55,9 @@ INSTALLED_APPS = [
     "django_browser_reload",
     # "axes",
     
-    "atc_site.backend.chatbot",
+    "atc_site.backend.weather_app",
+    "atc_site.backend.weather_app.locationImage",
+    "atc_site.backend.weather_app.chatbot",
     "atc_site.backend.atc",
     "atc_site",
     "atc_site.unitTests",
