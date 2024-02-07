@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  <title>{{title}}</title>
+  <link rel="icon" type="image/png" href="https://www.atc.qld.edu.au/favicon.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="font" href="{{ url_for('static', filename='css/homepage/fonts/Arvo-Regular.ttf') }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Arvo:wght@500;700&display=swap">
+
+
+  <link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/login-signup/main.css') }}">
+  <link rel="stylesheet" type="text/css"  href="{{ url_for('static', filename='css/login-signup/form.css') }}">
+</head>
+<body>
+    <div class="login-page">
+        <div class="form">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <div class="area" >
+        <ul class="circles">
+            {% for i in range(0,25) %}
+                <li></li>
+            {% endfor %}
+        </ul>
+    </div >
+    <script>
+        $('.message a').click(function(){
+            $('form').animate({height: "toggle", opacity: "toggle"}, 10000);
+        });
+        $('.go_back').click(function(){
+            $('form').animate({height: "toggle", opacity: "toggle"}, 10000);
+        }); 
+    </script>
+</body>

@@ -1,0 +1,71 @@
+{% extends "template/main.html" %}
+{% load static %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static '//css//landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/search.css' %}">
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_places_api_key }}&libraries=places"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="search-container" style="margin-left: -50px;">
+        <form action="/search" method="get">
+            {% csrf_token %}
+            <input type="text" id="search-input" name="q" class="search-input" style="{% if error %}border: 2px solid #dc3545;{% else %}border: 2px solid var(--primary);{% endif %}" placeholder="{% if error %}{{error}}...{% else %}Search...{% endif %}">
+            <button id="search-button" class="search-button {% if error %}bg-danger{%else%}bg-primary{% endif %}">  <!-- make it call /search/{input} -->
+                {% if error %}
+                    <i id="icon" class="bi bi-exclamation-circle"></i>
+                {% else %}
+                    <i class="fas fa-search"></i>
+                {% endif %}
+            </button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+    <script>
+        VANTA.GLOBE({
+        el: "#background",
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x144283,
+        color2: 0x37883e,
+        backgroundColor: 0x0
+        })
+
+        window.onload = function() {
+            var searchInput = document.getElementById('search-input');
+            var searchButton = document.getElementById('search-button');
+            
+            var options = {
+                componentRestrictions: {country: 'au'},
+                types: ['postal_code', 'locality', 'route']
+            };
+
+            var autocomplete = new google.maps.places.Autocomplete(searchInput, options);
+
+            searchButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                var query = searchInput.value;
+                window.location.href = '/search/' + encodeURIComponent(query);
+            });
+
+            setTimeout(function() {
+                var searchInput = document.getElementById('search-input');
+                var errorMessage = document.getElementById('search-button');
+                var icon = document.getElementById('icon');
+                searchInput.style.border = '2px solid var(--primary)';
+                errorMessage.innerHTML = '<i class="fas fa-search"></i>';
+                errorMessage.classList.remove('bg-danger');
+                errorMessage.classList.add('bg-primary');
+
+            }, 3000); // Hide after 3 seconds
+        };
+    </script>
+    {% include 'chatbot/chat.html' %}
+{% endblock %}

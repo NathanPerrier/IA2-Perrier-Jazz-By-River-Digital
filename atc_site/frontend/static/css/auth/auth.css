@@ -1,0 +1,288 @@
+:root {
+    --primary: #144283;
+    --secondary: #37883e;
+    --light: #fff;
+    --dark: #000;
+}
+
+#page {
+    background-color: var(--dark);
+    color: var(--light);
+    height: 100vh;
+    width: 100vw;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#page .weather-radar {
+    width: 60%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: flex; 
+    position: relative;
+    /* Add the clip-path property */
+    clip-path: polygon(0 1%, 100% 0, 75% 100%, 0% 100%);
+}
+
+#page .weather-radar .right {
+    position: absolute;
+    right: 6.65vw;
+    z-index: 5;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(to left, var(--dark), #00000000);
+    transform: skewX(-14.95deg);
+}
+
+#page .weather-radar #map {
+    width: 100%;
+    height: calc(100% + 30px);
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    z-index: -10;
+    bottom: 0;
+    right: 0;
+}
+
+#page .auth-form {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+}
+
+#page .auth-form .logos {
+    top: 1%;
+    right: 0;
+    left: 79%;
+    height: 7%;
+    width: 21%;
+    position: absolute;
+    display: flex;
+    align-items: right;
+}
+
+#page .auth-form .logos .rainCheck {
+    width: 60%;
+    height: 100%;
+    object-fit: contain;
+    justify-content: center;
+    align-items: center;
+}
+
+#page .auth-form .logos .rainCheck h1 {
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2%;
+}
+
+#page .auth-form .logos .divider {
+    height: 105%; 
+    transform-origin: 0 0; 
+    border: 1px var(--light) solid
+}
+
+#page .auth-form .logos .atc {
+    width: 12%;
+    height: 90%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%;
+}
+
+#page .auth-form .logos .atc img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+
+#page .auth-form .form {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#page .auth-form .form h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: var(--light);
+    text-transform: uppercase;
+}
+
+#page .auth-form .form form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#page .auth-form .form form .error-div {
+    background-color: #cb5b5b;
+    color: black;
+    width: 300px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 2rem;
+    border-radius: 5px 5px 0px 0px
+}
+
+#page .auth-form .form form .error-div p {
+    margin-top: 1%;
+    justify-content: center;
+}
+
+#page .auth-form .form form input {
+    width: 300px;
+    height: 3rem;
+    /* margin-bottom: .25rem; */
+    text-align: center;
+    color: var(--dark);
+    background-color: var(--light); 
+    border: none;
+    display: flex;
+    align-items: center;
+    border-radius: 0px;
+    font-size: 1.2rem;
+}
+
+#page .auth-form .form form .buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#page .auth-form .form form .buttons button {
+    width: 300px;
+    min-width: 300px;
+    height: 3rem;
+    color: var(--light);
+    background-color: var(--primary);
+    border: none;
+    border-radius: 0px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+
+}
+
+#page .auth-form .form form .buttons button:hover {
+    background-color: var(--secondary);
+}
+
+#page .auth-form .form form .buttons button:active {
+    background-color: var(--secondary);
+}
+
+#page .auth-form .form form .buttons .go_back {
+    width: 300px;
+    height: 3rem;
+    color: var(--light);
+    background-color: #292929;
+    border: none;
+    border-radius: 0px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+
+}
+
+#page .auth-form .form form .buttons .go_back:hover {
+    background-color: #3a3a3a;
+}
+
+#page .auth-form .form form .buttons .go_back:active {
+    background-color: #3a3a3a;
+}
+
+#page .auth-form .form form .message {
+    color: #6e6e6e;
+    font-size: 12px;
+  }
+
+@media(max-width:560.99px){
+    #page .auth-form .logos {
+        display: none;
+    }
+}
+@media(max-width:767.98px){
+    #page .weather-radar, #page .weather-radar #map {
+        display: none;
+        width: 0%;
+    }
+    #page .auth-form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #page .auth-form .form {
+        width: 50%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #page .auth-form .logos {
+        top: 1%;
+        right: 0;
+        left: 75%;
+        height: 7%;
+        width: 25%;
+        position: absolute;
+        display: flex;
+        align-items: right;
+    }
+    #page .auth-form .logos .divider, #page .auth-form .logos .atc {
+        display: none;
+    }
+
+}
+
+
+@media(max-width:999px){
+    #page .weather-radar .right {
+        transform: skewX(-10.5deg);
+        right: 50px;
+    }
+    #page .auth-form .logos {
+        top: 1%;
+        right: 0;
+        left: 75%;
+        height: 7%;
+        width: 25%;
+        position: absolute;
+        display: flex;
+        align-items: right;
+    }
+    #page .auth-form .logos .divider, #page .auth-form .logos .atc {
+        display: none;
+    }
+
+}
+
+form {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+
+    <meta charset="utf-8">
+    <title>RainCheck</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <meta content="map, weather, routes, API, BOM, TomorrowIO, Ambrose Treacy College, ATC, AI" name="keywords">
+    <meta name="description" content="A weather app built by Ambrose Treacy College that utilises data from BOM and TomorrowIO." />
+
+    <link rel="icon" type="image/png" href="{% static '//images//logos//raincheck.png' %}" width="30px">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <link rel="stylesheet" href="{% static '//css//animate//animate.min.css' %}">
+    <link rel="stylesheet" href="{% static '//css//owlcarousel//assets//owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static '//css//bootstrap.min.css' %}">  
+    <link rel="stylesheet" href="{% static '//css//stories//stories.css' %}">
+
+    <link rel="stylesheet" href="{% static '//css//responsive.css' %}">
+    <link rel="stylesheet" href="{% static '//css//nav.css' %}">
+    <link rel="stylesheet" href="{% static '//css//main.css' %}">
+    <link rel="stylesheet" href="{% static '//css//style.css' %}">
+
+    {% block header %}{% endblock %}
+  </head>
+  <body style="background-color:#000000;{% if warning %}padding-top: 45px;{% endif %}" id="background">
+    {% if warning %}
+        <div id="alert-ribbon" class="bg-danger fixed-top mb-0 ps-5 pt-2 pb-2 text-center">
+            <h3 id="warning-title" class="text-white font-netflix-bold mb-1">{{ warning.0.title }}</h3>
+        </div>
+    {% endif %}
+    <div id="spinner"
+        class="show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center" style="background-color:#000">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem; background-color:var(--primary)" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <nav class="navbar flex-column align-items-center navbar-expand-lg m-0" id="sidebar">
+        <!-- Logo on top -->
+        <div class="nav navbar-nav mb-auto" id="atc-link" style="padding-left: 22.5px">
+            <a class="navbar-brand mt-2 mb-auto" href="/atc/">
+            <img src="{% static '//images//logos//atc//atc-crest-white.svg' %}" alt="" style="width:30px;">
+            </a>
+        </div>
+        
+
+        <!-- Navbar icons in the center -->
+        <div class="nav navbar-nav" id="pages-link" style="padding-left:7.5px">
+            <a class="nav-item nav-link" href="/search"><i class="bi bi-search"></i><span class="visually-hidden">Search</span></a>
+            <a class="nav-item nav-link" href="/routes"><i class="bi bi-map"></i><span class="visually-hidden">RainCheck Routes</span></a>
+            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="/"><i class="bi bi-house-door"></i><span class="visually-hidden">Home</span></a>
+            <a class="nav-item nav-link" href="/saved"><i class="bi bi-flag"></i><span class="visually-hidden">Saved Locations</span></a>
+            <a class="nav-item nav-link" href="/radar"><i class="bi bi-droplet"></i><span class="visually-hidden">RainCheck Radar</span></a>
+        </div>
+
+        <!-- Account link on the bottom -->
+        {% if is_authenticated %}
+          <div class="nav navbar-nav mt-auto" id="account-link" style="padding-left:5px">
+              <a class="nav-item nav-link mb-2 mt-auto" href="/logout/"> <!-- account -->
+                  <i class="bi bi-person-circle"></i><span class="visually-hidden">Account</span>
+              </a>
+          </div>
+        {% else %}
+          <div class="nav navbar-nav mt-auto" id="account-link" style="padding-left:5px">
+              <a class="nav-item nav-link mb-2 mt-auto" href="/login">
+                  <i class="bi bi-box-arrow-in-right"></i><span class="visually-hidden">Login</span> 
+              </a>
+          </div>
+        {% endif %}
+        
+    </nav>
+    <div class="body-container" style="margin-left:50px">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script type="text/javascript">
+        var latitude = 153.02207;
+        var longitude = -27.46917;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+            });
+        }
+
+        var locationAjaxUrl = "{% url 'get_user_location' %}";
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $.ajax({
+          url : locationAjaxUrl, 
+          type : "POST", 
+          data : {
+              'latitude': latitude,
+              'longitude': longitude,
+          },
+          headers: { 'X-CSRFToken': getCookie('csrftoken') },
+          success : function(json) {
+              console.log(json);
+          },
+        });
+        //! send ip to backend
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="{% static '//js//wow//wow.min.js' %}"></script>
+    <script src="{% static '//js//easing-2//easing.min.js' %}"></script>
+    <script src="{% static '//js//waypoints//waypoints.min.js' %}"></script>
+    <script src="{% static '//js//counterup//counterup.min.js' %}"></script>
+    <script src="{% static '//js//owlcarousel//owl.carousel.min.js' %}"></script>
+    <script src="{% static '//js//jqBootstrapValidation.js' %}"></script>
+    <script src="{% static '//js//contact-form.js' %}"></script>
+    <script src="{% static '//js//main.js' %}"></script>
+    <script src="{% static '//js//main-2.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>

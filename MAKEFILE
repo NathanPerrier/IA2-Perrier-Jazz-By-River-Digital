@@ -1,5 +1,5 @@
 # Name of your Docker image
-IMAGE_NAME = weather_app
+IMAGE_NAME = atc_site
 
 # Name of your Docker container
 CONTAINER_NAME = your-container-name #! needed (change)

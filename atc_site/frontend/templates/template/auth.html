@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  {% load static %}
+  <head>
+
+    <meta charset="utf-8">
+    <title>RainCheck</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="map, weather, routes, API, BOM, TomorrowIO, Ambrose Treacy College, ATC, AI" name="keywords">
+    <meta name="description" content="A weather app built by Ambrose Treacy College that utilises data from BOM and TomorrowIO." />
+
+    <link rel="icon" type="image/png" href="{% static '//images//logos//raincheck.png' %}" width="30px">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <link rel="stylesheet" href="{% static '//css//animate//animate.min.css' %}">
+    <link rel="stylesheet" href="{% static '//css//owlcarousel//assets//owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static '//css//bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '//css//main.css' %}">  
+    <link rel="stylesheet" href="{% static '//css//stories//stories.css' %}">
+
+    <link rel="stylesheet" href="{% static '//css//responsive.css' %}">
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    {% block header %}{% endblock %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+  <body style="background-color:#000000">
+
+    <div id="spinner"
+        class="show position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center" style="background-color:#000">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem; background-color:var(--primary)" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script type="text/javascript">
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="{% static '//js//wow//wow.min.js' %}"></script>
+    <script src="{% static '//js//easing-2//easing.min.js' %}"></script>
+    <script src="{% static '//js//waypoints//waypoints.min.js' %}"></script>
+    <script src="{% static '//js//counterup//counterup.min.js' %}"></script>
+    <script src="{% static '//js//owlcarousel//owl.carousel.min.js' %}"></script>
+    <script src="{% static '//js//jqBootstrapValidation.js' %}"></script>
+    <script src="{% static '//js//contact-form.js' %}"></script>
+    <script src="{% static '//js//main.js' %}"></script>
+    <script src="{% static '//js//main-2.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  </body>
+</html>

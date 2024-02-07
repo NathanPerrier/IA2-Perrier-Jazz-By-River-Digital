@@ -1,0 +1,11 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+        
+{% block content %}                   
+    <img style="width: 150px;" class="logo" src="{{ url_for('static', filename=img2) }}">   <!-- school logo -->
+    <form>   <!-- creates a form and calls upon the function contact_form_page and set's the method to POST-->
+        <h1>{{header}}</h1>   
+        <h2 style="padding-bottom:5px">{{message}}</h2>
+        <a style="" class="go_back" href="/atc/">Go Home</a>  <!--doesn't work-->
+    </form> 
+{% endblock %} 

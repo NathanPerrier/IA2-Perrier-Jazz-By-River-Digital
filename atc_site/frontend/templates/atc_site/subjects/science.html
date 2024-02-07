@@ -1,0 +1,70 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Science</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/subjects">Subjects</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Science</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '/atc_site/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">Biology</h2>
+                    <p class="lead">In the world of biology, students explore the wonders of life itself. They study everything from the intricate workings of cells to the complexity of ecosystems. Through engaging experiments and fieldwork, students gain a profound understanding of the interconnectedness of living organisms.    
+                    </p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '/atc_site/images/homepage/atc_website/science-1.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light py-5">
+        <div class="container bg-light g-4">
+            <div class="row">
+                <div class="col-md-7 order-md-2 center-text-parent-div">
+                    <span>
+                        <h2 class="featurette-heading mb-4">Chemistry</h2>
+                        <p class="lead">Chemistry delves into the composition and behavior of matter. Our chemistry courses equip students with the skills to analyze substances, conduct experiments, and understand chemical reactions. It's a subject that bridges the gap between the microscopic and macroscopic world.</p>
+                    </span>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '/atc_site/images/homepage/atc_website/science-2.jpg' %}" alt="image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">Physics</h2>
+                    <p class="lead">Physics unlocks the secrets of the physical universe. Students explore concepts like motion, energy, and the fundamental laws governing the cosmos. Our physics courses challenge students to think critically and develop problem-solving skills essential for tackling real-world challenges.</p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" src="{% static '/atc_site/images/homepage/atc_website/science-3.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+{% endblock %}

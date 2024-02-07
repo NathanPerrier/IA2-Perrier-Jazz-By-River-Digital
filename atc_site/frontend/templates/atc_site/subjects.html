@@ -1,0 +1,184 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Our Subjects</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Subjects</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '//atc_site//images//homepage//hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+    <!-- terms and policies Start -->
+    <div class="container-fluid bg-light py-5" style="overflow:hidden">
+        <div class="container py-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="row g-4">
+                        <a class="p-0 m-0" href="/atc/subjects/maths"><div class="col-12 wow fadeInLeftBig" data-wow-delay="0.3s">
+                            <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                <div class="service-icon btn-square">
+                                    <i class="fa fa-divide fa-2x"></i>
+                                </div>
+                                <h5 class="mb-3">Maths</h5>
+                                <p style="font-size:.875em">Experience an enriching math curriculum, guided by expert faculty, in a stimulating and supportive learning environment.
+                                </p>
+                                <a class="btn px-3 mt-auto mx-auto" href="/atc/subjects/maths">Read More</a>
+                            </div>
+                        </div></a>
+                        <a class="p-0 m-0" href="/atc/subjects/english"><div class="col-12 wow fadeInLeftBig" data-wow-delay="0.5s">
+                            <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                <div class="service-icon btn-square">
+                                    <i class="fa fa-book fa-2x"></i>
+                                </div>
+                                <h5 class="mb-3">English</h5>
+                                <p style="font-size:.875em">Explore our Terms of Use to understand the guidelines on using our services responsibly and ethically. </p>
+                                <a class="btn px-3 mt-auto mx-auto" href="/atc/subjects/english">Read More</a>
+                            </div>
+                        </div></a>
+                        <a class="p-0 m-0" href="/atc/subjects/technology"><div class="col-12 wow fadeInLeftBig" data-wow-delay="0.7s">
+                            <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                <div class="service-icon btn-square">
+                                    <i class="fa fa-laptop fa-2x"></i>
+                                </div>
+                                <h5 class="mb-3">Technology</h5>
+                                <p style="font-size:.875em">Read our Safety Policy to learn how we prioritize and legislate safety in the development and use of artificial intelligence. </p>
+                                <a class="btn px-3 mt-auto mx-auto" href="/atc/subjects/technology">Read More</a>
+                            </div>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-4">
+                        <a class="p-0 m-0" href="/atc/subjects/science"><div class="col-12 wow fadeInRightBig" data-wow-delay="0.3s">
+                            <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                <div class="service-icon btn-square">
+                                    <i class="fa fa-flask fa-2x"></i>
+                                </div>
+                                <h5 class="mb-3">Science</h5>
+                                <p style="font-size:.875em">Our Privacy Policy outlines safeguarding Your Personal Information and Respecting Your Privacy Rights. </p>
+                                <a class="btn px-3 mt-auto mx-auto" href="/atc/subjects/science">Read More</a>
+                            </div>
+                        </div></a>
+                        <a class="p-0 m-0" href="/atc/subjects/religion"><div class="col-12 wow fadeInRightBig" data-wow-delay="0.5s">
+                            <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                <div class="service-icon btn-square">
+                                    <i class="fa fa-cross fa-2x"></i>
+                                </div>
+                                <h5 class="mb-3">Relgion</h5>
+                                <p style="font-size:.875em">How we protect and respect intellectual property rights for a fair and respectful online environment. </p>
+                                <a class="btn px-3 mt-auto mx-auto" href="/atc/subjects/religion">Read More</a>
+                            </div>
+                        </div></a>
+                        <a class="p-0 m-0" href="/atc/subjects/music"><div class="col-12 wow fadeInRightBig" data-wow-delay="0.7s">
+                            <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                <div class="service-icon btn-square">
+                                    <i class="fa fa-music fa-2x"></i>
+                                </div>
+                                <h5 class="mb-3">Music</h5>
+                                <p style="font-size:.875em">Learn about our WebGenie's use of cookies and how they enhance your browsing experience. </p>
+                                <a class="btn px-3 mt-auto mx-auto" href="/atc/subjects/music">Read More</a>
+                            </div>
+                        </div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- terms and policies End -->
+
+    <!-- Contact Start -->
+    <div class="container-fluid bg-primary feature pt-5" id='contact'>
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <div class="btn btn-sm border rounded-pill text-white px-3 mb-3">Contact Us</div>
+                    <h1 class="mb-4 align-items-center text-white">Feel Free To Contact Us!</h1>
+                    <h3 class="text-white" style="margin-bottom: .75em"><i class="fa fa-check text-secondary me-2"></i>24/7 Support</h3>
+                    <p class="text-left text-white mb-4">Connect with us effortlessly through our contact section. Drop us a message, ask a question, or share your thoughts. We're here to listen and provide prompt assistance for all your inquiries.</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="wow fadeIn" data-wow-delay="0.3s">
+                        <div class="contact-form">
+                            <div id="alertMessage"></div>
+                            <form action="{% url 'contact_ajax' %}" method="POST" id="contactForm">
+                                {% csrf_token %}
+                                {{ form }}
+                                <div class="row">
+                                    <div class="col-sm-6 control-group">
+                                        <input type="text" name="name" class="form-control py-2" id="name" value="{{user.first_name}}" placeholder="Your Name"
+                                            required="required" data-validation-required-message="Please enter your name" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-sm-6 control-group">
+                                        <input type="email" name="email" class="form-control py-2" id="email" value="{{user.email}}" placeholder="Your Email"
+                                            required="required" data-validation-required-message="Please enter your email" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12 control-group">
+                                        <input type="text" name="subject" class="form-control py-2" id="subject" placeholder="Subject"
+                                            required="required" data-validation-required-message="Please enter a subject" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12 control-group">
+                                        <textarea class="form-control" name="message" rows="4" id="message" placeholder="Message"
+                                            required="required"
+                                            data-validation-required-message="Please enter your message"></textarea>
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-outline-light w-100 py-2" type="submit" method="POST" name="submit" id="sendMessageButton">
+                                            <span>SEND</span>
+                                            <div class="d-none spinner-border spinner-border-sm text-light ms-3" role="status"></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+    <div class="container-fluid px-0 bg-primary">
+        <img style="padding:0;width:100%" src="{% static '//atc_site//images//homepage//peaks-1.svg' %}"></div>
+    </div>
+
+{% endblock %}

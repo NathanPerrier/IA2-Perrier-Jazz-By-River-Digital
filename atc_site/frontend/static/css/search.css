@@ -1,0 +1,60 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Adjust this value to position the search input vertically */
+    width: 100vw; /* Adjust this value to position the search input horizontally */
+}
+
+.search-input {
+    border: 2px solid var(--primary);
+    padding: 10px;
+    width: 50vw; /* Adjust this value to change the width of the search input */
+    border-radius: 50px;
+    outline: none;
+}
+
+.search-button {
+    border: none;
+    margin-left: -45px; /* Adjust this value to disconnect the button from the input */
+    width: 40px; /* Adjust as needed */
+    height: 40px;
+    border-radius: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    font-family: url(../fonts/NetflixSans-Regular.ttf);
+}
+
+.search-button:hover {
+    opacity: 0.8;
+    background-color: var(--secondary);
+}
+
+.search-button i {
+    margin-left: -15px;
+}
+
+.pac-container {
+    background-color: #fff;
+    border: 2px solid var(--primary);
+    border-top: none;
+    box-sizing: content-box;
+    border-radius: 0em 0em 2em 2em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    font-size: 14px;
+    font-family: url(../fonts/NetflixSans-Regular.ttf);
+    margin-top: 0px;
+    padding: 0;
+    max-width: calc(50vw - 40px);
+    margin-left: 20px;
+    margin-right:20px
+}
+
+.pac-item {
+    cursor: pointer;
+    min-width: 100%;
+}
+
+.pac-item:hover {
+    background-color: #eee;
+}

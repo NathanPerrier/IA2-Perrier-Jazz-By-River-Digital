@@ -1,0 +1,57 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Religion</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/subjects">Subjects</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Religion</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '/atc_site/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">Exploring the World of Religion</span></h2>
+                    <p class="lead">Religion is a subject that invites students to embark on a profound journey of exploration and understanding. In this course, we delve into the rich tapestry of beliefs, traditions, and practices that have shaped cultures and societies throughout history. Students will have the opportunity to study the world's major religions, such as Christianity, Islam, Buddhism, Hinduism, and Judaism, as well as lesser-known belief systems.    
+                    </p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '/atc_site/images/homepage/atc_website/religion-1.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light py-5">
+        <div class="container bg-light g-4">
+            <div class="row">
+                <div class="col-md-7 order-md-2 center-text-parent-div">
+                    <span>
+                        <h2 class="featurette-heading mb-4">Ethical Reflection and Personal Growth</h2>
+                        <p class="lead">Beyond the study of religious traditions, our Religion program encourages students to engage in ethical reflection and personal growth. It prompts them to grapple with questions of morality, justice, and the human condition. Students explore how religious and philosophical ideas have influenced ethical principles and continue to shape ethical dilemmas in contemporary society.</p>
+                    </span>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '/atc_site/images/homepage/atc_website/religion-2.jpg' %}" alt="image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

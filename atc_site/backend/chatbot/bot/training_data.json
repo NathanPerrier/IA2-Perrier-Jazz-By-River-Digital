@@ -1,0 +1,678 @@
+[
+	{
+		"type": "function",
+		"function": {
+			"name": "get_current_weather",
+			"description": "Get the current weather and envirournment data based on the feilds requested by the user of a location",
+			"parameters": {
+				"type": "object",
+				"properties": {
+					"location": {
+						"type": "string",
+						"description": "Defualt is None (gathers location for user's ip). if a location was provided in the prompt, use that location (sould be just what the user imputted, nothing else. e.g. if user inputs 'gold coast' do not change it to 'gold coast, Australia', keep it as is). if no loaction was provided in the prompt, return Nothing!"
+					},
+					"unit": {
+						"type": "string",
+						"enum": [
+							"metric",
+							"imperial"
+						],
+						"description": "The temperature unit to use. Defualt is metric. Infer this from the users location. only return either imperial or metric"
+					},
+					"fields": {
+						"type": "object",
+						"properties": {
+							"temperature": {
+								"type": "string",
+								"description": "The temperature in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"humidity": {
+								"type": "string",
+								"description": "The humidity, which The concentration of water vapor present in the air, measured in %"
+							},
+							"cloudCover": {
+								"type": "string",
+								"description": "The fraction of the sky obscured by clouds when observed from a particular location, denoted by %"
+							},
+							"dewPoint": {
+								"type": "string",
+								"description": "The dew point in which The temperature to which air must be cooled to become saturated with water vapor in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"fireIndex": {
+								"type": "string",
+								"description": "The fire index (FWI), the probability of a fire"
+							},
+							"hailBinary": {
+								"type": "string",
+								"description": "The hail binary prediction"
+							},
+							"iceAccumilation": {
+								"type": "string",
+								"description": "The ice accumilation in mm (metric) or in (imperial)"
+							},
+							"moonPhase": {
+								"type": "string",
+								"description": "The moon phase from 0 (new), 1 (waxing cresent), 2 (first quarter), 3 (waxing gibbous), 4 (full), 5 (waning gibbous), 6 (third quarter), to 7 (waning cresent)"
+							},
+							"precipitationIntensity": {
+								"type": "string",
+								"description": "The precipitation intensity in which, The measure of the intensity of precipitation by calculating the amount of precipitation that would fall over a given interval of time if the precipitation intensity were constant over that time period., measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"precipitationProbability": {
+								"type": "string",
+								"description": "The precipitation probability, in which the Probability of precipitation represents the chance of >0.0254 cm (0.01 in.) of liquid equivalent precipitation at a radius surrounding a point location over a specific period of time. measured in %"
+							},
+							"precipitationType": {
+								"type": "string",
+								"description": "The various types of precipitation often include the character or phase of the precipitation which is falling to ground level (Schuur classification). Precipitation Type indicates what type the precipitation will be if something were to precipitate out. This will have a non-zero value regardless of the precipitation probability or intensity values. denoted by 0 (none), 1 (rain), 2 (snow), 3 (freezing rain), 4 (ice pellets)"
+							},
+							"snowAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of new snowfall that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"rainAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of liquid rain that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"snowDepth": {
+								"type": "string",
+								"description": "The depth of snow on the ground including both new and old snow, measured in cm (metric) or in (imperial)"
+							},
+							"freezingRainIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of freezing rain by calculating the amount of freezing rain that would fall over a given interval of time if the freezing rain intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"rainIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of rainfall by calculating the amount of rain that would fall over a given interval of time if the rain intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"snowIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of snowfall by calculating the amount of snow that would fall over a given interval of time if the snow intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"sleetIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of sleet (ice pellets) by calculating the amount of sleet that would fall over a given interval of time if the sleet intensity were constant over that time period. measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"sleetAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of new sleet (ice pellets) that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"iceAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of ice from freezing rain that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"temperatureApparent": {
+								"type": "string",
+								"description": "The apparent temperature ('feels like', temperature). it is the temperature equivalent perceived by humans, caused by the combined effects of air temperature, relative humidity, and wind speed in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"visibility": {
+								"type": "string",
+								"description": "The measure of the distance at which an object or light can be clearly discerned, measured in km (metric) or mi (imperial)"
+							},
+							"waveSignificantHeight": {
+								"type": "string",
+								"description": "The wave significant height in m (metric) or ft (imperial)"
+							},
+							"windDirection": {
+								"type": "string",
+								"description": "The direction from which it originates, measured in degrees clockwise from due north"
+							},
+							"windGust": {
+								"type": "string",
+								"description": "The wind gust in which The maximum brief increase in the speed of the wind, usually less than 20 seconds, measured in m/s (metric) or mph (imperial)"
+							},
+							"windSpeed": {
+								"type": "string",
+								"description": "The fundamental atmospheric quantity caused by air moving from high to low pressure, usually due to changes in temperature in m/s (metric) or mph (imperial)"
+							},
+							"sunriseTime": {
+								"type": "string",
+								"description": "The daily appearance of the Sun on the horizon due to Earths rotation in UTC ISO-8601 format"
+							},
+							"sunsetTime": {
+								"type": "string",
+								"description": "The daily disappearance of the Sun below the horizon due to Earths rotation in UTC ISO-8601 format"
+							},
+							"floodIndex": {
+								"type": "string",
+								"description": "The flood index in which The Flood Index is a Standard measurement of the strength of flood producing rain at a particular place and time. The index is based on the following scale, 1 (least sereve) - Minor flash flooding possible: Rivers may go out of their banks briefly, 2 - Moderate flash flooding possible: Rivers experiencing flooding conditions with minor impacts to homes and businesses, 3 - Significant flash flooding possible: Could lead to disruptions with river flooding also significant enough to threaten homes and businesses, 4 - Major river and/or flash flooding possible: Major disruptions to transportation, along with significant impacts to homes/businesses, 5 (most servere) - Catastrophic or extreme river and/or flash flooding probable or likely: Extreme impacts along river networks and low-lying areas"
+							},
+							"cloudBase": {
+								"type": "string",
+								"description": "The cloud base in which The lowest altitude of the visible portion of the cloud in (km or null (metric)) or (mi or null (imperial))"
+							},
+							"treeIndex": {
+								"type": "string",
+								"description": "The tree index  is a Standard measurement of the strength of tree pollen at a particular place and time. Useful to identify alergines or pollen in the air. The index is based on the following scale, 0 (none), 1 (very low), 2 (low), 3 (medium), 4 (high), 5 (very high)"
+							},
+							"grassIndex": {
+								"type": "string",
+								"description": "The grass index  is a Standard measurement of the strength of grass pollen at a particular place and time. Useful to identify alergines or pollen in the air. The index is based on the following scale, 0 (none), 1 (very low), 2 (low), 3 (medium), 4 (high), 5 (very high)"
+							},
+							"lightningFlashRateDensity": {
+								"type": "string",
+								"description": "The lightning flash rate density in which The number of lightning flashes per unit area per unit time, measured in flashes per square kilometer per hour (metric) or flashes per square mile per hour (imperial)"
+							},
+							"uvIndex": {
+								"type": "string",
+								"description": "The UV Index is a Standard measurement of the strength of sunburn producing UV radiation at a particular place and time. The index is based on the following scale, 0-2 (low), 3-5 (moderate), 6-7 (high), 8-10 (very high), 11+ (extreme)"
+							},
+							"uvHealthConcern": {
+								"type": "string",
+								"description": "When the predicted UV index is within these numerical ranges, the recommended need for protection is indicated by the qualitative description of the values. The concern is based on the following scale, 0-2 (low), 3-5 (moderate), 6-7 (high), 8-10 (very high), 11+ (extreme)"
+							},
+							"wildfireSmokeIndex": {
+								"type": "string",
+								"description": "wildfire smoke index conveys risk that an area may be exposed to elevated particulate matter concentrations (PM2.5) from nearby fires. The index is based on the following scale, 0 (no risk), 1 (minor risk), 2 (Moderate smoke concentrations possible), 3 (Significant smoke concentrations possible), 4 (Major smoke concentrations probable), 5 (Extreme smoke concentrations likely (dangerous))"
+							},
+							"weatherCode": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition. 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							},
+							"weatherCodeFullDay": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition during the day (from sunrise till next sunrise). 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							},
+							"weatherCodeNight": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition during the night (from sunset till sunrise). 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							}
+						},
+						"required": [],
+						"description": "The weather data fields that you can request. By Defualt only the core weather fields are set. Based on the users request, add all and any relevent feilds to effectively answer the users prompt."
+					}
+				},
+				"required": [
+					"fields"
+				]
+			}
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "get_daily_weather_forecast",
+			"description": "Get the dialy weather and envirournment data based on the feilds requested by the user of a location",
+			"parameters": {
+				"type": "object",
+				"properties": {
+					"location": {
+						"type": "string",
+						"description": "Defualt is None (gathers location for users ip). if a location was provided in the prompt, use that location (sould be just what the user imputted, nothing else. e.g. if user inputs 'gold coast' DO NOT change it to 'gold coast, Australia', keep it as is). if no loaction was provided in the prompt, return Nothing!"
+					},
+					"unit": {
+						"type": "string",
+						"enum": [
+							"metric",
+							"imperial"
+						],
+						"description": "The temperature unit to use. Defualt is metric. Infer this from the users location. only return either imperial or metric"
+					},
+					"fields": {
+						"type": "object",
+						"properties": {
+							"temperature": {
+								"type": "string",
+								"description": "The temperature in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"humidity": {
+								"type": "string",
+								"description": "The humidity, which The concentration of water vapor present in the air, measured in %"
+							},
+							"cloudCover": {
+								"type": "string",
+								"description": "The fraction of the sky obscured by clouds when observed from a particular location, denoted by %"
+							},
+							"dewPoint": {
+								"type": "string",
+								"description": "The dew point in which The temperature to which air must be cooled to become saturated with water vapor in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"fireIndex": {
+								"type": "string",
+								"description": "The fire index (FWI), the probability of a fire"
+							},
+							"hailBinary": {
+								"type": "string",
+								"description": "The hail binary prediction"
+							},
+							"iceAccumilation": {
+								"type": "string",
+								"description": "The ice accumilation in mm (metric) or in (imperial)"
+							},
+							"moonPhase": {
+								"type": "string",
+								"description": "The moon phase from 0 (new), 1 (waxing cresent), 2 (first quarter), 3 (waxing gibbous), 4 (full), 5 (waning gibbous), 6 (third quarter), to 7 (waning cresent)"
+							},
+							"precipitationIntensity": {
+								"type": "string",
+								"description": "The precipitation intensity in which, The measure of the intensity of precipitation by calculating the amount of precipitation that would fall over a given interval of time if the precipitation intensity were constant over that time period., measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"precipitationProbability": {
+								"type": "string",
+								"description": "The precipitation probability, in which the Probability of precipitation represents the chance of >0.0254 cm (0.01 in.) of liquid equivalent precipitation at a radius surrounding a point location over a specific period of time. measured in %"
+							},
+							"precipitationType": {
+								"type": "string",
+								"description": "The various types of precipitation often include the character or phase of the precipitation which is falling to ground level (Schuur classification). Precipitation Type indicates what type the precipitation will be if something were to precipitate out. This will have a non-zero value regardless of the precipitation probability or intensity values. denoted by 0 (none), 1 (rain), 2 (snow), 3 (freezing rain), 4 (ice pellets)"
+							},
+							"snowAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of new snowfall that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"rainAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of liquid rain that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"snowDepth": {
+								"type": "string",
+								"description": "The depth of snow on the ground including both new and old snow, measured in cm (metric) or in (imperial)"
+							},
+							"freezingRainIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of freezing rain by calculating the amount of freezing rain that would fall over a given interval of time if the freezing rain intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"rainIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of rainfall by calculating the amount of rain that would fall over a given interval of time if the rain intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"snowIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of snowfall by calculating the amount of snow that would fall over a given interval of time if the snow intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"sleetIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of sleet (ice pellets) by calculating the amount of sleet that would fall over a given interval of time if the sleet intensity were constant over that time period. measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"sleetAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of new sleet (ice pellets) that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"iceAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of ice from freezing rain that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"temperatureApparent": {
+								"type": "string",
+								"description": "The apparent temperature ('feels like', temperature). it is the temperature equivalent perceived by humans, caused by the combined effects of air temperature, relative humidity, and wind speed in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"visibility": {
+								"type": "string",
+								"description": "The measure of the distance at which an object or light can be clearly discerned, measured in km (metric) or mi (imperial)"
+							},
+							"waveSignificantHeight": {
+								"type": "string",
+								"description": "The wave significant height in m (metric) or ft (imperial)"
+							},
+							"windDirection": {
+								"type": "string",
+								"description": "The direction from which it originates, measured in degrees clockwise from due north"
+							},
+							"windGust": {
+								"type": "string",
+								"description": "The wind gust in which The maximum brief increase in the speed of the wind, usually less than 20 seconds, measured in m/s (metric) or mph (imperial)"
+							},
+							"windSpeed": {
+								"type": "string",
+								"description": "The fundamental atmospheric quantity caused by air moving from high to low pressure, usually due to changes in temperature in m/s (metric) or mph (imperial)"
+							},
+							"sunriseTime": {
+								"type": "string",
+								"description": "The daily appearance of the Sun on the horizon due to Earths rotation in UTC ISO-8601 format"
+							},
+							"sunsetTime": {
+								"type": "string",
+								"description": "The daily disappearance of the Sun below the horizon due to Earths rotation in UTC ISO-8601 format"
+							},
+							"floodIndex": {
+								"type": "string",
+								"description": "The flood index in which The Flood Index is a Standard measurement of the strength of flood producing rain at a particular place and time. The index is based on the following scale, 1 (least sereve) - Minor flash flooding possible: Rivers may go out of their banks briefly, 2 - Moderate flash flooding possible: Rivers experiencing flooding conditions with minor impacts to homes and businesses, 3 - Significant flash flooding possible: Could lead to disruptions with river flooding also significant enough to threaten homes and businesses, 4 - Major river and/or flash flooding possible: Major disruptions to transportation, along with significant impacts to homes/businesses, 5 (most servere) - Catastrophic or extreme river and/or flash flooding probable or likely: Extreme impacts along river networks and low-lying areas"
+							},
+							"cloudBase": {
+								"type": "string",
+								"description": "The cloud base in which The lowest altitude of the visible portion of the cloud in (km or null (metric)) or (mi or null (imperial))"
+							},
+							"treeIndex": {
+								"type": "string",
+								"description": "The tree index  is a Standard measurement of the strength of tree pollen at a particular place and time. Useful to identify alergines or pollen in the air. The index is based on the following scale, 0 (none), 1 (very low), 2 (low), 3 (medium), 4 (high), 5 (very high)"
+							},
+							"grassIndex": {
+								"type": "string",
+								"description": "The grass index  is a Standard measurement of the strength of grass pollen at a particular place and time. Useful to identify alergines or pollen in the air. The index is based on the following scale, 0 (none), 1 (very low), 2 (low), 3 (medium), 4 (high), 5 (very high)"
+							},
+							"lightningFlashRateDensity": {
+								"type": "string",
+								"description": "The lightning flash rate density in which The number of lightning flashes per unit area per unit time, measured in flashes per square kilometer per hour (metric) or flashes per square mile per hour (imperial)"
+							},
+							"uvIndex": {
+								"type": "string",
+								"description": "The UV Index is a Standard measurement of the strength of sunburn producing UV radiation at a particular place and time. The index is based on the following scale, 0-2 (low), 3-5 (moderate), 6-7 (high), 8-10 (very high), 11+ (extreme)"
+							},
+							"uvHealthConcern": {
+								"type": "string",
+								"description": "When the predicted UV index is within these numerical ranges, the recommended need for protection is indicated by the qualitative description of the values. The concern is based on the following scale, 0-2 (low), 3-5 (moderate), 6-7 (high), 8-10 (very high), 11+ (extreme)"
+							},
+							"temperatureMax": {
+								"type": "string",
+								"description": "The maximum temperature in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"temperatureMin": {
+								"type": "string",
+								"description": "The minimum temperature in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"wildfireSmokeIndex": {
+								"type": "string",
+								"description": "wildfire smoke index conveys risk that an area may be exposed to elevated particulate matter concentrations (PM2.5) from nearby fires. The index is based on the following scale, 0 (no risk), 1 (minor risk), 2 (Moderate smoke concentrations possible), 3 (Significant smoke concentrations possible), 4 (Major smoke concentrations probable), 5 (Extreme smoke concentrations likely (dangerous))"
+							},
+							"weatherCode": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition. 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							},
+							"weatherCodeFullDay": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition during the day (from sunrise till next sunrise). 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							},
+							"weatherCodeNight": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition during the night (from sunset till sunrise). 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							}
+						},
+						"required": [],
+						"description": "The weather data fields that you can request. By Defualt only the core weather fields are set. Based on the users request, add all and any relevent feilds to effectively answer the users prompt."
+					}
+				},
+				"required": [
+					"fields"
+				]
+			}
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "get_hourly_weather_forecast",
+			"description": "Get the hourly weather and envirournment data based on the feilds requested by the user for the current day of a location",
+			"parameters": {
+				"type": "object",
+				"properties": {
+					"location": {
+						"type": "string",
+						"description": "Defualt is None (gathers location for users ip). if a location was provided in the prompt, use that location (sould be just what the user imputted, nothing else. e.g. if user inputs 'gold coast' DO NOT change it to 'gold coast, Australia', keep it as is). if no loaction was provided in the prompt, return Nothing!"
+					},
+					"unit": {
+						"type": "string",
+						"enum": [
+							"metric",
+							"imperial"
+						],
+						"description": "The temperature unit to use. Defualt is metric. Infer this from the users location. only return either imperial or metric"
+					},
+					"fields": {
+						"type": "object",
+						"properties": {
+							"temperature": {
+								"type": "string",
+								"description": "The temperature in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"humidity": {
+								"type": "string",
+								"description": "The humidity, which The concentration of water vapor present in the air, measured in %"
+							},
+							"cloudCover": {
+								"type": "string",
+								"description": "The fraction of the sky obscured by clouds when observed from a particular location, denoted by %"
+							},
+							"dewPoint": {
+								"type": "string",
+								"description": "The dew point in which The temperature to which air must be cooled to become saturated with water vapor in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"fireIndex": {
+								"type": "string",
+								"description": "The fire index (FWI), the probability of a fire"
+							},
+							"hailBinary": {
+								"type": "string",
+								"description": "The hail binary prediction"
+							},
+							"iceAccumilation": {
+								"type": "string",
+								"description": "The ice accumilation in mm (metric) or in (imperial)"
+							},
+							"moonPhase": {
+								"type": "string",
+								"description": "The moon phase from 0 (new), 1 (waxing cresent), 2 (first quarter), 3 (waxing gibbous), 4 (full), 5 (waning gibbous), 6 (third quarter), to 7 (waning cresent)"
+							},
+							"precipitationIntensity": {
+								"type": "string",
+								"description": "The precipitation intensity in which, The measure of the intensity of precipitation by calculating the amount of precipitation that would fall over a given interval of time if the precipitation intensity were constant over that time period., measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"precipitationProbability": {
+								"type": "string",
+								"description": "The precipitation probability, in which the Probability of precipitation represents the chance of >0.0254 cm (0.01 in.) of liquid equivalent precipitation at a radius surrounding a point location over a specific period of time. measured in %"
+							},
+							"precipitationType": {
+								"type": "string",
+								"description": "The various types of precipitation often include the character or phase of the precipitation which is falling to ground level (Schuur classification). Precipitation Type indicates what type the precipitation will be if something were to precipitate out. This will have a non-zero value regardless of the precipitation probability or intensity values. denoted by 0 (none), 1 (rain), 2 (snow), 3 (freezing rain), 4 (ice pellets)"
+							},
+							"snowAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of new snowfall that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"rainAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of liquid rain that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"snowDepth": {
+								"type": "string",
+								"description": "The depth of snow on the ground including both new and old snow, measured in cm (metric) or in (imperial)"
+							},
+							"freezingRainIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of freezing rain by calculating the amount of freezing rain that would fall over a given interval of time if the freezing rain intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"rainIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of rainfall by calculating the amount of rain that would fall over a given interval of time if the rain intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"snowIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of snowfall by calculating the amount of snow that would fall over a given interval of time if the snow intensity were constant over that time period, measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"sleetIntensity": {
+								"type": "string",
+								"description": "The measure of the intensity of sleet (ice pellets) by calculating the amount of sleet that would fall over a given interval of time if the sleet intensity were constant over that time period. measured in mm/hr (metric) or in/hr (imperial)"
+							},
+							"sleetAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of new sleet (ice pellets) that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"iceAccumulation": {
+								"type": "string",
+								"description": "The accumulated amount of ice from freezing rain that has or will accumulate for the past or future hour of the requested time, measured in mm (metric) or in (imperial)"
+							},
+							"temperatureApparent": {
+								"type": "string",
+								"description": "The apparent temperature ('feels like' temperature). it is the temperature equivalent perceived by humans, caused by the combined effects of air temperature, relative humidity, and wind speed in Celcius (metric) or Fahrenheit (imperial)"
+							},
+							"visibility": {
+								"type": "string",
+								"description": "The measure of the distance at which an object or light can be clearly discerned, measured in km (metric) or mi (imperial)"
+							},
+							"waveSignificantHeight": {
+								"type": "string",
+								"description": "The wave significant height in m (metric) or ft (imperial)"
+							},
+							"windDirection": {
+								"type": "string",
+								"description": "The direction from which it originates, measured in degrees clockwise from due north"
+							},
+							"windGust": {
+								"type": "string",
+								"description": "The wind gust in which The maximum brief increase in the speed of the wind, usually less than 20 seconds, measured in m/s (metric) or mph (imperial)"
+							},
+							"windSpeed": {
+								"type": "string",
+								"description": "The fundamental atmospheric quantity caused by air moving from high to low pressure, usually due to changes in temperature in m/s (metric) or mph (imperial)"
+							},
+							"floodIndex": {
+								"type": "string",
+								"description": "The flood index in which The Flood Index is a Standard measurement of the strength of flood producing rain at a particular place and time. The index is based on the following scale, 1 (least sereve) - Minor flash flooding possible: Rivers may go out of their banks briefly, 2 - Moderate flash flooding possible: Rivers experiencing flooding conditions with minor impacts to homes and businesses, 3 - Significant flash flooding possible: Could lead to disruptions with river flooding also significant enough to threaten homes and businesses, 4 - Major river and/or flash flooding possible: Major disruptions to transportation, along with significant impacts to homes/businesses, 5 (most servere) - Catastrophic or extreme river and/or flash flooding probable or likely: Extreme impacts along river networks and low-lying areas"
+							},
+							"cloudBase": {
+								"type": "string",
+								"description": "The cloud base in which The lowest altitude of the visible portion of the cloud in (km or null (metric)) or (mi or null (imperial))"
+							},
+							"treeIndex": {
+								"type": "string",
+								"description": "The tree index  is a Standard measurement of the strength of tree pollen at a particular place and time. Useful to identify alergines or pollen in the air. The index is based on the following scale, 0 (none), 1 (very low), 2 (low), 3 (medium), 4 (high), 5 (very high)"
+							},
+							"grassIndex": {
+								"type": "string",
+								"description": "The grass index  is a Standard measurement of the strength of grass pollen at a particular place and time. Useful to identify alergines or pollen in the air. The index is based on the following scale, 0 (none), 1 (very low), 2 (low), 3 (medium), 4 (high), 5 (very high)"
+							},
+							"lightningFlashRateDensity": {
+								"type": "string",
+								"description": "The lightning flash rate density in which The number of lightning flashes per unit area per unit time, measured in flashes per square kilometer per hour (metric) or flashes per square mile per hour (imperial)"
+							},
+							"uvIndex": {
+								"type": "string",
+								"description": "The UV Index is a Standard measurement of the strength of sunburn producing UV radiation at a particular place and time. The index is based on the following scale, 0-2 (low), 3-5 (moderate), 6-7 (high), 8-10 (very high), 11+ (extreme)"
+							},
+							"uvHealthConcern": {
+								"type": "string",
+								"description": "When the predicted UV index is within these numerical ranges, the recommended need for protection is indicated by the qualitative description of the values. The concern is based on the following scale, 0-2 (low), 3-5 (moderate), 6-7 (high), 8-10 (very high), 11+ (extreme)"
+							},
+							"wildfireSmokeIndex": {
+								"type": "string",
+								"description": "wildfire smoke index conveys risk that an area may be exposed to elevated particulate matter concentrations (PM2.5) from nearby fires. The index is based on the following scale, 0 (no risk), 1 (minor risk), 2 (Moderate smoke concentrations possible), 3 (Significant smoke concentrations possible), 4 (Major smoke concentrations probable), 5 (Extreme smoke concentrations likely (dangerous))"
+							},
+							"weatherCode": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition. 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							},
+							"weatherCodeNight": {
+								"type": "string",
+								"description": "The text description that conveys the most prominent weather condition during the night (from sunset till sunrise). 0 (Unknown), 1000 (clear, Sunny), 1100 (Mostly Clear), 1101 (Partly Cloudy), 1102 (Mostly Cloudy), 2000 (Fog), 2100 (Light Fog), 4000 (Drizzle), 4001 (Rain), 4200 (Light Rain), 4201 (Heavy Rain), 5000 (Snow), 5001 (Flurries), 5100 (Light Snow), 5101 (Heavy Snow), 6000 (Freezing Drizzle), 6001 (Freezing Rain), 6200 (Light Freezing Rain), 6201 (Heavy Freezing Rain), 7000 (Ice Pellets), 7101 (Heavy Ice Pellets), 7102 (Light Ice Pellets), 8000 (Thunderstorm), 8001 (Heavy Thunderstorm), 8002 (Light Thunderstorm), 9000 (Lightning), 9001 (Heavy Lightning), 9002 (Light Lightning Rain), 9003 (Heavy Lightning Rain), 9999 (Unknown Precipitation)"
+							}
+						},
+						"required": [],
+						"description": "The weather data fields that you can request. By Defualt only the core weather fields are set. Based on the users request, add all and any relevent feilds to effectively answer the users prompt."
+					}
+				},
+				"required": [
+					"fields"
+				]
+			}
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "get_recent_weather_history",
+			"description": "returns the recent weather history over the past 24hrs (hourly) or few days (daily)",
+			"parameters": {
+				"type": "object",
+				"properties": {
+					"location": {
+						"type": "string",
+						"description": "Defualt is None (gathers location for user's ip). if a location was provided in the prompt, use that location (sould be just what the user imputted, nothing else. e.g. if user inputs 'gold coast' DO NOT change it to 'gold coast, Australia', keep it as is). if no loaction was provided in the prompt, return Nothing! or if the user wants to know the weather in their current location, return None"
+					},
+					"unit": {
+						"type": "string",
+						"enum": [
+							"metric",
+							"imperial"
+						],
+						"description": "The temperature unit to use. Infer this from the users location. only return either imperial or metric"
+					},
+					"timestep": {
+						"type": "string",
+						"enum": [
+							"1d",
+							"1h"
+						],
+						"description": "the intevals between weather data. 1h (hourly) and 1d (daily), if 1h then is over the coure of 24hr and if daily then over the course of a few days"
+					}
+				},
+				"required": [
+					"unit",
+					"timestep"
+				]
+			}
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "get_weather_on_route",
+			"description": "Gets the weahter warnings and rain forecast on a route. If the route does not exist (You are to assume that there is an active route if the user has not supplied a start and end location), it will create a new route using startLocation (if specified, if not specified then the function will use user's current location so leave blank), and endlocation (required) and mode (defualt is driving) and get the weather on that route",
+			"parameters": {
+				"type": "object",
+				"properties": {
+					"startLocation": {
+						"type": "string",
+						"description": "the start location of the route"
+					},
+					"endLocation": {
+						"type": "string",
+						"description": "the end location of the route"
+					},
+					"mode": {
+						"type": "string",
+						"enum": [
+							"driving",
+							"walking",
+							"bicycling"
+						],
+						"description": "the type of transportation mode"
+					}
+				},
+				"required": [
+					"endLocation"
+				]
+			}
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "atc_current_weather",
+			"description": "Gets the current weather from the atc (ambrose treacy college) weather station. this is a school weather station that has data for the on site location only. should only use this function is the user requests data from the atc weather station"
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "atc_hourly_weather",
+			"description": "Gets the hourly weather forecast from the atc (ambrose treacy college) weather station. this is a school weather station that has data for the on site location only. should only use this function is the user requests data from the atc weather station"
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "atc_daily_weather",
+			"description": "Gets the daily weather forecast from the atc (ambrose treacy college) weather station. this is a school weather station that has data for the on site location only. should only use this function is the user requests data from the atc weather station"
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "atc_rain_weather",
+			"description": "Gets the rain weather forecast from the atc (ambrose treacy college) weather station. this is a school weather station that has data for the on site location only. should only use this function is the user requests data from the atc weather station"
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "atc_uv_message",
+			"description": "Gets the current uv message (how strong the uv is) from the atc (ambrose treacy college) weather station. this is a school weather station that has data for the on site location only. should only use this function is the user requests data from the atc weather station"
+		}
+	},
+	{
+		"type": "function",
+		"function": {
+			"name": "atc_weather_warning",
+			"description": "Gets all current or expired weather warnings from the atc (ambrose treacy college) weather station. this is a school weather station that has data for the on site location only. should only use this function is the user requests data from the atc weather station"
+		}
+	}
+]

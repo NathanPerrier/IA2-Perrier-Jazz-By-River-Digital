@@ -1,0 +1,510 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid p-0 m-0 hero bg-overlay-40">
+        <div class="video-container">
+            <img class="bg-video" src="{% static '//atc_site//images//main//1.jpg' %}" id="parallaxVideo">
+        </div>
+        <div class="container px-3 py-5">
+            <div class="row g-5 py-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Ambrose Treacy College</h1>
+                    <p class="text-white mb-4 animated slideInRight">Welcome to Ambrose Treacy College, an esteemed boys' school nestled in the heart of Indooroopilly. Discover Boundless Learning and Inspiring Growth on the Banks of Brisbane River. Where Years 4-12 Thrive Amidst Nature's Abundance, Embracing Excellence, and Innovation with State-of-the-Art Facilities and a Close-Knit Community!</p>
+                    <div class="wow fadeInUp" data-wow-delay="0.5s">
+                        <a href="#About" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
+                        <a href="#contact" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero End -->
+
+
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+
+    <!-- About Start -->   <!--     ADD A 'TRY NOW' BUTTON      -->
+    <div class="container-fluid pt-5 bg-white m-0" id="About" style="overflow:hidden;">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="about-img">
+                        <img class="img-fluid" src="{% static '//atc_site//images//homepage//atc_website//teacher-teaching.jpg' %}">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow slideInRight" data-wow-delay="0.3s">
+                    <div class="py-2">
+                        <div class="btn btn-sm border rounded-pill text-primary px-3 mb-4">About Us</div>
+                    </div>
+                    <div class="owl-carousel testimonial-carousel-long border-start border-primary">
+                        <div class="testimonial-item ps-5">
+                            <h1 class="mb-4">Who Are <span style="color:var(--secondary)">We</span>?</h1>
+                            <p class="">At Ambrose Treacy College, we are a vibrant and inclusive community dedicated to nurturing young minds and empowering them to reach their full potential. As a premier educational institution, we are committed to providing a holistic learning experience that fosters academic excellence, character development, and a strong sense of social responsibility.
+                            <br><br>
+                            Our dedicated team of educators and staff work tirelessly to create a safe and supportive environment where students can thrive intellectually, emotionally, and spiritually. With a rich history and a forward-thinking approach to education, we embrace innovation and foster a love for learning that extends beyond the classroom. 
+                            </p>
+                        </div>
+                        <div class="testimonial-item ps-5">
+                            <h1 class="mb-4">What <span style="color:var(--secondary)">We</span> Do?</h1>
+                            <p class="">We are dedicated to fostering an inclusive and vibrant learning community that nurtures the holistic development of young minds. Our mission is to inspire and empower each student to reach their full potential, academically, emotionally, and socially.
+                                <br><br>
+                                Through a dynamic and innovative curriculum, we strive to cultivate critical thinking, creativity, and a love for lifelong learning. Our experienced and passionate educators are committed to providing personalized support and guidance to every student, ensuring they thrive in their educational journey.
+                            </p>
+                        </div>
+                        <div class="testimonial-item ps-5">
+                            <h1 class="mb-4">Why <span style="color:var(--secondary)">We</span> Do It?</h1>
+                            <p class="">Our driving force is to foster holistic growth and inspire excellence in every aspect of education. We firmly believe in creating a vibrant and inclusive learning environment that nurtures the mind, body, and spirit of each student.
+                                <br><br>
+                                Our unwavering commitment to academic excellence ensures that students receive a well-rounded education, empowering them to embrace challenges with confidence and adaptability. By promoting critical thinking, creativity, and innovation, we prepare our students to be lifelong learners and future leaders.
+                               
+                            </p>
+                        </div>
+                        <div class="testimonial-item ps-5">
+                            <h1 class="mb-4">How <span style="color:var(--secondary)">We</span> Do It?</h1>
+                            <p class="">
+                                Our dedicated team of educators utilizes cutting-edge teaching methodologies to encourage critical thinking, creativity, and problem-solving skills. With a focus on individualized attention, we ensure that every student receives the support they need to excel.
+                                <br><br>
+                                Our state-of-the-art facilities provide a dynamic and engaging setting for learning, enabling students to explore their interests across a range of subjects, including arts, sciences, and sports. We also encourage a strong sense of community, fostering values of respect, compassion, and integrity among our students.
+                              
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0 bg-white">
+        <img class="img-fluid" src="{% static '//atc_site//images//homepage//peaks-5.svg' %}">
+    </div>
+    <!-- About End -->
+
+    <!-- Feature Start -->
+    <div class="container-fluid bg-secondary feature-3" id="cummunity">
+        <div class="container pt-5">
+            <div class="row g-5">
+                <div class="col-lg-6 align-self-center pb-md-5">
+                    <div class="wow fadeInLeftBig" data-wow-delay="0.3s">
+                        <div class="btn btn-sm border rounded-pill text-white px-3 mb-3">Our Community</div>
+                        <h1 class="text-white mb-4">About Our Community</h1>
+                        <p class="text-light mb-4">As a parent, student, staff member, or alumni, you are an integral part of this vibrant and dynamic community. Together, we strive to create an environment where everyone feels welcomed, respected, and inspired to achieve their full potential.</p>
+                        <div class="d-flex align-items-center text-white mb-3">
+                            <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <span>Welcoming environment where every individual is valued and respected!</span>
+                        </div>
+                        <div class="d-flex align-items-center text-white mb-3">
+                            <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <span>Promoting diversity and celebrating different backgrounds and cultures!</span>
+                        </div>
+                        <div class="d-flex align-items-center text-white mb-3">
+                            <div class="btn-sm-square bg-white text-primary rounded-circle me-3">
+                                <i class="fa fa-check"></i>
+                            </div>
+                            <span>Engaging students in various community service initiatives!</span>
+                        </div>
+                    </div>
+                    <div class="row g-4 pt-3 wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="col-sm-6">
+                            <div class="d-flex rounded p-3" style="background: rgba(256, 256, 256, 0.1);">
+                                <i class="fa fa-users fa-3x text-white"></i>
+                                <div class="ms-3">
+                                    <h2 class="text-white mb-0" data-toggle="counter-up">1357</h2>
+                                    <p class="text-white mb-0">Students</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex rounded p-3" style="background: rgba(256, 256, 256, 0.1);">
+                                <i class="fa fa-chalkboard-teacher fa-3x text-white"></i>
+                                <div class="ms-3">
+                                    <h2 class="text-white mb-0" data-toggle="counter-up">323</h2>
+                                    <p class="text-white mb-0">Teachers</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 align-content-center pb-5 text-center wow fadeIn" data-wow-delay="0.1s">
+                    <img class="img-fluid" src="{% static '//atc_site//images//homepage//atc_website//Faith-Life-Masses-and-Liturgies-1.jpg' %}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0 bg-light">
+        <img class="img-fluid" src="{% static '//atc_site//images//homepage//peaks-4.svg' %}">
+    </div>
+    <!-- Feature End --> 
+
+
+    <!-- Service Start -->
+    <div class="container-fluid bg-light" id="#services" style="padding:0">
+        <div class="container pb-4">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="btn btn-sm border rounded-pill bg-dark text-light px-3 mb-3">EREA Touchstones</div>
+                    <h1 class="mb-4 text-dark">Edmund Rice Education Australia</h1>
+                    <p class="mb-4 text-dark">Established in 2007 by the Christian Brothers, EREA is a network of schools, entities and offices that offer a Catholic education in the tradition of its founder, Blessed Edmund Rice. In 2014 there are almost 50 schools administered by EREA, enrolling over 35,000 students throughout Australia.</p>
+                    <a class="btn btn-dark rounded-pill px-5 py-3" href="/erea">Read More</a> <!--! FIX (hover) !-->
+                </div>
+                <div class="col-lg-8">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="row g-4">
+                                <div class="col-12 wow fadeIn" data-wow-delay="0.2s">
+                                    <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                        <div class="service-icon btn-square">
+                                            <i class="fa fa-school fa-2x"></i>
+                                        </div>
+                                        <h5 class="mb-3">Liberating Education</h5>
+                                        <p style="font-size:.875em">The right to fosters liberating education empowering students to think critically and effect positive change.</p>
+                                        <a class="btn px-3 mt-auto mx-auto" href="">Read More</a>
+                                    </div>
+                                </div>
+                                <div class="col-12 wow fadeIn" data-wow-delay="0.5s">
+                                    <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                        <div class="service-icon btn-square">
+                                            <i class="fa fa-book-open fa-2x"></i>
+                                        </div>
+                                        <h5 class="mb-3">Gospel Spirituality</h5>
+                                        <p style="font-size:.875em">Embracing a faith-filled environment, guiding boys to live with compassion, integrity, and purpose.</p>
+                                        <a class="btn px-3 mt-auto mx-auto" href="/">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pt-md-4">
+                            <div class="row g-4">
+                                <div class="col-12 wow fadeIn" data-wow-delay="0.3s">
+                                    <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                        <div class="service-icon btn-square">
+                                            <i class="fa bi-people-fill fa-2x"></i>
+                                        </div>
+                                        <h5 class="mb-3">Inclusive Community</h5>
+                                        <p style="font-size:.875em">EREA schools uphold an inclusive community where every student is valued, respected, and supported.</p>
+                                        <a class="btn px-3 mt-auto mx-auto" href="">Read More</a>
+                                    </div>
+                                </div>
+                                <div class="col-12 wow fadeIn" data-wow-delay="0.7s">
+                                    <div class="service-item d-flex flex-column justify-content-center text-center rounded">
+                                        <div class="service-icon btn-square">
+                                            <i class="fa fa-gavel fa-2x"></i>
+                                        </div>
+                                        <h5 class="mb-3">Justice and Solidarity</h5>
+                                        <p style="font-size:.875em">Promoting justice and solidarity thatcultivates compassionate leaders committed to creating a better world.</p>
+                                        <a class="btn px-3 mt-auto mx-auto" href="/">Read More</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+    <!-- campus start -->
+    <div class="container-fluid bg-campus px-0 bg-light" id="campus">
+        <div class="p-5 bg-overlay-55">
+            <div class="col-lg-12 align-content-center p-5 text-white text-center">
+                <h1 class="text-white underline-secondary mb-3 wow fadeInDown" data-wow-delay=".8s" style="z-index:-5">Our Campus</h1>
+                <p class="mb-4 px-3 wow fadeIn" data-wow-delay="0.2s">Spread across lush greenery and overlooking the meandering Brisbane River, our campus boasts an awe-inspiring view that inspires creativity and curiosity among our students.Our sprawling campus is a testament to modern education, providing a dynamic and enriching learning environment for students from Years 4 to 12.</p>
+                <a href="/#contact" class="btn btn-light rounded-pill px-5 py-3 wow fadeInUp" data-wow-delay=".8s">Take a Tour</a>
+            </div>
+        </div>
+    </div>
+    <!-- campus end -->
+
+    <!-- Values Start -->
+    <div class="container-fluid bg-light" style="overflow:hidden"> <!-- transform into the different Models Adopted from Open AI-->
+        <div class="container py-5">
+            <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
+                <div class="btn btn-sm border rounded-pill text-dark px-3 mb-3">School Values</div>
+                <h1 class="mb-4">Our School Values</h1>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 wow fadeInLeft" data-wow-delay="0.5s">
+                    <div class="case-item position-relative overflow-hidden rounded mb-2">
+                        <img class="img-fluid" src="{% static '//atc_site//images//homepage//atc_website//learning.PNG' %}" alt="">
+                        <a class="case-overlay text-decoration-none" href="#">
+                            <small>Learning</small> 
+                            <span class="mb-3" style="display:inline"><h5 class="lh-base text-white" style="font-size:1.075em;display:inline">We empower the boys to thrive academically<span class="text-show">...</span><span class="text-hide typewriter">&nbsp fostering curiosity, critical thinking, and a lifelong love for learning.</span>
+                            </h5></span>
+                            <span class="btn btn-square btn-primary"><i class="fa fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="case-item position-relative overflow-hidden rounded mb-2">
+                        <img class="img-fluid" src="{% static '//atc_site//images//homepage//atc_website//service.PNG' %}" alt="">
+                        <a class="case-overlay text-decoration-none" href="#">
+                            <small>Service</small> 
+                            <span class="mb-3" style="display:inline"><h5 class="lh-base text-white mb-3" style="font-size:1.075em;display:inline">We encourages boys to actively serve their community<span class="text-show">...</span><span class="text-hide typewriter">&nbsp fostering a sense of responsibility through service hours.</span>
+                            </h5></span>
+                            <span class="btn btn-square btn-primary"><i class="fa fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeInRight" data-wow-delay="0.5s">
+                    <div class="case-item position-relative overflow-hidden rounded mb-2">
+                        <img class="img-fluid" src="{% static '//atc_site//images//homepage//atc_website//leadership.PNG' %}" alt="">
+                        <a class="case-overlay text-decoration-none" href="#">
+                            <small>Leadership</small> 
+                            <span class="mb-3" style="display:inline"><h5 class="lh-base text-white mb-3" style="font-size:1.075em;display:inline">We cultivate leadership among boys empowering them<span class="text-show">...</span><span class="text-hide typewriter">&nbsp to lead with integrity, resilience, and a sense of service.</span>
+                            </h5></span>
+                            <span class="btn btn-square btn-primary"><i class="fa fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Values End -->
+
+    <!-- Schools start-->
+    <div class="wrap-school bg-light">
+        <div class="col-expand wow slideInRight" data-wow-delay="0.3s">
+            <div class="bg-overlay-50 text-white" style="width:100%;height:100%;overflow:hidden">
+                <h1 class="m-2 text-white">Junior</h1>
+                <p class="px-5">Our Junior school provides an exciting educational journey for young learners from Years 4 to 6. Nestled along the scenic Brisbane River in Indooroopilly, our expansive campus offers modern facilities and a nurturing environment, fostering curiosity, creativity, and academic excellence in every student.</p>
+                <a class="btn btn-secondary rounded-pill px-5 py-3 text-white" href="#">Read More</a>
+            </div>
+        </div>
+        <div class="col-expand wow slideInRight" data-wow-delay="0.5s">
+            <div class="bg-overlay-50 text-white" style="width:100%;height:100%;overflow:hidden">
+                <h1 class="m-2 text-white">Middle</h1>
+                <p class="px-5">Our vibrant Middle School is a nurturing haven for students in Years 7 to 9. Located on the scenic Brisbane River in Indooroopilly, our innovative and inclusive environment fosters academic growth, personal development, and a love for learning, preparing young minds for a bright future.</p>
+                <a class="btn btn-secondary rounded-pill px-5 py-3 text-white" href="#">Read More</a>
+            </div>
+        </div>
+        <div class="col-expand wow slideInRight" data-wow-delay="0.7s">
+            <div class="bg-overlay-50 text-white" style="width:100%;height:100%;overflow:hidden">
+                <h1 class="m-2 text-white">Senior</h1>
+                <p class="px-5">Our senior campus, situated on the scenic banks of the Brisbane River in Indooroopilly, offers a dynamic learning environment for students in Years 10 to 12. With cutting-edge facilities, expert faculty, and a focus on holistic development, we empower students to excel in academics and beyond.</p>
+                <a class="btn btn-secondary rounded-pill px-5 py-3 text-white" href="#">Read More</a>
+            </div>
+        </div>
+    </div>
+    <!-- schools end -->
+
+    <!-- Contact Start -->
+    <div class="container-fluid bg-primary feature pt-5" id='contact'>
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <div class="btn btn-sm border rounded-pill text-white px-3 mb-3">Contact Us</div>
+                    <h1 class="mb-4 align-items-center text-white">Feel Free To Contact Us!</h1>
+                    <h3 class="text-white" style="margin-bottom: .75em"><i class="fa fa-check text-secondary me-2"></i>24/7 Support</h3>
+                    <p class="text-left text-white mb-4">Connect with us effortlessly through our contact section. Drop us a message, ask a question, or share your thoughts. We're here to listen and provide prompt assistance for all your inquiries.</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="wow fadeIn" data-wow-delay="0.3s">
+                        <div class="contact-form">
+                            <div id="alertMessage"></div>
+                            <form action="{% url 'contact_ajax' %}" method="POST" id="contactForm">
+                                {% csrf_token %}
+                                {{ form }}
+                                <div class="row">
+                                    <div class="col-sm-6 control-group">
+                                        <input type="text" name="name" class="form-control py-2" id="name" value="{{user.first_name}}" placeholder="Your Name"
+                                            required="required" data-validation-required-message="Please enter your name" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-sm-6 control-group">
+                                        <input type="email" name="email" class="form-control py-2" id="email" value="{{user.email}}" placeholder="Your Email"
+                                            required="required" data-validation-required-message="Please enter your email" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12 control-group">
+                                        <input type="text" name="subject" class="form-control py-2" id="subject" placeholder="Subject"
+                                            required="required" data-validation-required-message="Please enter a subject" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12 control-group">
+                                        <textarea class="form-control" name="message" rows="4" id="message" placeholder="Message"
+                                            required="required"
+                                            data-validation-required-message="Please enter your message"></textarea>
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-outline-light w-100 py-2" type="submit" method='POST' name="submit" id="sendMessageButton">
+                                            <span>SEND</span>
+                                            <div class="d-none spinner-border spinner-border-sm text-light ms-3" role="status"></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+    <div class="container-fluid p-0 m-0 bg-light" >
+        <img class="img-fluid" style="width:100%" src="{% static '//atc_site//images//homepage//peaks-3.svg' %}">
+    </div>
+
+
+    <!-- Staff Start -->
+    <div class="container-fluid bg-light">
+        <div class="container pb-5">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="btn btn-sm border rounded-pill text-primary px-3 mb-3">Our Staff</div>
+                    <h1 class="mb-4">Meet Some of Our Friendly Staff</h1>
+                    <p class="mb-4">Our staff at Ambrose Treacy College is a dedicated and passionate team, committed to providing an exceptional educational experience for our students. With diverse expertise and a deep understanding of individual needs, our teachers create a nurturing and inspiring learning environment.
+                        <br><br>Together, they embody the values of excellence, integrity, and compassion, shaping young minds and empowering them to become confident, responsible, and compassionate global citizens.</p>
+                    <a class="btn btn-primary rounded-pill px-5 py-3" href="">Read More</a>
+                </div>
+                <div class="col-lg-7">
+                    <div class="row g-4" style="overflow-x:hidden">
+                        <div class="col-md-6">
+                            <div class="row g-4">
+                                <div class="col-12 wow fadeInRight" data-wow-delay="0.3s">
+                                    <div class="team-item bg-white text-center rounded p-4 pt-0">
+                                        <img class="img-fluid rounded-circle p-4" src="{% static '//atc_site//images//homepage//atc_website//c_ryan.PNG' %}" alt="">
+                                        <h5 class="mb-0">Mr Chris Ryan</h5>
+                                        <small>College Principle</small>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-instagram"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-linkedin-in"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 wow fadeInRight" data-wow-delay="0.5s">
+                                    <div class="team-item bg-white text-center rounded p-4 pt-0">
+                                        <img class="img-fluid rounded-circle p-4" src="{% static '//atc_site//images//homepage//atc_website//d_gardiner.PNG' %}" alt="">
+                                        <h5 class="mb-0">Mr David Gardiner</h5>
+                                        <small>Deputy Principle</small>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-instagram"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-linkedin-in"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pt-md-4">
+                            <div class="row g-4">
+                                <div class="col-12 wow fadeInRight" data-wow-delay="0.3s">
+                                    <div class="team-item bg-white text-center rounded p-4 pt-0">
+                                        <img class="img-fluid rounded-circle p-4" src="{% static '//atc_site//images//homepage//atc_website//l_morgan.PNG' %}" alt="">
+                                        <h5 class="mb-0">Miss Luara Morgan</h5>
+                                        <small>Dean of Learning</small>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-instagram"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-linkedin-in"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 wow fadeInRight" data-wow-delay="0.5s">
+                                    <div class="team-item bg-white text-center rounded p-4 pt-0">
+                                        <img class="img-fluid rounded-circle p-4" src="{% static '//atc_site//images/homepage//atc_website//m_warr.PNG' %}" alt="">
+                                        <h5 class="mb-0">Mr Mathew Warr</h5>
+                                        <small>Dean of Faith and Mission</small>
+                                        <div class="d-flex justify-content-center mt-3">
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-facebook-f"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-twitter"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-instagram"></i></a>
+                                            <a class="btn btn-square btn-primary m-1" href=""><i
+                                                    class="fab fa-linkedin-in"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Staff End -->
+
+    <!-- carousel Start -->
+    <div class="owl-carousel testimonial-carousel">
+        <div class="testimonial-item">
+            <img class="" style="object-fit:cover;width:100vw;height:300px" src="{% static '//atc_site//images/homepage//atc_website//banner//1.jpg' %}">
+        </div>
+        <div class="testimonial-item">
+            <img class="" style="object-fit:cover;width:100vw;height:300px" src="{% static '//atc_site//images//homepage//atc_website//banner//2.jpg' %}">
+        </div>
+        <div class="testimonial-item">
+            <img class="" style="object-fit:cover;width:100vw;height:300px" src="{% static '//atc_site//images//homepage//atc_website//banner//3.jpg' %}">
+        </div>
+        <div class="testimonial-item">
+            <img class="" style="object-fit:cover;width:100vw;height:300px" src="{% static '//atc_site//images//homepage//atc_website//banner//4.jpg' %}">
+        </div>
+        <div class="testimonial-item">
+            <img class="" style="object-fit:cover;width:100vw;height:300px" src="{% static '//atc_site//images//homepage//atc_website//banner//5.jpg' %}">
+        </div>
+    </div>
+    <!-- carousel End -->
+
+
+    <script>
+        function link() {
+            var element = document.getElementById("home-link");
+            element.classList.add("active");
+            var nav = document.getElementById("navbar")
+            nav.classList.add("bg-overlay-40")
+        };
+        link();
+
+        if(Hls.isSupported()) {
+            var video = document.getElementById('parallaxVideo');
+            var hls = new Hls();
+            hls.loadSource("https:{% url 'stream_video_atc_site' video_path='header-1.m3u8' %}");
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED,function() {
+              video.play();
+          });
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Maths</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/subjects">Subjects</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Maths</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '//atc_site//images//homepage//hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">Essential Mathematics</h2>
+                    <p class="lead">In our Essential Mathematics program at Ambrose Treacy College, we provide a strong foundation in fundamental mathematical concepts. This course is designed to equip students with the essential mathematical skills needed for everyday life. From budgeting to data analysis, Essential Mathematics covers it all, ensuring that our students have the tools they need to excel in practical mathematical applications.    
+                    </p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '//atc_site//images//homepage//atc_website//math-3.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light py-5">
+        <div class="container bg-light g-4">
+            <div class="row">
+                <div class="col-md-7 order-md-2 center-text-parent-div">
+                    <span>
+                        <h2 class="featurette-heading mb-4">General Mathematics</h2>
+                        <p class="lead">General Mathematics at Ambrose Treacy College offers students a comprehensive exploration of mathematical topics that are relevant to a wide range of fields. This course delves into areas such as statistics, algebra, and financial mathematics, preparing students for real-world problem-solving and decision-making. General Mathematics is a versatile choice for those seeking a well-rounded mathematical education.</p>
+                    </span>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '//atc_site//images//homepage//atc_website//math-1.jpg' %}" alt="image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">Mathematical Methods</h2>
+                    <p class="lead">This course extends students' mathematical knowledge and problem-solving skills. It's an ideal choice for those pursuing careers in science, engineering, or mathematics-related fields.</p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" src="{% static '//atc_site//images//homepage//atc_website//math-2.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light py-5">
+        <div class="container bg-light g-4">
+            <div class="row">
+                <div class="col-md-7 order-md-2 center-text-parent-div">
+                    <span>
+                        <h2 class="featurette-heading mb-4">Specialist Mathematics</h2>
+                        <p class="lead">If you're passionate about mathematics and aspire to tackle the most complex mathematical problems, Specialist Mathematics is for you. This advanced course covers topics like calculus, linear algebra, and advanced statistics, preparing students for higher-level studies in mathematics.</p>
+                    </span>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '//atc_site//images//homepage//atc_website//math-4.jpg' %}" alt="image">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

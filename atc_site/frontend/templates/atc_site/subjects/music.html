@@ -1,0 +1,70 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Music</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="atc/subjects">Subjects</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Music</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '//atc_site//images//homepage//hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <div class="container py-5">
+        <div class="row g-4">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">The Art and Science of Music</h2>
+                    <p class="lead">Music is both an art form and a science, and in our program, we explore every facet of this captivating discipline. Students will discover the power of sound, the intricacies of musical composition, and the joy of performance. Our curriculum covers a wide range of musical genres, from classical to contemporary, and introduces students to various musical instruments and vocal techniques.     
+                    </p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '/atc_site/images/homepage/atc_website/music.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-light py-5">
+        <div class="container bg-light g-4">
+            <div class="row">
+                <div class="col-md-7 order-md-2 center-text-parent-div">
+                    <span>
+                        <h2 class="featurette-heading mb-4">Creative Expression and Collaboration</h2>
+                        <p class="lead">Music is a universal language that transcends boundaries and connects people. In our music program, students have the opportunity to unleash their creativity and collaborate with their peers. Whether it's composing original pieces, joining a choir, or playing in an ensemble, students develop their musical talents.</p>
+                    </span>
+                </div>
+                <div class="col-md-5 order-md-1">
+                    <img class="img-fluid mx-auto" style="height:100%;object-fit:cover" src="{% static '/atc_site/images/homepage/atc_website/music-3.jpg' %}" alt="image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-7 center-text-parent-div">
+                <span>
+                    <h2 class="featurette-heading mb-4">Beyond the Classroom</h2>
+                    <p class="lead">Our music program extends beyond the classroom, offering numerous opportunities for students to showcase their talents and engage with the broader musical community. From annual concerts and recitals to participation in regional and national competitions, students have the chance to shine in front of diverse audiences.</p>
+                </span>
+            </div>
+            <div class="col-md-5">
+                <img class="img-fluid mx-auto" src="{% static '/atc_site/images/homepage/atc_website/music-2.jpg' %}" alt="image">
+            </div>
+        </div>
+    </div>
+{% endblock %}

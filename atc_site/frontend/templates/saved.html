@@ -1,0 +1,171 @@
+{% extends 'template/main.html' %} 
+{% load static %} 
+{% load date_extras %}
+{% block header %}
+  <link rel="stylesheet" href="{% static '//css//landing.css' %}">
+{% endblock %}
+{% block content %}
+  <div class="" style="position: absolute">
+  <!-- video -->
+    <div class="hero-background pt-0 mt-0">
+      <section class="hero-header">
+        <div class="content pt-3">
+          <section class="left">
+            <div class="datetime-div">
+              <div class="datetime-divider"></div>
+              <div class="ms-2 datetime">
+                <span id="time"></span>
+                <br/>
+                <span id="date"></span>
+              </div>
+            </div> 
+            <div class="location-header">
+              <h2 class="pt-5 mb-0 pb-0 font-netflix-medium wow fadeIn country-text" data-wow-delay="2s">NATHAN PERRIER</h2>
+              <h1 class="text-white header-text pt-0 ml-0 mt-0 wow slideInLeft font-tungston-bold">SAVED LOCATIONS</h1>
+            </div>
+            <div class="header-weather">
+              <div class="current-weather">
+                <div class="icon">
+                  <div class="icon-img">  <!-- change to forecast_daily.0. ?? more accurate ?? -->
+                    {% if forecast_daily.0.icon_descriptor == 'partly_cloudy' or forecast_daily.0.icon_descriptor == 'mostly_sunny' or forecast_daily.0.icon_descriptor == 'cloudy' %}
+                        <div class="highlight-header" style="background-color:#fff"></div>
+                    {% elif forecast_daily.0.icon_descriptor == 'heavy_shower' or forecast_daily.0.icon_descriptor == 'light_shower' or forecast_daily.0.icon_descriptor == 'fog' or forecast_daily.0.icon_descriptor == 'light_rain' or forecast_daily.0.icon_descriptor == 'shower' or forecast_daily.0.icon_descriptor == 'rain' or forecast_daily.0.icon_descriptor == 'snow' or forecast_daily.0.icon_descriptor == 'windy' or forecast_daily.0.icon_descriptor == 'frost' %}
+                        <div class="highlight-header" style="background-color:#56a0ee"></div>
+                    {% elif forecast_daily.0.icon_descriptor == 'hazy' or forecast_daily.0.icon_descriptor == 'dusty' %}
+                        <div class="highlight-header" style="background-color:#cd9e73"></div>
+                    {% elif forecast_daily.0.icon_descriptor == 'sunny' or forecast_daily.0.icon_descriptor == 'clear' %}
+                        <div class="highlight-header" style="background-color:#ffa500"></div>
+                    {% else %}
+                        <div class="highlight-header" style="background-color:#ff0000"></div>
+                    {% endif %}
+                    {% with icon_path='//images//weatherIcons//static//'|add:forecast_daily.0.icon_descriptor|add:'.svg' %}
+                      <img src="{% static icon_path %}" alt="weather icon">
+                    {% endwith %}
+                  </div>
+                </div>
+                <div class="text">
+                  <div class="temp">
+                    <span>{{ forecast_hourly.0.temp }}°C</span> 
+                  </div>
+                </div>
+              </div>
+              <div class="weather-data mt-2"> <!-- add .weather-data to css-->
+                <span class="p-3 pt-0">{{ forecast_daily.0.extended_text }}</span>
+              </div>
+            </div>
+          </section>         
+        </div>
+      </section>
+      <section class="weather-app-home-video">
+          <div class="left"></div>
+          <div class="left-2"></div>
+          <div class="top"></div>
+          <div class="bottom"></div>
+          <img src="{{ image.image_url.url }}" alt="">
+          <!-- <video autoplay muted loop>
+            <source src="{% url 'stream_video' video_path='video.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+          </video> -->
+        </section>
+      
+    </div>
+  <!-- video -->
+
+    <!-- sliders -->
+    <div class="slider-box" >
+      <div class="container-fluid mb-0 p-0 ps-0 slide1">
+        <section class="d-flex justify-content-between margin-right margin-title">
+          <p class="mt-2 text-white font-netflix-bold"> <b>Forecast</b> </p>
+          <div> <!-- why?? -->
+            <button  type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active tab-change-btn" aria-current="true" aria-label="Slide 1"></button>
+            <button class="tab-change-btn" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          </div>
+        </section>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <div class="carousel-inner" style="position: relative; overflow: visible;width: calc(100vw - 60px)" >
+            {% for day in forecast_daily %}
+              {% if forloop.counter|divisibleby:4 or forloop.first %}
+                {% if not forloop.first %}
+                  </div>
+                {% endif %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <section class='d-flex'>
+              {% endif %}
+                  {% if day.now %} <!-- doesn't work because day.date time is not current-->
+                  <div class="weather-card card current-day" style="margin-right:10px">
+                  {% else %}
+                  <div class="weather-card card" style="{% if forloop.counter|divisibleby:4 %}margin-right:10px{% else %}margin: 0 10px{% endif %}">
+                  {% endif %}
+                    <div class="content">
+                      <div class="top-info">
+                          <span class="day">
+                            {% if day.now %}
+                              Today
+                            {% else %}
+                              {{ day.date }}
+                            {% endif %}
+                          </span>
+                          {% if day.now %}
+                            <span class="temp">{{ day.now.temp_now }}°C</span>
+                          {% else %}
+                            <span class="temp">
+                              {% if day.temp_min %}
+                                {{ day.temp_min }}/
+                              {% endif %}
+                              {{day.temp_max}}°C
+                            </span>
+                          {% endif %}
+                      </div>
+                      <div class="icon">
+                        {% if day.icon_descriptor == 'partly_cloudy' or day.icon_descriptor == 'mostly_sunny' or day.icon_descriptor == 'cloudy' %}
+                            <div class="highlight" style="background-color:#fff"></div>
+                        {% elif day.icon_descriptor == 'heavy_shower' or day.icon_descriptor == 'light_shower' or day.icon_descriptor == 'fog' or day.icon_descriptor == 'light_rain' or day.icon_descriptor == 'shower' or day.icon_descriptor == 'rain' or day.icon_descriptor == 'snow' or day.icon_descriptor == 'windy' or day.icon_descriptor == 'frost' %}
+                            <div class="highlight" style="background-color:#56a0ee"></div>
+                        {% elif day.icon_descriptor == 'hazy' or day.icon_descriptor == 'dusty' %}
+                            <div class="highlight" style="background-color:#cd9e73"></div>
+                        {% elif day.icon_descriptor == 'sunny' or day.icon_descriptor == 'clear' %}
+                            <div class="highlight" style="background-color:#ffa500"></div>
+                        {% else %}
+                            <div class="highlight" style="background-color:#ff0000"></div>
+                        {% endif %}
+                        {% with icon_path='//images//weatherIcons//static//'|add:day.icon_descriptor|add:'.svg' %}
+                          
+                            <img src="{% static icon_path %}" alt="Weather Icon">
+                        {% endwith %}
+                      </div>
+                      <div class="description mt-0">{{ day.short_text }}</div>
+                      <div class="bottom-info">
+                        <span class="humidity">Rain: {{ day.rain.chance }}%</span>
+                        {% if day.now %}
+                          {% if day.now.is_night %}
+                            <span class="aqi">Nightime</span>
+                          {% else %}
+                            <span class="aqi">Daytime</span>
+                          {% endif %}
+                        {% else %}
+                          <span class="aqi">UV: {{ day.uv.max_index }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+              {% if forloop.last %}
+                </section>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- sliders-end -->
+    <script src="{% static '//js//landing.js' %}"></script>
+{% endblock %}
+

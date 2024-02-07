@@ -1,0 +1,487 @@
+{% extends 'template/main.html' %} 
+{% load static %} 
+{% load date_extras %}
+{% block header %}
+  <link rel="stylesheet" href="{% static '//css//landing.css' %}">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+  <div id="welcome-screen" class="wow fadeOut" data-wow-delay="1.4s" style="position: fixed; width: 100%; height: 100%; top: 0; left: 0; background: #000; display: none; align-items: center; justify-content: center; z-index: 9999;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <h1 class="text-white header-text pt-0 ml-0 mt-0 wow fadeInLeftBig" style="overflow-x:hidden;font-family: Tungsten;font-size: 7rem;letter-spacing: -0.375rem; font-weight: 700;word-wrap: break-word; padding:0; margin-top: 0;">Rain<span style="color:var(--secondary)">Check</span></h1>
+      <h2 class="pb-0 wow fadeInRightBig" style="color: #B9BBB9; font-size: 1.25rem; font-family: Netflix Sans; font-weight: 500; letter-spacing: 0.5rem; word-wrap: break-word; margin-bottom: 0;">POWERED BY AMBROSE TREACY COLLEGE</h2>
+    </div>
+  </div>
+
+  <div class="" style="position: absolute">
+  <!-- video -->
+    <div class="hero-background pt-0 mt-0">
+      <section class="hero-header">
+        <div class="content pt-3">
+          <section class="left">
+            <div class="datetime-div">
+              <div class="datetime-divider"></div>
+              <div class="ms-2 datetime">
+                <span id="time"></span>
+                <br/>
+                <span id="date"></span>
+              </div>
+            </div> 
+            <div class="location-header">
+              <h2 class="pt-5 mb-0 pb-0 font-netflix-medium wow fadeIn country-text" data-wow-delay="2s">{{ location.country|upper }}</h2>
+              <h1 class="text-white header-text pt-0 ml-0 mt-0 wow slideInLeft font-tungston-bold">{{ location.city|upper }}</h1>
+            </div>
+            <div class="header-weather">
+              <div class="current-weather">
+                <div class="icon">
+                  <div class="icon-img">  <!-- change to forecast_hourly.0. ?? more accurate ?? -->
+                    {% if forecast_hourly.0.icon_descriptor == 'partly_cloudy' or forecast_hourly.0.icon_descriptor == 'mostly_sunny' or forecast_hourly.0.icon_descriptor == 'cloudy' %}
+                        <div class="highlight-header" style="background-color:#fff"></div>
+                    {% elif forecast_hourly.0.icon_descriptor == 'heavy_shower' or forecast_hourly.0.icon_descriptor == 'light_shower' or forecast_hourly.0.icon_descriptor == 'fog' or forecast_hourly.0.icon_descriptor == 'light_rain' or forecast_hourly.0.icon_descriptor == 'shower' or forecast_hourly.0.icon_descriptor == 'rain' or forecast_hourly.0.icon_descriptor == 'snow' or forecast_hourly.0.icon_descriptor == 'windy' or forecast_hourly.0.icon_descriptor == 'frost' %}
+                        <div class="highlight-header" style="background-color:#56a0ee"></div>
+                    {% elif forecast_hourly.0.icon_descriptor == 'hazy' or forecast_hourly.0.icon_descriptor == 'dusty' %}
+                        <div class="highlight-header" style="background-color:#cd9e73"></div>
+                    {% elif forecast_hourly.0.icon_descriptor == 'sunny' or forecast_hourly.0.icon_descriptor == 'clear' %}
+                        <div class="highlight-header" style="background-color:#ffa500"></div>
+                    {% else %}
+                        <div class="highlight-header" style="background-color:#ff0000"></div>
+                    {% endif %}
+                    {% with icon_path_hb='//images//weatherIcons//static//'|add:forecast_hourly.0.icon_descriptor|add:'.svg' %}
+                      <img src="{% static icon_path_hb %}" alt="weather icon">
+                    {% endwith %}
+                  </div>
+                </div>
+                <div class="text">
+                  <div class="temp">
+                    <span>{{ forecast_hourly.0.temp }}°C</span> 
+                  </div>
+                </div>
+              </div>
+              <div class="weather-data mt-2"> <!-- add .weather-data to css-->
+                <span class="p-3 pt-0 text-center">{{ forecast_daily.0.extended_text }}</span>
+              </div>
+            </div>
+          </section>         
+        </div>
+      </section>
+      <section class="weather-app-home-video">
+          <div class="left"></div>
+          <div class="left-2"></div>
+          <div class="top"></div>
+          <div class="bottom"></div>
+          <img src="{{ image.image_url.url }}" alt="">
+          <!-- <video autoplay muted loop>
+            <source src="{% url 'stream_video' video_path='video.mp4' %}" type="video/mp4">
+              Your browser does not support the video tag.
+          </video> -->
+        </section>
+      
+    </div>
+  <!-- video -->
+
+    <!-- sliders -->
+    <div class="slider-box" >
+      <div class="container-fluid mb-0 p-0 ps-0 slide1">
+        <section class="d-flex justify-content-between margin-right margin-title">
+          <p class="mt-2 text-white font-netflix-bold"> <b>Forecast</b> </p>
+          <div> 
+            <button  type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active tab-change-btn" aria-current="true" aria-label="Slide 1"></button>
+            <button class="tab-change-btn" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          </div>
+        </section>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+          <div class="carousel-inner" style="position: relative; overflow: visible;width: calc(100vw - 55px)" >
+            {% for day in forecast_daily %}
+              {% if forloop.counter|divisibleby:5 or forloop.first %}
+                {% if not forloop.first %}
+                  </div>
+                {% endif %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <section class='d-flex'>
+              {% endif %}
+                  {% if day.now %} <!-- doesn't work because day.date time is not current-->
+                  <div class="weather-card card current-day" style="margin-right:10px">
+                  {% else %}
+                  <div class="weather-card card" style="{% if forloop.counter|divisibleby:5 %}margin-right:10px{% else %}margin: 0 10px{% endif %}">
+                  {% endif %}
+                    <div class="content">
+                      <div class="top-info">
+                          <span class="day">
+                            {% if day.now %}
+                              Today
+                            {% else %}
+                              {{ day.date }}
+                            {% endif %}
+                          </span>
+                          {% if day.now %}
+                            <span class="temp">{{ day.now.temp_now }}°C</span>
+                          {% else %}
+                            <span class="temp">
+                              {% if day.temp_min %}
+                                {{ day.temp_min }}/
+                              {% endif %}
+                              {{day.temp_max}}°C
+                            </span>
+                          {% endif %}
+                      </div>
+                      <div class="icon">
+                        {% if day.icon_descriptor == 'partly_cloudy' or day.icon_descriptor == 'mostly_sunny' or day.icon_descriptor == 'cloudy' %}
+                            <div class="highlight" style="background-color:#fff"></div>
+                        {% elif day.icon_descriptor == 'heavy_shower' or day.icon_descriptor == 'light_shower' or day.icon_descriptor == 'fog' or day.icon_descriptor == 'light_rain' or day.icon_descriptor == 'shower' or day.icon_descriptor == 'rain' or day.icon_descriptor == 'snow' or day.icon_descriptor == 'windy' or day.icon_descriptor == 'frost' %}
+                            <div class="highlight" style="background-color:#56a0ee"></div>
+                        {% elif day.icon_descriptor == 'hazy' or day.icon_descriptor == 'dusty' %}
+                            <div class="highlight" style="background-color:#cd9e73"></div>
+                        {% elif day.icon_descriptor == 'sunny' or day.icon_descriptor == 'clear' %}
+                            <div class="highlight" style="background-color:#ffa500"></div>
+                        {% else %}
+                            <div class="highlight" style="background-color:#ff0000"></div>
+                        {% endif %}
+                        {% with icon_path='//images//weatherIcons//static//'|add:day.icon_descriptor|add:'.svg' %}
+                          <img src="{% static icon_path %}" alt="Weather Icon">
+                        {% endwith %}
+                      </div>
+                      <div class="description mt-0">{{ day.short_text }}</div>
+                      <div class="bottom-info">
+                        <span class="humidity">Rain: {{ day.rain.chance }}%</span>
+                        {% if day.now %}
+                          {% if day.now.is_night %}
+                            <span class="aqi">Nightime</span>
+                          {% else %}
+                            <span class="aqi">Daytime</span>
+                          {% endif %}
+                        {% else %}
+                          <span class="aqi">UV: {{ day.uv.max_index }}</span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+              {% if forloop.last %}
+                </section>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- sliders-end -->
+
+    <!--<div class="carousel-item {% if forloop.first %}active{% endif %} d-flex">
+      <section class='d-flex'>-->
+
+    <div class="m-0 mt-2 p-0 location-container" style="text-align: left;">
+      <div class="left">
+        <div class="location-header" style="text-align: left;">
+          <!--<p class="mt-1 mb-1 p-0 text-white font-netflix-bold text" style="text-align: left;"> 
+              <b>{{ location.city }} Radar</b> 
+          </p>-->
+        </div>
+        <div class="radar" style="padding-left:0;padding-right:.8rem">
+          <div id="map"></div>
+        </div>
+      </div>
+      <div class="pt-0 pb-0 right">
+        <!--<p class="mt-1 mb-0 p-0 text-white font-netflix-bold" style="text-align: left;"> 
+          <b>Top Locations</b>
+        </p>-->
+        <div class="locations pt-0 mt-0">
+          <div class="left pt-0">
+            <div class="top">
+              <a href="/search/Hervey%20Bay%20QLD%2C%20Australia%2C%20Home"><div class="location card-location">  <!-- LINK!! -->
+                  <div class="temp-symbol">
+                    <span class="temperature">{{ hervey_bay.0.temp }}°C</span>
+                    {% if hervey_bay.0.icon_descriptor == 'partly_cloudy' or hervey_bay.0.icon_descriptor == 'mostly_sunny' or hervey_bay.0.icon_descriptor == 'cloudy' %}
+                        <div class="highlight-header" style="background-color:#fff"></div>
+                    {% elif hervey_bay.0.icon_descriptor == 'heavy_shower' or hervey_bay.0.icon_descriptor == 'light_shower' or hervey_bay.0.icon_descriptor == 'fog' or hervey_bay.0.icon_descriptor == 'light_rain' or hervey_bay.0.icon_descriptor == 'shower' or hervey_bay.0.icon_descriptor == 'rain' or hervey_bay.0.icon_descriptor == 'snow' or hervey_bay.0.icon_descriptor == 'windy' or hervey_bay.0.icon_descriptor == 'frost' %}
+                        <div class="highlight-header" style="background-color:#56a0ee"></div>
+                    {% elif hervey_bay.0.icon_descriptor == 'hazy' or hervey_bay.0.icon_descriptor == 'dusty' %}
+                        <div class="highlight-header" style="background-color:#cd9e73"></div>
+                    {% elif hervey_bay.0.icon_descriptor == 'sunny' or hervey_bay.0.icon_descriptor == 'clear' %}
+                        <div class="highlight-header" style="background-color:#ffa500"></div>
+                    {% else %}
+                        <div class="highlight-header" style="background-color:#ff0000"></div>
+                    {% endif %}
+                    {% with icon_path='//images//weatherIcons//static//'|add:hervey_bay.0.icon_descriptor|add:'.svg' %}
+                      <img src="{% static icon_path %}" alt="weather icon">
+                    {% endwith %}
+                  </div>
+                  <div class="location-description">
+                    <span class="location-name">Hervey Bay</span>
+                    <span class="weather-description descriptor">{{ hervey_bay.0.icon_descriptor|capfirst }}</span>
+                  </div>     
+              </div></a>
+            </div>
+            <div class="bottom">
+              <a href="/search/Perth%2C%20Home"><div class="location card-location">
+                <div class="temp-symbol">
+                  <span class="temperature">{{ perth.0.temp }}°C</span>
+                    {% if perth.0.icon_descriptor == 'partly_cloudy' or perth.0.icon_descriptor == 'mostly_sunny' or perth.0.icon_descriptor == 'cloudy' %}
+                        <div class="highlight-header" style="background-color:#fff"></div>
+                    {% elif perth.0.icon_descriptor == 'heavy_shower' or perth.0.icon_descriptor == 'light_shower' or perth.0.icon_descriptor == 'fog' or perth.0.icon_descriptor == 'light_rain' or perth.0.icon_descriptor == 'shower' or perth.0.icon_descriptor == 'rain' or perth.0.icon_descriptor == 'snow' or perth.0.icon_descriptor == 'windy' or perth.0.icon_descriptor == 'frost' %}
+                        <div class="highlight-header" style="background-color:#56a0ee"></div>
+                    {% elif perth.0.icon_descriptor == 'hazy' or perth.0.icon_descriptor == 'dusty' %}
+                        <div class="highlight-header" style="background-color:#cd9e73"></div>
+                    {% elif perth.0.icon_descriptor == 'sunny' or perth.0.icon_descriptor == 'clear' %}
+                        <div class="highlight-header" style="background-color:#ffa500"></div>
+                    {% else %}
+                        <div class="highlight-header" style="background-color:#ff0000"></div>
+                    {% endif %}
+                    {% with icon_path='//images//weatherIcons//static//'|add:perth.0.icon_descriptor|add:'.svg' %}
+                      <img src="{% static icon_path %}" alt="weather icon">
+                    {% endwith %}
+                  </div>
+                  <div class="location-description">
+                    <span class="location-name">Perth</span>
+                    <span class="weather-description descriptor">{{ perth.0.icon_descriptor|capfirst }}</span>
+                  </div>     
+              </div></a>
+            </div>
+          </div>
+          <div class="middle">
+            <div class="top">
+              <a href="/search/Melbourne%2C%20Home"><div class="location card-location">
+                <div class="temp-symbol">
+                  <span class="temperature">{{ melbourne.0.temp }}°C</span>
+                  {% if melbourne.0.icon_descriptor == 'partly_cloudy' or melbourne.0.icon_descriptor == 'mostly_sunny' or melbourne.0.icon_descriptor == 'cloudy' %}
+                      <div class="highlight-header" style="background-color:#fff"></div>
+                  {% elif melbourne.0.icon_descriptor == 'heavy_shower' or melbourne.0.icon_descriptor == 'light_shower' or melbourne.0.icon_descriptor == 'fog' or melbourne.0.icon_descriptor == 'light_rain' or melbourne.0.icon_descriptor == 'shower' or melbourne.0.icon_descriptor == 'rain' or melbourne.0.icon_descriptor == 'snow' or melbourne.0.icon_descriptor == 'windy' or melbourne.0.icon_descriptor == 'frost' %}
+                      <div class="highlight-header" style="background-color:#56a0ee"></div>
+                  {% elif melbourne.0.icon_descriptor == 'hazy' or melbourne.0.icon_descriptor == 'dusty' %}
+                      <div class="highlight-header" style="background-color:#cd9e73"></div>
+                  {% elif melbourne.0.icon_descriptor == 'sunny' or melbourne.0.icon_descriptor == 'clear' %}
+                      <div class="highlight-header" style="background-color:#ffa500"></div>
+                  {% else %}
+                      <div class="highlight-header" style="background-color:#ff0000"></div>
+                  {% endif %}
+                  {% with icon_path='//images//weatherIcons//static//'|add:melbourne.0.icon_descriptor|add:'.svg' %}
+                    <img src="{% static icon_path %}" alt="weather icon">
+                  {% endwith %}
+                </div>
+                <div class="location-description">
+                  <span class="location-name">Melbourne</span>
+                  <span class="weather-description descriptor">{{ melbourne.0.icon_descriptor|capfirst }}</span>
+                </div> 
+              </div></a>
+            </div>
+            <div class="bottom">
+              <a href="/search/Gold%20Coast%20QLD%2C%20Australia%2C%20Home"><div class="location card-location">
+                <div class="temp-symbol">
+                  <span class="temperature">{{ gold_coast.0.temp }}°C</span>
+                  {% if gold_coast.0.icon_descriptor == 'partly_cloudy' or gold_coast.0.icon_descriptor == 'mostly_sunny' or gold_coast.0.icon_descriptor == 'cloudy' %}
+                      <div class="highlight-header" style="background-color:#fff"></div>
+                  {% elif gold_coast.0.icon_descriptor == 'heavy_shower' or gold_coast.0.icon_descriptor == 'light_shower' or gold_coast.0.icon_descriptor == 'fog' or gold_coast.0.icon_descriptor == 'light_rain' or gold_coast.0.icon_descriptor == 'shower' or gold_coast.0.icon_descriptor == 'rain' or gold_coast.0.icon_descriptor == 'snow' or gold_coast.0.icon_descriptor == 'windy' or gold_coast.0.icon_descriptor == 'frost' %}
+                      <div class="highlight-header" style="background-color:#56a0ee"></div>
+                  {% elif gold_coast.0.icon_descriptor == 'hazy' or gold_coast.0.icon_descriptor == 'dusty' %}
+                      <div class="highlight-header" style="background-color:#cd9e73"></div>
+                  {% elif gold_coast.0.icon_descriptor == 'sunny' or gold_coast.0.icon_descriptor == 'clear' %}
+                      <div class="highlight-header" style="background-color:#ffa500"></div>
+                  {% else %}
+                      <div class="highlight-header" style="background-color:#ff0000"></div>
+                  {% endif %}
+                  {% with icon_path='//images//weatherIcons//static//'|add:gold_coast.0.icon_descriptor|add:'.svg' %}
+                    <img src="{% static icon_path %}" alt="weather icon">
+                  {% endwith %}
+                </div>
+                <div class="location-description">
+                  <span class="location-name">Gold Coast</span>
+                  <span class="weather-description descriptor">{{ gold_coast.0.icon_descriptor|capfirst }}</span>
+                </div> 
+              </div></a>
+            </div>
+          </div>
+          <div class="right">
+            <div class="top">
+              <a href="/search/sydney%2C%20Home"><div class="location card-location">
+                <div class="temp-symbol">
+                  <span class="temperature">{{ sydney.0.temp }}°C</span>
+                  {% if sydney.0.icon_descriptor == 'partly_cloudy' or sydney.0.icon_descriptor == 'mostly_sunny' or sydney.0.icon_descriptor == 'cloudy' %}
+                      <div class="highlight-header" style="background-color:#fff"></div>
+                  {% elif sydney.0.icon_descriptor == 'heavy_shower' or sydney.0.icon_descriptor == 'light_shower' or sydney.0.icon_descriptor == 'fog' or sydney.0.icon_descriptor == 'light_rain' or sydney.0.icon_descriptor == 'shower' or sydney.0.icon_descriptor == 'rain' or sydney.0.icon_descriptor == 'snow' or sydney.0.icon_descriptor == 'windy' or sydney.0.icon_descriptor == 'frost' %}
+                      <div class="highlight-header" style="background-color:#56a0ee"></div>
+                  {% elif sydney.0.icon_descriptor == 'hazy' or sydney.0.icon_descriptor == 'dusty' %}
+                      <div class="highlight-header" style="background-color:#cd9e73"></div>
+                  {% elif sydney.0.icon_descriptor == 'sunny' or sydney.0.icon_descriptor == 'clear' %}
+                      <div class="highlight-header" style="background-color:#ffa500"></div>
+                  {% else %}
+                      <div class="highlight-header" style="background-color:#ff0000"></div>
+                  {% endif %}
+                  {% with icon_path='//images//weatherIcons//static//'|add:sydney.0.icon_descriptor|add:'.svg' %}
+                    <img src="{% static icon_path %}" alt="weather icon">
+                  {% endwith %}
+                </div>
+                <div class="location-description">
+                  <span class="location-name">Sydney</span>
+                  <span class="weather-description descriptor">{{ sydney.0.icon_descriptor|capfirst }}</span>
+                </div> 
+              </div></a>
+            </div>
+            <div class="bottom">
+              <a href="/search/Brisbane%20City%2C%20Home"><div class="location card-location">
+                <div class="temp-symbol">
+                  <span class="temperature">{{ forecast_hourly.0.temp }}°C</span>
+                  {% if forecast_daily.0.icon_descriptor == 'partly_cloudy' or forecast_daily.0.icon_descriptor == 'mostly_sunny' or forecast_daily.0.icon_descriptor == 'cloudy' %}
+                      <div class="highlight-header" style="background-color:#fff"></div>
+                  {% elif forecast_daily.0.icon_descriptor == 'heavy_shower' or forecast_daily.0.icon_descriptor == 'light_shower' or forecast_daily.0.icon_descriptor == 'fog' or forecast_daily.0.icon_descriptor == 'light_rain' or forecast_daily.0.icon_descriptor == 'shower' or forecast_daily.0.icon_descriptor == 'rain' or forecast_daily.0.icon_descriptor == 'snow' or forecast_daily.0.icon_descriptor == 'windy' or forecast_daily.0.icon_descriptor == 'frost' %}
+                      <div class="highlight-header" style="background-color:#56a0ee"></div>
+                  {% elif forecast_daily.0.icon_descriptor == 'hazy' or forecast_daily.0.icon_descriptor == 'dusty' %}
+                      <div class="highlight-header" style="background-color:#cd9e73"></div>
+                  {% elif forecast_daily.0.icon_descriptor == 'sunny' or forecast_daily.0.icon_descriptor == 'clear' %}
+                      <div class="highlight-header" style="background-color:#ffa500"></div>
+                  {% else %}
+                      <div class="highlight-header" style="background-color:#ff0000"></div>
+                  {% endif %}
+                  {% with icon_path='//images//weatherIcons//static//'|add:forecast_daily.0.icon_descriptor|add:'.svg' %}
+                    <img src="{% static icon_path %}" alt="weather icon">
+                  {% endwith %}
+                </div>
+                <div class="location-description">
+                  <span class="location-name">Brisbane</span>
+                  <span class="weather-description">{{ forecast_daily.0.short_text }}</span>
+                </div> 
+              </div></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  {% include 'chatbot/chat.html' %}
+
+  <script src="{% static '//js//landing.js' %}"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+  <script>    
+    fetch('http://worldtimeapi.org/api/ip')
+        .then(response => response.json())
+        .then(data => {
+            const datetime = new Date(data.datetime);
+            document.getElementById('date').textContent = datetime.toLocaleDateString();
+            const timeOptions = { hour: '2-digit', minute: '2-digit' };
+            document.getElementById('time').textContent = datetime.toLocaleTimeString([], timeOptions);
+            document.getElementById('divider').removeClass('hide');
+            document.getElementById('timedate').removeClass('hide');
+            document.getElementById('timedate').addClass('wow');
+            document.getElementById('timedate').addClass('slideInLeft');
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+    });
+    window.onload = function () {
+      // Check if the cookie indicating the welcome screen has been shown exists
+      if (document.cookie.indexOf('welcomeScreenShown=true') === -1) {
+          document.getElementById('welcome-screen').style.display = 'flex';
+          // If not, execute the code
+          setTimeout(function () {
+              document.getElementById('welcome-screen').style.display = 'none';
+  
+              var date = new Date();
+              date.setDate(date.getDate() + 1); // Set the date to one day in the future
+              document.cookie = 'welcomeScreenShown=true; expires=' + date.toUTCString() + '; path=/';
+          }, 1600);
+      } else {
+        document.getElementById('welcome-screen').style.display = 'none';
+      }
+    };
+
+    window.onload = function() {
+      var weatherDescriptions = document.getElementsByClassName('descriptor');
+      for (var i = 0; i < weatherDescriptions.length; i++) {
+          weatherDescriptions[i].textContent = weatherDescriptions[i].textContent.replace(/_/g, ' ');
+      }
+    };
+  
+
+    function getGeoLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            return {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude
+            }
+        });
+      } else {
+        return {
+          latitude: 153.02207,
+          longitude: -27.46917
+        }
+      }
+    }
+    setInterval(function() {
+      fetch('http://worldtimeapi.org/api/ip')
+      .then(response => response.json())
+      .then(data => {
+          const datetime = new Date(data.datetime);
+          document.getElementById('date').textContent = datetime.toLocaleDateString();
+          const timeOptions = { hour: '2-digit', minute: '2-digit' };
+          document.getElementById('time').textContent = datetime.toLocaleTimeString([], timeOptions);
+          document.getElementById('divider').removeClass('hide');
+          document.getElementById('timedate').removeClass('hide');
+          document.getElementById('timedate').addClass('wow');
+          document.getElementById('timedate').addClass('slideInLeft');
+      })
+      .catch((error) => {
+          console.error('Error:', error);
+      });
+    }, 60000);
+  
+    mapboxgl.accessToken = "{{ mapbox_access_token }}";
+
+    const API_KEY = "{{ tomorrowio_api_key }}";
+
+    // pick the field (like temperature, precipitationIntensity or cloudCover)
+    const DATA_FIELD = 'precipitationIntensity';
+
+    // set the ISO timestamp (now for all fields, up to 6 hour out for precipitationIntensity)
+    const TIMESTAMP = (new Date()).toISOString();
+
+    var latitude = 153.02207;
+    var longitude = -27.46917;
+    if ('{{ location }}') {
+      latitude = '{{ location.lon }}';
+      longitude = '{{ location.lat }}';
+    } else {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+              latitude = position.coords.latitude;
+              longitude = position.coords.longitude;
+          });
+      }
+    }; 
+  
+
+    // initialize the map
+    var map = (window.map = new mapboxgl.Map({
+      container: 'map',
+      zoom: 10,
+      center: [latitude, longitude],
+      style: 'mapbox://styles/nathan-perrier23/clr7wfpx6000101ood22cfm8u', //* 'mapbox://styles/nathan-perrier23/clqthibtm00ci01pp38f03g3w',   ------ LEGACY ------
+      antialias: true
+    }));
+
+    // inject the tile layer
+    map.on('load', function() {
+      map.addSource('tomorrow-io-api', {
+          "type": 'raster',
+          "tiles": [`https://api.tomorrow.io/v4/map/tile/{z}/{x}/{y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`],
+          "tileSize": 256,
+          "attribution": '&copy; <a href="http://127.0.0.1:8000/atc/">Powered by Ambrose Treacy College</a>'
+      });
+      map.addLayer({
+          "id": "radar-tiles",
+          "type": "raster",
+          "source": "tomorrow-io-api",
+          "minzoom": 1,
+          "maxzoom": 12
+      });
+    });
+  </script>
+{% endblock %}  

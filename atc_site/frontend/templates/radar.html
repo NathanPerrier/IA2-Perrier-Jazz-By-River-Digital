@@ -1,0 +1,170 @@
+{% extends 'template/main.html' %} 
+{% load static %} 
+{% block header %}
+    <link rel="stylesheet" href="{% static '//css//landing.css' %}">
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script> -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+{% endblock %}
+{% block content %}
+    <style>
+        body {
+            overflow-y: hidden !important;
+            position: relative;
+            min-height: 100vh;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            z-index: 300;
+            bottom: 0;
+            width: calc(100vw - 50px);
+            right: 0;
+            height: calc(100vh + 30px);
+            overflow-y: hidden !important;
+        }
+        #radar-weather-select {
+            z-index: 400;
+            bottom: 20px;
+            position: absolute;
+            left: 65px;
+        }
+        .dropdown-menu {
+            display: none;
+        }
+
+        .dropdown:hover {
+            opacity: 1;
+        }
+        .dropdown .dropdown-menu .dropdown-item {
+            cursor: pointer;
+        }
+
+        .dropdown .dropdown-menu .dropdown-item.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+
+        .dropdown.show .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            transform: translate3d(0px, -100%, 0px);
+            top: 0;
+            left: 0;
+        }
+        
+    </style>
+    <div id="map">
+    </div>
+    <div id="radar-weather-select" class="dropup">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Select Field
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" id="temperature" onclick="changeField('temperature')">Temperature</a>
+            <a class="dropdown-item" id="precipitationIntensity" onclick="changeField('precipitationIntensity')">Precipitation Intensity</a>
+            <a class="dropdown-item" id="cloudCover" onclick="changeField('cloudCover')">Cloud Cover</a>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        mapboxgl.accessToken = "{{ mapbox_access_token }}";
+
+        const API_KEY = "{{ tomorrowio_api_key }}";
+
+
+        var DATA_FIELD = localStorage.getItem('selectedField');
+        // pick the field (like temperature, precipitationIntensity or cloudCover)
+        $(document).ready(function() {
+            var field = localStorage.getItem('selectedField');
+            if (field) {
+                changeField(field);
+            } else {
+                changeField('precipitationIntensity');
+            }
+        });
+
+        // set the ISO timestamp (now for all fields, up to 6 hour out for precipitationIntensity)
+        const TIMESTAMP = (new Date()).toISOString();
+
+        var latitude = 153.02207;
+        var longitude = -27.46917;
+        if ('{{ location }}') {
+          latitude = '{{ location.lon }}';
+          longitude = '{{ location.lat }}';
+        } else {
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                  latitude = position.coords.latitude;
+                  longitude = position.coords.longitude;
+              });
+          }
+        }; 
+        
+
+        // initialize the map
+        var map = (window.map = new mapboxgl.Map({
+        container: 'map',
+        zoom: 5,
+        center: [latitude, longitude],
+        style: 'mapbox://styles/nathan-perrier23/clr7bpszt00ls01ob5pxjboov', //mapbox://styles/nathan-perrier23/clqthibtm00ci01pp38f03g3w
+        antialias: true
+        }));
+
+        // inject the tile layer
+        map.on('load', function() {
+        map.addSource('tomorrow-io-api', {
+            "type": 'raster',
+            "tiles": [`https://api.tomorrow.io/v4/map/tile/{z}/{x}/{y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`],
+            "tileSize": 256,
+            "attribution": '&copy; <a href="http://127.0.0.1:8000/atc/">Powered by Ambrose Treacy College</a>'
+        });
+        map.addLayer({
+            "id": "radar-tiles",
+            "type": "raster",
+            "source": "tomorrow-io-api",
+            "minzoom": 1,
+            "maxzoom": 12
+        });
+        });
+
+        $(document).ready(function() {
+            $('.dropdown-toggle').click(function() {
+                $(this).next('.dropdown-menu').toggle();
+            });
+
+            $(document).click(function(event) {
+                var target = $(event.target);
+                if (!target.closest('.dropup').length) {
+                    $('.dropdown-menu').hide();
+                }
+            });
+        });
+
+        function changeField(field) {
+            if (field != DATA_FIELD) {
+                var currentField = $('.active').first();
+                var newField = $('#' + field);
+
+                currentField.removeClass('active');
+                newField.addClass('active');
+
+                // Store the selected field in local storage
+                localStorage.setItem('selectedField', field);
+                DATA_FIELD = field;
+
+                window.location.reload();
+            }
+        }
+    </script>
+
+    {% include 'chatbot/chat.html' %}
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Safety Policy</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/terms and policies">Terms & Policies</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Safety Policy</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '/atc_site/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <!-- Full Screen Search Start -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content" style="background: rgba(20, 24, 62, 0.7);">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn btn-square bg-white btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <div class="input-group" style="max-width: 600px;">
+                        <input type="text" class="form-control bg-transparent border-light p-3"
+                            placeholder="Type search keyword">
+                        <button class="btn btn-light px-4"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Full Screen Search End -->
+
+
+
+    <!-- safety Start -->
+    <div class="container-fluid bg-light py-5" id='privacy policy'>
+        <div class="container">
+            <div class="align-items-left">
+                <small class="wow fadeIn" data-wow-delay="0.1s">Last Updated: July 12, 2023</small>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">1. Introduction</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">This document serves as a comprehensive guideline and policy document addressing the safety concerns related to the use of AI technology by Ambrose Treacy College ("Company", "we", "our", "us"). It covers areas of potential liability and other important safety considerations regarding the Site and/or Services.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">2. General AI Safety Precautions</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">While AI technology can be highly beneficial, it also comes with certain risks. AI misuse can lead to consequences such as data breaches, privacy invasion, and unintended actions. To mitigate these risks, Ambrose Treacy College employs rigorous AI safety precautions, including secure software design practices, and timely patches and updates.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">3. Data Privacy and Protection</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">Ambrose Treacy College is committed to maintaining the privacy and security of user data. We comply with all applicable data protection regulations and employ robust encryption techniques to secure data. Please read our <a href="/terms and policies/privacy policy">Privacy Policy</a> for more information.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">4. Content Moderation and Censorship</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">Ambrose Treacy College’s AI is capable of generating various types of content. While we aim to foster creativity and innovation, we are also conscious of the potential misuse of this capability. We, therefore, employ AI-driven content moderation to prevent the creation of inappropriate or harmful content.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">5. Fair Usage Policy</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">Ambrose Treacy College’s AI technology and it's service(s) are designed to be used by humans. We do not allow the use of our services by automated bots or other non-human entities. We reserve the right to suspend or terminate accounts that violate this policy.
+                    <br><br>Ambrose Treacy College encourages its users to make fair and responsible use of our services. We reserve the right to limit or restrict access to our services if a user’s usage significantly exceeds average usage patterns.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">6. Accessibility and Inclusivity</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">We strive to make our AI services accessible and inclusive. We recognize the diversity of our user base and ensure that our AI models do not inadvertently reinforce harmful stereotypes or biases.
+                    <br><br>Furthermore, our AI models are designed to be accessible to users with disabilities. We are committed to complying with all applicable accessibility regulations and standards.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">7. Third-Party Involvement</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">Some aspects of our services involve third-party AI providers. We carefully vet these providers to ensure they meet our strict standards for data privacy, security, and ethical AI usage.
+                    </p>
+                </div>
+                <h2 class="mb-4 mt-4 align-items-left text-dark wow fadeIn" data-wow-delay="0.2s">8. Compliance with Laws and Regulations</h2>
+                <div class="m-5">
+                    <p class="text-left text-dark mb-4 wow fadeIn" data-wow-delay="0.3s">Ambrose Treacy College complies with all applicable laws and regulations related to AI and data privacy. We ensure all our practices are up to date and in line with best current standards.
+                    </p>
+                </div>
+                <small class="mt-3 wow fadeIn" data-wow-delay="0.2s">If you have any questions about our Safety Policy, please contact us at <a href="mailto:admin@atc.qld.edu.au">admin@atc.qld.edu.au</a> or by using the <a href="#contact">contact form</a> below and we'll try our best to reply as soon as posible.</small>
+            </div>
+        </div>
+    </div>
+    <!-- safety End -->
+
+    <!-- Contact Start -->
+    <div class="container-fluid bg-primary feature pt-5" id='contact'>
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
+                    <div class="btn btn-sm border rounded-pill text-white px-3 mb-3">Contact Us</div>
+                    <h1 class="mb-4 align-items-center text-white">Feel Free To Contact Us!</h1>
+                    <h3 class="text-white" style="margin-bottom: .75em"><i class="fa fa-check text-secondary me-2"></i>24/7 Support</h3>
+                    <p class="text-left text-white mb-4">Connect with us effortlessly through our contact section. Drop us a message, ask a question, or share your thoughts. We're here to listen and provide prompt assistance for all your inquiries.</p>
+                </div>
+                <div class="col-lg-8">
+                    <div class="wow fadeIn" data-wow-delay="0.3s">
+                        <div class="contact-form">
+                            <div id="alertMessage"></div>
+                            <form action="{% url 'contact_ajax' %}" method="POST" id="contactForm">
+                                {% csrf_token %}
+                                {{ form }}
+                                <div class="row">
+                                    <div class="col-sm-6 control-group">
+                                        <input type="text" name="name" class="form-control py-2" id="name" value="{{user.first_name}}" placeholder="Your Name"
+                                            required="required" data-validation-required-message="Please enter your name" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-sm-6 control-group">
+                                        <input type="email" name="email" class="form-control py-2" id="email" value="{{user.email}}" placeholder="Your Email"
+                                            required="required" data-validation-required-message="Please enter your email" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12 control-group">
+                                        <input type="text" name="subject" class="form-control py-2" id="subject" placeholder="Subject"
+                                            required="required" data-validation-required-message="Please enter a subject" />
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12 control-group">
+                                        <textarea class="form-control" name="message" rows="4" id="message" placeholder="Message"
+                                            required="required"
+                                            data-validation-required-message="Please enter your message"></textarea>
+                                        <p class="help-block text-danger"></p>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-outline-light w-100 py-2" type="submit" method="POST" name="submit" id="sendMessageButton">
+                                            <span>SEND</span>
+                                            <div class="d-none spinner-border spinner-border-sm text-light ms-3" role="status"></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contact End -->
+
+    <div class="container-fluid px-0 bg-primary">
+        <img style="padding:0;width:100%" src="{% static '/atc_site/images/homepage/peaks-1.svg' %}"></div>
+    </div>
+
+{% endblock %}

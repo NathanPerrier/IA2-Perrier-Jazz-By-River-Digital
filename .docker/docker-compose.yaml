@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  app:
+    image: app
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./DockerFile
+    ports:
+      - "8000:8000"
+      
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./staticfiles:/usr/src/app/staticfiles
+    ports:
+      - "80:80"
+
+  redis:
+    image: redis:latest
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - ./redis.conf:/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+  

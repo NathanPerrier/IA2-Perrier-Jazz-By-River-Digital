@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    
+    {% load static %}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta content="Weather, Website, Radar, Weather Alerts, Directions, Ambrose Treacy College" name="keywords">
+    <meta name="description" content="An Ambrose Treacy College Weather Website" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Arvo:wght@500;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <link rel="icon" type="image/png" href="https://www.atc.qld.edu.au/favicon.png">
+
+    <title>Ambrose Treacy College</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static '//atc_site//css//homepage//animate//animate.min.css' %}">
+    <link rel="stylesheet" href="{% static '//atc_site//css//homepage//owlcarousel//assets//owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static '//atc_site//css//homepage//bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '//atc_site//css//homepage//style.css' %}"> 
+    <link rel="stylesheet" href="{% static '//atc_site//css//homepage//stories//stories.css' %}">
+  </head>
+  <body>
+
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top px-0" id="navbar">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                <a href="/atc/" class="navbar-brand"><img style="width:200px" src="{% static 'atc_site//images//logos//atc-logo.svg' %}"></a>
+                <button type="button" class="navbar-toggler ms-0 me-0 p-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon navbar-toggler-icon-light"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a id="home-link" href="/atc/" class="nav-item nav-link">Home</a>
+                        <a href="/atc/#About" class="nav-item nav-link">About</a> <!-- turn into dropdown -->
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Subjects</a>
+                            <div class="dropdown-menu bg-light mt-2">
+                                <a href="/atc/subjects/english" class="dropdown-item">English</a>
+                                <a href="/atc/subjects/maths" class="dropdown-item">Maths</a>
+                                <a href="/atc/subjects/science" class="dropdown-item">Science</a>
+                                <a href="/atc/subjects/technology" class="dropdown-item">Technology</a>
+                                <a href="/atc/subjects/religion" class="dropdown-item">Religion</a>
+                                <a href="/atc/subjects/music" class="dropdown-item">Music</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu bg-light mt-2">
+                                <a href="/" class="dropdown-item">Weather</a>
+                                <a href="/atc/erea" class="dropdown-item">EREA</a>
+                                <a href="/atc/subjects" class="dropdown-item">Subjects</a>
+                                <a href="/atc/terms and policies" class="dropdown-item">Terms & Policies</a>
+                            </div>
+                        </div>
+                        <a href="/atc/#contact" class="nav-item nav-link">Contact</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    
+
+    <!-- Navbar End -->
+
+    {% block content %}{% endblock %}
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 footer pt-3" style="overflow-y:hidden">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+                    <a href="/atc/" class="d-inline-block mb-3">
+                        <img style="width:200px;" src="{% static 'atc_site//images//logos//atc-logo.svg' %}" alt="Logo">
+                    </a>
+                    <p class="mb-0">Discover excellence at Ambrose Treacy College, a leading educational institution on the beautiful Brisbane River. Empowering minds, shaping futures, and fostering a community of lifelong learners. Enroll in years 4-12, join the cummunity!</p>
+                </div>
+                <div class="col-md-6 col-lg-2 wow fadeIn" data-wow-delay="0.3s">
+                    <h5 class="text-white mb-4">Popular Links</h5>
+                    <a class="btn btn-link" href="/atc/">Home</a>
+                    <a class="btn btn-link" href="/atc/#About">About Us</a>
+                    <a class="btn btn-link" href="/atc/subjects">Subjects</a>
+                    <a class="btn btn-link" href="/atc/erea">EREA</a>
+                    <a class="btn btn-link" href="/">Weather</a>
+                    <a class="btn btn-link" href="/atc/#contact">Contact Us</a>
+                    <a class="btn btn-link" href="/atc/terms and policies">Terms & Policies</a>
+                </div>
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
+                    <h5 class="text-white mb-4">Our Terms & Policies</h5>
+                    <a class="btn btn-link" href="/atc/terms and policies/terms and conditions">Terms and Conditions</a>
+                    <a class="btn btn-link" href="/atc/terms and policies/privacy policy">Privacy Policy</a>
+                    <a class="btn btn-link" href="/atc/terms and policies/terms of use">Terms of Use</a>
+                    <a class="btn btn-link" href="/atc/terms and policies/copyright policy">Copyright Policy</a>
+                    <a class="btn btn-link" href="/atc/terms and policies/safety policy">Safety Policy</a>
+                    <a class="btn btn-link" href="/atc/terms and policies/cookie policy">Cookie Policy</a>
+                </div>
+                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.7s">
+                    <h5 class="text-white mb-4">Get In Touch</h5>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>Twigg St, Brisbane, Queensland</p>
+                    <p><i class="fa fa-phone me-3"></i><a class="text-white-50" href="tel:07 3878 0500" target="">(07) 3878 0500</a></p>
+                    <p><i class="fa fa-envelope me-3"></i><a class="text-white-50" href="mailto:admin@atc.qld.edu.au">admin@atc.qld.edu.au</a></p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href="https://www.facebook.com/ambrosetreacylife/"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="https://www.instagram.com/ambrose_treacy_college/"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="https://au.linkedin.com/company/ambrose-treacy-college"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="position-relative w-100 mt-4">
+                        <form method="post" onsubmit="addToNewsletter(); return false;" id="newsletter-form">
+                            <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="email" name="email_news" placeholder="Enter Your Email" style="height: 48px;">
+                            <button type="submit" id="newsletter-form-submit" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
+                        </form>
+                    </div>
+                    <small class="text-white-50 m-3">Stay In Touch!</small>
+                </div>
+            </div>
+        </div>
+        <div class="container wow slideInUp" data-wow-delay="0.5s">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; 2023 <a class="border-bottom" href="/">Ambrose Treacy College</a>. All Right Reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="/atc/">Home</a>
+                            <a href="/atc/#About">About Us</a>
+                            <a href="/atc/terms and policies/terms and conditions">Terms and Conditions</a>
+                            <a href="/">Weather</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
+
+      
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'atc_site//js//homepage//main.js' %}"></script>
+    <script src="{% static 'atc_site//js//wow//wow.min.js' %}"></script>
+    <script src="{% static 'atc_site//js//easing-2//easing.min.js' %}"></script>
+    <script src="{% static 'atc_site//js//waypoints//waypoints.min.js' %}"></script>
+    <script src="{% static 'atc_site//js//counterup//counterup.min.js' %}"></script>
+    <script src="{% static 'atc_site//js//owlcarousel//owl.carousel.min.js' %}"></script>
+    <script src="{% static 'atc_site//js//jqBootstrapValidation.js' %}"></script>
+    <script src="{% static 'atc_site//js//contact-form.js' %}"></script>
+    <script src="{% static 'atc_site//js//homepage//main.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        var contactAjaxUrl = "{% url 'contact_ajax' %}";
+        var newsletterAjaxUrl = "{% url 'newsletter_ajax' %}";
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const list = document.querySelectorAll('.list')
+        function activeLink() {
+            list.forEach((item) => 
+            item.classList.remove('active'));
+            this.classList.add('active');
+        }
+        list.forEach((item) =>
+        item.addEventListener('click', activeLink));
+
+        function addToNewsletter() { 
+
+            var emailInput = document.querySelector('input[name="email_news"]').value;
+
+            var emailData = new FormData();
+            emailData.append('email', emailInput);
+
+            if (emailInput == "") {
+                alert("Please enter an email address");
+                return;
+            }
+            if (emailInput.includes("@") == false) {
+                alert("Please enter a valid email address");
+                return;
+            }
+            fetch('newsletter_ajax/', { // Replace with the correct URL
+                method: 'POST',
+                body: emailData,
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Thank you for subscribing!');
+                    
+                } else {
+                    alert(data.error);
+                }
+            });
+        };
+    </script>
+  </body>
+</html>

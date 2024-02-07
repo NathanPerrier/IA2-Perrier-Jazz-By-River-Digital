@@ -55,7 +55,7 @@ The application's design is user-friendly and intuitive, making it easy for user
 
     GOOGLE_PLACES_API_KEY = 'your-google-places-api-key'
 
-    DJANGO_SETTINGS_MODULE= weather_app.settings
+    DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
 
     NOTE: To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
@@ -129,7 +129,7 @@ The application's design is user-friendly and intuitive, making it easy for user
 
     GOOGLE_PLACES_API_KEY = 'your-google-places-api-key'
 
-    DJANGO_SETTINGS_MODULE= weather_app.settings
+    DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
 
     NOTE: To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
@@ -159,7 +159,7 @@ The application's design is user-friendly and intuitive, making it easy for user
 6. Build the Docker image (ensure docker is running):
 
     ```sh
-    docker build -t weather_app -f DockerFile .
+    docker build -t atc_site -f DockerFile .
     ```
 
 7. Run the Docker container:
@@ -167,7 +167,7 @@ The application's design is user-friendly and intuitive, making it easy for user
     For Deployment, use:
 
     ```sh
-    docker run -p 8000:8000 weather_app
+    docker run -p 8000:8000 atc_site
     ```
 
     or 
@@ -179,7 +179,7 @@ The application's design is user-friendly and intuitive, making it easy for user
     For Development:
 
     ```sh 
-    docker run -p 8000:8000 -v "$(pwd):/app" weather_app
+    docker run -p 8000:8000 -v "$(pwd):/app" atc_site
     ```
 
 8. Open your web browser and visit `http://localhost:8000/`.

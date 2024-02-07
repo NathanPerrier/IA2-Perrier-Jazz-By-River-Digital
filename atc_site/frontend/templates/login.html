@@ -1,0 +1,100 @@
+{% extends 'template/auth.html' %}
+{% load static %} 
+
+{% block header %}
+  <link rel="stylesheet" href="{% static '//css//auth//auth.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="container p-0 m-0" id="page">
+      <div class="weather-radar">
+        <div id="map"></div>
+        <div class="right"></div>
+      </div>
+      <div class="auth-form">
+        <div class="logos mt-2"> 
+          <div class="logo">
+            <a href="/"><h1>Rain<span class="text-secondary">Check</span></h1></a>
+          </div>
+          <div class="ms-2"><div class="divider"></div></div>
+          <div class="atc ms-2">
+            <a href="/atc/"><img src="{% static '//images//logos//atc//atc-crest-white.svg' %}" alt="ATC"></a>
+          </div>
+        </div>
+        <div class="form">
+          <form action="" method="POST">
+            <h1 class="text-center mb-2">Login</h1>
+            {% csrf_token %}
+            {% if error %}
+              <div class="error-div">
+                <p class="text-center">{{ error }}</p>
+              </div>
+            {% endif %}
+            <input type="text" class="mb-1" id="email" style="text-align:center" name="email" placeholder="Email" required>
+            <div class='mb-2'>
+              <input type="password" class="mb-0" style="text-align:center" id="password" name="password" placeholder="Password" required>
+              <small class="form-text text-muted mt-0" style="font-size:.75em"><a class="text-secondary mt-0" href="/forgot/">Forgot password?</a></small>
+            </div>
+            <div class="mb-2 buttons">
+              <button type="submit" class="btn btn-primary">Login</button>
+              <a type="submit" onclick="window.history.back()" class="btn go_back">Go Back</a>
+            </div>
+            <div class="mb-3">
+              <p class="message text-center mt-0">Don't have an account? <a href="/register/" class="text-secondary">Register</a></p>
+            </div>
+        </div>
+      </div>
+  </div>
+  <script>
+      mapboxgl.accessToken = "{{ mapbox_access_token }}";
+
+      const API_KEY = "{{ tomorrowio_api_key }}";
+
+      // pick the field (like temperature, precipitationIntensity or cloudCover)
+      const DATA_FIELD = 'precipitationIntensity';
+
+      // set the ISO timestamp (now for all fields, up to 6 hour out for precipitationIntensity)
+      const TIMESTAMP = (new Date()).toISOString();
+
+      var latitude = 153.02207;
+      var longitude = -27.46917;
+      if ('{{ location }}') {
+        latitude = '{{ location.lon }}';
+        longitude = '{{ location.lat }}';
+      } else {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+            });
+        }
+      }; 
+    
+
+      // initialize the map
+      var map = (window.map = new mapboxgl.Map({
+        container: 'map',
+        zoom: 7,
+        center: [latitude, longitude],
+        style: 'mapbox://styles/nathan-perrier23/clr7wfpx6000101ood22cfm8u', //* 'mapbox://styles/nathan-perrier23/clqthibtm00ci01pp38f03g3w',   ------ LEGACY ------
+        antialias: true
+      }));
+
+      // inject the tile layer
+      map.on('load', function() {
+        map.addSource('tomorrow-io-api', {
+            "type": 'raster',
+            "tiles": [`https://api.tomorrow.io/v4/map/tile/{z}/{x}/{y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`],
+            "tileSize": 256,
+            "attribution": '&copy; <a href="http://127.0.0.1:8000/atc/">Powered by Ambrose Treacy College</a>'
+        });
+        map.addLayer({
+            "id": "radar-tiles",
+            "type": "raster",
+            "source": "tomorrow-io-api",
+            "minzoom": 1,
+            "maxzoom": 12
+        });
+      });
+  </script>
+{% endblock %}

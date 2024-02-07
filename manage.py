@@ -20,7 +20,7 @@ def main():
 
     execute_from_command_line(sys.argv)
     
-    from weather_app.backend.location.models import UserLocationModel
+    from atc_site.backend.location.models import UserLocationModel
 
     UserLocationModel.objects.all().delete()
 

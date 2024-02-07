@@ -1,0 +1,59 @@
+.LD-area{
+    height: auto;
+    display: flex;
+}
+.LD-area-sub{
+    width: 50px !important;
+    height: auto;
+    display: block;
+    text-align: center;
+    padding: 10px 0px !important;
+}
+.LD-area-sub i{ 
+    font-size: 20px !important;
+    transition: ease-in-out 0.1s;
+}
+
+.LD-hover-like:hover {
+    cursor:  pointer !important;
+    color: #1b3a7d !important;
+    transition: ease-in-out 0.1s;
+}
+
+.LD-hover-like .active {
+    color: #1b3a7d !important;
+}
+
+.LD-hover-dislike:hover {
+    cursor:  pointer !important;
+    color: #ff0000 !important;
+    transition: ease-in-out 0.1s;
+}
+
+.LD-hover-dislike .active {
+    color: #ff0000 !important;
+}
+
+.blog-small-image {
+    width: 300px;
+    height: 100%; /* Maintain the aspect ratio */
+  }
+  
+  /* Adjust the image size for smaller screens (e.g., below 768px) */
+  @media (max-width: 1111px) {
+    .blog-small-image {
+      width: 100%; /* Take the full width of the blog element */
+      height: 100%; /* Maintain the aspect ratio */
+    }
+  }
+
+  @media (max-width: 768px) {
+    .col-md-6 {
+      width: 100%; /* Columns take full width */
+      display: inline;
+    }
+  }
+
+  
+  
+  
