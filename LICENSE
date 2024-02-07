@@ -1,6 +1,8 @@
 MIT License
 
-Copyright (c) 2024 Nathan Perrier
+Copyright (c) 2024 Nathan Perrier | ATC Site
+
+This is a weather application built with Django, inspired by the innovative design of modern sites. The application uses the Django framework and follows the MVC design pattern. It also includes user authentication features. And a use of various weather API's.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
