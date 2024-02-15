@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.urls import include, path
 from . import main, views
 from .chatbot.views import chat
+from atc_site.backend import views as atc_views
 
 urlpatterns = [   
     path("", main.index, name="index"),
@@ -16,6 +17,19 @@ urlpatterns = [
     path("search/<str:location>", views.search_location, name="search_location"),
     path("saved", main.saved, name="saved"),
     path("search/", main.search, name="search"),
+    
+    path('login', atc_views.loginView, name='login'),
+    
+    path('register/', atc_views.register_view, name='register'),
+    path('register/get_email/', atc_views.register_get_email_view, name='register_get_email'),
+    path('register/get_code/', atc_views.register_get_code_view, name='register_get_code'),
+    path('register/set_password/', atc_views.register_set_password_view, name='register_set_password'),
+    
+    path('forgot/', atc_views.forgot_password_view, name='forgot_password'),
+    path('forgot/get_email/', atc_views.forgot_password_get_email_view, name='forgot_password_get_email'),
+    path('forgot/get_code/', atc_views.forgot_password_get_code_view, name='forgot_password_get_code'),
+    path('forgot/set_password/', atc_views.forgot_password_set_password_view, name='forgot_password_set_password'),
+    
     
     path("", include("atc_site.backend.weather_app.chatbot.urls"), name="chatbot"),
 ]

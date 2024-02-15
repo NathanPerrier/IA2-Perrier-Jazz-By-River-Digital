@@ -29,18 +29,6 @@ urlpatterns = [
     
     path("weather/", include("atc_site.backend.weather_app.urls"), name="weather"),
     
-    path('login', views.loginView, name='login'),
-    
-    path('register/', views.register_view, name='register'),
-    path('register/get_email/', views.register_get_email_view, name='register_get_email'),
-    path('register/get_code/', views.register_get_code_view, name='register_get_code'),
-    path('register/set_password/', views.register_set_password_view, name='register_set_password'),
-    
-    path('forgot/', views.forgot_password_view, name='forgot_password'),
-    path('forgot/get_email/', views.forgot_password_get_email_view, name='forgot_password_get_email'),
-    path('forgot/get_code/', views.forgot_password_get_code_view, name='forgot_password_get_code'),
-    path('forgot/set_password/', views.forgot_password_set_password_view, name='forgot_password_set_password'),
-    
     path('logout/', views.logout_view, name='logout'),
     
     path("admin", admin.site.urls),
