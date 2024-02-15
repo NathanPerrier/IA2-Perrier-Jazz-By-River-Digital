@@ -2,8 +2,15 @@ import os
 from django.http import StreamingHttpResponse, JsonResponse
 from django.conf import settings
 from .models import Newsletter
+from .main import *
 
 from .email import send_contact_emails, send_newsletter_emails
+
+def register_view(request):
+    return register_page(request)
+    
+def forgot_password_view(request):
+    return forgot_password_page(request)
 
 def stream_video_atc_site(request, video_path):
     video_path = os.path.join(settings.BASE_DIR, 'atc_site\\frontend\\static\\atc_site\\videos', video_path)

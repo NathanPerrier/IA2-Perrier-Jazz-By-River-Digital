@@ -14,12 +14,6 @@ from .auth.views import *
 from .atc.main import *
 # from .weather.main import RetrieveWeather
 
-def register_view(request):
-    return register_page(request)
-    
-def forgot_password_view(request):
-    return forgot_password_page(request)
-
 def logout_view(request):
     logout(request)
     return index(request)

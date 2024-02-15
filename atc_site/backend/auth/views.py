@@ -1,3 +1,3 @@
 from .register.views import register_get_code_view, register_get_email_view, register_set_password_view
 from .forgot_password.views import forgot_password_get_code_view, forgot_password_get_email_view, forgot_password_set_password_view
-from .login.views import loginView
+from .login.views import *
