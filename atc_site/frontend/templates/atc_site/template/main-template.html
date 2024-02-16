@@ -71,7 +71,36 @@
                                 <a href="/atc/terms and policies" class="dropdown-item">Terms & Policies</a>
                             </div>
                         </div>
-                        <a href="/atc/#contact" class="nav-item nav-link">Contact</a>
+                        <a href="/#contact" class="nav-item nav-link">Contact</a>
+
+                        {% if is_authenticated %}
+                        <div class="nav-item dropdown">
+                            <a href="/account" class="nav-item dropdown-toggle account" style="font-weight:1000" data-bs-toggle="dropdown">{{ user.first_name }}<span class="icon">
+                                {% if 'http' in user.avatar %}
+                                    <img
+                                    style="width:22.5px; border-radius:50%; margin-left: 8px; margin-bottom: 1.25px"
+                                    src="{{ user.avatar }}"
+                                    alt="avatar" /></span>
+                                {% else %}
+                                    {% set avatar = user.avatar|replace('frontend/static/', '') %}
+                                    <img
+                                    style="width:22.5px;height:22.5px; object-fit:cover; border-radius:50%; margin-left: 8px; margin-bottom: 1.25px"
+                                    src="{{ url_for('static', filename=avatar) }}"
+                                    alt="avatar" /></span>
+                                {% endif %}
+                            </a>
+                            <div class="dropdown-menu bg-light mt-2">
+                                <a href="/account" class="dropdown-item">Your Account</a>
+                                <a href="/account/manage" class="dropdown-item">Manage Account</a>
+                                {% if user.admin %}
+                                    <a href="/admin/users" class="dropdown-item">Manage Users</a>
+                                {% endif %}
+                                <a href="/blog/create" class="dropdown-item">Post A Blog</a>
+                                <a href="{{ url_for('main.logout') }}" class="dropdown-item">Logout</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     </div>
                 </div>
             </nav>
