@@ -64,7 +64,7 @@
       return cookieValue;
     }
     function resetMessages() {
-      fetch('/chat/reset/', {
+      fetch('/weather/chat/reset/', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -125,7 +125,7 @@
       requestInProgress = true;
 
       $.ajax({
-          url: '/chat/',  // The URL to chat endpoint
+          url: '/weather/chat/',  // The URL to chat endpoint
           method: 'POST',
           data: {
               message: userMessage,
@@ -153,7 +153,7 @@
     var model_user = document.getElementById(model).innerHTML;
 
     $.ajax({
-      url: '/chat/change_model/',  // The URL to your chat endpoint
+      url: '/weather/chat/change_model/',  // The URL to your chat endpoint
       method: 'POST',
       data: {
           model: model,

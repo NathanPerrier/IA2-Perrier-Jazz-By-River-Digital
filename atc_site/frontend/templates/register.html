@@ -253,7 +253,7 @@
               .then(data => {
                   if (data.success) {
                       document.getElementsByClassName("error-div")[0].style.display = "none";
-                      window.location.replace("/");
+                      window.location.replace("/weather/");
                       thebutton.prop("disabled", false);
                   } else {
                     alert(data.error);
@@ -264,7 +264,6 @@
                     document.getElementsByClassName("error-div")[0].innerHTML = `<p class="text-center text-white">${data.error}</p>`;
                     document.getElementsByClassName("error-div")[0].style.display = "block";
                     thebutton.prop("disabled", false);
-                    window.location.replace("/");
                   }
               });
           }
