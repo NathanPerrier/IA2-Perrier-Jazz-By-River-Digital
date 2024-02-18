@@ -16,11 +16,11 @@
       <div class="auth-form">
         <div class="logos mt-2">
           <div class="logo">
-            <a href="/"><h1>Rain<span class="text-secondary">Check</span></h1></a>
+            <a href="/weather/"><h1>Rain<span class="text-secondary">Check</span></h1></a>
           </div>
           <div class="ms-2"><div class="divider"></div></div>
           <div class="atc ms-2">
-            <a href="/atc/"><img src="{% static '//images//logos//atc//atc-crest-white.svg' %}" alt="ATC"></a>
+            <a href="/"><img src="{% static '//images//logos//atc//atc-crest-white.svg' %}" alt="ATC"></a>
           </div>
         </div>
         <div class="form">
@@ -149,7 +149,7 @@
           emailData.append('last_name', last_name);
           emailData.append('email', document.querySelector('input[name="email"]').value);
 
-          fetch('/register/get_email/', {
+          fetch('/weather/register/get_email/', {
             method: 'POST',
             body: emailData,
             headers: { 'X-CSRFToken': getCookie('csrftoken') },
@@ -175,7 +175,7 @@
           codeData.append('code', document.querySelector('input[name="reset_code"]').value);
           codeData.append('email', document.querySelector('input[name="email"]').value);
 
-          fetch('/register/get_code/', {
+          fetch('/weather/register/get_code/', {
               method: 'POST',
               body: codeData,
               headers: { 'X-CSRFToken': getCookie('csrftoken') },
@@ -244,7 +244,7 @@
               passwordData.append('password', document.querySelector('input[name="password"]').value);
               passwordData.append('email', document.querySelector('input[name="email"]').value);
 
-              fetch('/register/set_password/', {
+              fetch('/weather/register/set_password/', {
                   method: 'POST',
                   body: passwordData,
                   headers: { 'X-CSRFToken': getCookie('csrftoken') },

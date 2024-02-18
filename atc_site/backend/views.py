@@ -11,7 +11,6 @@ import re
 
 from .main import *
 from .auth.views import *
-from .atc.main import *
 # from .weather.main import RetrieveWeather
     
 def stream_video(request, video_path):
