@@ -164,7 +164,7 @@
                 var passwordData = new FormData();
                 passwordData.append('first_name', document.querySelector('input[name="first_name"]').value);
                 passwordData.append('last_name', document.querySelector('input[name="last_name"]').value);
-                passwordData.append('new_password', document.querySelector('input[name="password"]').value);
+                passwordData.append('password', document.querySelector('input[name="password"]').value);
                 passwordData.append('email', document.querySelector('input[name="email"]').value);
 
                 fetch('/register/set_password/', {
