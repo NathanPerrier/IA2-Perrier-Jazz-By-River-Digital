@@ -13,10 +13,6 @@ from .main import *
 from .auth.views import *
 from .atc.main import *
 # from .weather.main import RetrieveWeather
-
-def logout_view(request):
-    logout(request)
-    return index(request)
     
 def stream_video(request, video_path):
     video_path = os.path.join(settings.BASE_DIR, 'atc_site/frontend/static/videos', video_path)

@@ -82,10 +82,10 @@
                                     src="{{ user.avatar }}"
                                     alt="avatar" /></span>
                                 {% else %}
-                                    {% set avatar = user.avatar|replace('frontend/static/', '') %}
+                                    
                                     <img
                                     style="width:22.5px;height:22.5px; object-fit:cover; border-radius:50%; margin-left: 8px; margin-bottom: 1.25px"
-                                    src="{{ url_for('static', filename=avatar) }}"
+                                    src="{% static avatar %}"
                                     alt="avatar" /></span>
                                 {% endif %}
                             </a>
@@ -96,7 +96,7 @@
                                     <a href="/admin/users" class="dropdown-item">Manage Users</a>
                                 {% endif %}
                                 <a href="/blog/create" class="dropdown-item">Post A Blog</a>
-                                <a href="{{ url_for('main.logout') }}" class="dropdown-item">Logout</a>
+                                <a href="/logout" class="dropdown-item">Logout</a>
                             </div>
                         </div>
                     {% endif %}

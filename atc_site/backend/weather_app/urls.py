@@ -30,6 +30,7 @@ urlpatterns = [
     path('forgot/get_code/', atc_views.forgot_password_get_code_view, name='forgot_password_get_code'),
     path('forgot/set_password/', atc_views.forgot_password_set_password_view, name='forgot_password_set_password'),
     
+    path('logout/', views.logout_view, name='logout'),
     
     path("", include("atc_site.backend.weather_app.chatbot.urls"), name="chatbot"),
 ]

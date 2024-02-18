@@ -4,7 +4,12 @@ from django.conf import settings
 from .models import Newsletter
 from .main import *
 
+from django.contrib.auth import logout
 from .email import send_contact_emails, send_newsletter_emails
+
+def logout_view(request):
+    logout(request)
+    return index(request)
 
 def register_view(request):
     return register_page(request)

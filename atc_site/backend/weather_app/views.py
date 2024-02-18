@@ -12,6 +12,10 @@ import re
 from .main import *
 from .weather.main import RetrieveWeather
 
+def logout_view(request):
+    logout(request)
+    return index(request)
+
 
 def register_view(request):
     return register_page(request)

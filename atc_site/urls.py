@@ -29,8 +29,6 @@ urlpatterns = [
     
     path("weather/", include("atc_site.backend.weather_app.urls"), name="weather"),
     
-    path('logout/', views.logout_view, name='logout'),
-    
     path("admin", admin.site.urls),
     
     path('stream_video/<str:video_path>/', stream_video, name='stream_video'),
