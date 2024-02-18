@@ -116,7 +116,7 @@
 
         function submitResetCode() {
             var codeData = new FormData();
-            codeData.append('reset_code', document.querySelector('input[name="reset_code"]').value);
+            codeData.append('code', document.querySelector('input[name="reset_code"]').value);
             codeData.append('email', document.querySelector('input[name="email"]').value);
 
             fetch('/register/get_code/', {
