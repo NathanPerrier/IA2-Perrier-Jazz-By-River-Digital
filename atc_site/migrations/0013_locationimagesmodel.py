@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("atc_site", "0012_delete_locationimagesmodel"),
     ]
 
     operations = [

@@ -65,6 +65,12 @@ The application's design is user-friendly and intuitive, making it easy for user
     ```sh
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force;
     ```
+    
+    and
+
+    ```sh
+    ./.venv/scripts/activate
+    ```
 
 5. Install the required Python packages using pip:
 
@@ -114,6 +120,12 @@ The application's design is user-friendly and intuitive, making it easy for user
 
     ```sh
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force;
+    ```
+
+    and
+
+    ```sh
+    ./.venv/scripts/activate
     ```
 
 4. Set up environment variables for configuration. These are stored in a `.env` file at the root of the        
