@@ -7,16 +7,16 @@ from .subjects import *
 from .terms import *
 
 def index(request):
-    return render(request, 'atc_site//index.html')
+    return render(request, 'atc_site//index.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 def erea(request):
-    return render(request, 'atc_site//erea.html')
+    return render(request, 'atc_site//erea.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 def subjects(request):
-    return render(request, 'atc_site//subjects.html')
+    return render(request, 'atc_site//subjects.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 def terms(request):
-    return render(request, 'atc_site//terms and policies.html')
+    return render(request, 'atc_site//terms and policies.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 @csrf_protect
 def login_page(request, error=''):

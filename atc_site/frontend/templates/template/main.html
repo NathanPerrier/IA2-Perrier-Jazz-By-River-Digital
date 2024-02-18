@@ -55,11 +55,11 @@
 
         <!-- Navbar icons in the center -->
         <div class="nav navbar-nav" id="pages-link" style="padding-left:7.5px">
-            <a class="nav-item nav-link" href="/weather/search"><i class="bi bi-search"></i><span class="visually-hidden">Search</span></a>
-            <a class="nav-item nav-link" href="/weather/routes"><i class="bi bi-map"></i><span class="visually-hidden">RainCheck Routes</span></a>
-            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="/weather/"><i class="bi bi-house-door"></i><span class="visually-hidden">Home</span></a>
-            <a class="nav-item nav-link" href="/weather/saved"><i class="bi bi-flag"></i><span class="visually-hidden">Saved Locations</span></a>
-            <a class="nav-item nav-link" href="/weather/radar"><i class="bi bi-droplet"></i><span class="visually-hidden">RainCheck Radar</span></a>
+            <a class="nav-item nav-link" href="/search"><i class="bi bi-search"></i><span class="visually-hidden">Search</span></a>
+            <a class="nav-item nav-link" href="/routes"><i class="bi bi-map"></i><span class="visually-hidden">RainCheck Routes</span></a>
+            <a class="nav-item nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}" href="/"><i class="bi bi-house-door"></i><span class="visually-hidden">Home</span></a>
+            <a class="nav-item nav-link" href="/saved"><i class="bi bi-flag"></i><span class="visually-hidden">Saved Locations</span></a>
+            <a class="nav-item nav-link" href="/radar"><i class="bi bi-droplet"></i><span class="visually-hidden">RainCheck Radar</span></a>
         </div>
 
         <!-- Account link on the bottom -->
@@ -71,7 +71,7 @@
           </div>
         {% else %}
           <div class="nav navbar-nav mt-auto" id="account-link" style="padding-left:5px">
-              <a class="nav-item nav-link mb-2 mt-auto" href="/weather/login">
+              <a class="nav-item nav-link mb-2 mt-auto" href="/login">
                   <i class="bi bi-box-arrow-in-right"></i><span class="visually-hidden">Login</span> 
               </a>
           </div>
