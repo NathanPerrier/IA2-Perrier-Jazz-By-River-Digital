@@ -102,7 +102,7 @@
                         {% endif %}
                     </div>
                     <div class="login-box shake">
-                        {% if is_authenticated == false %}
+                        {% if not is_authenticated %}
                             <a type="button" href="/login" class="btn login-button" style="font-weight:1000;">Login</a>
                             <a type="button" href="/register/" class="btn register-button" style="font-weight:1000;">Signup</a>
                         {% endif %}
