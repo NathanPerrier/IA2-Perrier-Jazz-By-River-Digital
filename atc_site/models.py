@@ -1,22 +1,50 @@
 from typing import Any
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.contrib.auth.models import Group
+import re
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError('The Email field must be set')
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+    def create_user(self, email, password=None, is_admin=False, **extra_fields):
+        if not self.is_admin(extra_fields['first_name'], extra_fields['last_name'], email) or is_admin:
+            if not email:
+                raise ValueError('The Email field must be set')
+            email = self.normalize_email(email)
+            user = self.model(email=email, **extra_fields)
+            user.set_password(password)
+            user.save(using=self._db)
+            self.check_group(email, **extra_fields)
+            return user
+        CustomUser.objects.create_superuser(email, password, **extra_fields)
+        
     
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email, password, is_admin=True, **extra_fields)
+    
+    def check_group(self, email, **extra_fields):
+        if self.is_admin(extra_fields['first_name'], extra_fields['last_name'], email):
+            self.assign_user_to_group(email, 'Admins')
+        elif self.is_student(email):
+            self.assign_user_to_group(email, 'Students')
+        else:
+            self.assign_user_to_group(email, 'User')
+            
 
+    def is_admin(cls, first_name, last_name, email):
+        pattern = r'^' + re.escape(last_name.lower() + first_name[0].lower()) + r'@atc\.qld\.edu\.au$'
+
+        if not re.match(pattern, email):
+            return False
+        return True
+    
+    def is_student(cls, email):
+        pattern = r'^\d+@atc\.qld\.edu\.au$'
+
+        if not re.match(pattern, email):
+            return False
+        return True
     
     def update_password(self, email, password):
         user = self.get_by_email(email)
@@ -60,14 +88,22 @@ class CustomUserManager(BaseUserManager):
             return True
         except:
             return False
-    
+        
+    def assign_user_to_group(self, user_email, group_name):
+        user = CustomUser.objects.get(email=user_email)
+        group = Group.objects.get(name=group_name)
+        user.groups.add(group)
+        user.save()
+        
     
 class CustomUser(AbstractBaseUser):
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
     email = models.EmailField(max_length=254, unique=True)
     password = models.CharField(max_length=254, blank=False)
-    
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -77,6 +113,16 @@ class CustomUser(AbstractBaseUser):
     def __str__(self):
         return self.email
 
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # True if the user is a superuser, else False
+        return self.is_superuser
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # True if the user is a superuser, else False
+        return self.is_superuser
+    
 
     groups = models.ManyToManyField(
         'auth.Group',

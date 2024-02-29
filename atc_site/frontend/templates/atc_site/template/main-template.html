@@ -92,7 +92,7 @@
                                 <div class="dropdown-menu bg-light mt-2">
                                     <a href="/account" class="dropdown-item">Your Account</a>
                                     <a href="/account/manage" class="dropdown-item">Manage Account</a>
-                                    {% if user.admin %}
+                                    {% if user.is_admin %}
                                         <a href="/admin/users" class="dropdown-item">Manage Users</a>
                                     {% endif %}
                                     <a href="/blog/create" class="dropdown-item">Post A Blog</a>

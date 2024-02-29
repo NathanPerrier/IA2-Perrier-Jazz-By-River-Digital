@@ -88,6 +88,7 @@ AUTHENTICATION_BACKENDS = (
 
 ROOT_URLCONF = "atc_site.urls"
 
+default_app_config = 'atc_site.apps.ATC_SiteConfig'
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
