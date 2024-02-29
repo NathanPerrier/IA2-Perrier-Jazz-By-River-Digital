@@ -29,7 +29,8 @@ def register_get_code_view(request):
 
 def register_set_password_view(request):
     if request.method == 'POST':
-        user = CustomUser.objects.create_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=request.POST['password'])
+        
+        user = CustomUser.objects.check_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=request.POST['password'])
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return JsonResponse({'success': True, 'error': ''})
     return register_page_weather(request) if 'weather' in request.path else register_page_atc(request)   

@@ -5,46 +5,58 @@ from django.contrib.auth.models import Group
 import re
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, is_admin=False, **extra_fields):
-        if not self.is_admin(extra_fields['first_name'], extra_fields['last_name'], email) or is_admin:
-            if not email:
-                raise ValueError('The Email field must be set')
-            email = self.normalize_email(email)
-            user = self.model(email=email, **extra_fields)
-            user.set_password(password)
-            user.save(using=self._db)
-            self.check_group(email, **extra_fields)
-            return user
-        CustomUser.objects.create_superuser(email, password, **extra_fields)
+    def create_user(self, email, password=None, **extra_fields):
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        self.check_group(email, **extra_fields)
+        return user
         
     
     def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, is_admin=True, **extra_fields)
+        extra_fields['is_staff'] = True
+        extra_fields['is_superuser'] = True
+        return self.create_user(email, password, **extra_fields)
+    
+    def create_staff(self, email, password=None, **extra_fields):
+        extra_fields['is_staff'] = True
+        return self.create_user(email, password, **extra_fields)
+    
+    def check_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        else:
+            if self.is_teacher(extra_fields['first_name'], extra_fields['last_name'], email):
+                return self.create_staff(email, password, **extra_fields)       
+            if self.is_admin(extra_fields['first_name'], extra_fields['last_name'], email):
+                return self.create_superuser(email, password, **extra_fields) 
+            else:
+                return self.create_user(email, password, **extra_fields)
     
     def check_group(self, email, **extra_fields):
-        if self.is_admin(extra_fields['first_name'], extra_fields['last_name'], email):
-            self.assign_user_to_group(email, 'Admins')
+        if self.is_teacher(extra_fields['first_name'], extra_fields['last_name'], email):
+            self.assign_user_to_group(email, 'Teachers')
         elif self.is_student(email):
             self.assign_user_to_group(email, 'Students')
         else:
             self.assign_user_to_group(email, 'User')
             
 
-    def is_admin(cls, first_name, last_name, email):
-        pattern = r'^' + re.escape(last_name.lower() + first_name[0].lower()) + r'@atc\.qld\.edu\.au$'
-
-        if not re.match(pattern, email):
-            return False
-        return True
+    def is_admin(self, first_name, last_name, email):
+        pattern = r'^[a-zA-Z0-9._%+-]+@atc\.qld\.edu\.au$'
+        if not self.is_student(email) and not self.is_teacher(first_name, last_name, email):
+            if re.match(pattern, email):
+                return True
+        return False
     
-    def is_student(cls, email):
+    def is_teacher(self, first_name, last_name, email):
+        pattern = r'^' + re.escape(last_name.lower() + first_name[0].lower()) + r'@atc\.qld\.edu\.au$'
+        return re.match(pattern, email) is not None
+    
+    def is_student(self, email):
         pattern = r'^\d+@atc\.qld\.edu\.au$'
-
-        if not re.match(pattern, email):
-            return False
-        return True
+        return re.match(pattern, email) is not None
     
     def update_password(self, email, password):
         user = self.get_by_email(email)
