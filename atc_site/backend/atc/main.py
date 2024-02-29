@@ -6,6 +6,9 @@ from django.views.decorators.csrf import csrf_protect
 from .subjects import *
 from .terms import *
 
+
+#* split into respective folders and files later on
+
 def index(request):
     return render(request, 'atc_site//index.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
@@ -29,6 +32,9 @@ def register_page(request, error=''):
 @csrf_protect
 def forgot_password_page(request, error=''):
     return render(request, 'atc_site//forgot_password.html', {'error': error, 'range_25': range(25)})
+
+def account_page(request):
+    return render(request, 'atc_site/account//account.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 @require_POST
 #@handle_newsletter

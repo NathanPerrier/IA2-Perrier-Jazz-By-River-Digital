@@ -1,8 +1,8 @@
 {% extends 'atc_site/template/login-signup.html' %}  
 {% load static %}        
 {% block content %}                   
-    <img style="width: 150px;padding-bottom:5%;" class="logo" src="{{ static 'atc_site/images/logos/atc-logo.svg' }}">   <!-- school logo -->
-    <form action="{{ url_for('admin.admin_add_user' }}" method="POST">   <!-- creates a form and calls upon the function contact_form_page and set's the method to POST-->
+    <img style="width: 150px;padding-bottom:5%;" class="logo" src="{% static 'atc_site/images/logos/atc-logo.svg' %}">   <!-- school logo -->
+    <form action="{{ url_for('admin.admin_add_user' %}" method="POST">   <!-- creates a form and calls upon the function contact_form_page and set's the method to POST-->
         {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         <h1 style="font-weight:500; margin-bottom:5%">Add New User</h1>                 

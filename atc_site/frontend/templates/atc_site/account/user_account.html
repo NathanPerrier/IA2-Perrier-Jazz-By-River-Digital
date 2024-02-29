@@ -1,8 +1,8 @@
 {% extends "atc_site/template/main-template.html" %}
 {% load static %}
 {% block content %}
-<link type="text/css" href="{{ static 'atc_site/css/blog/blog.css' }}" rel="stylesheet">
-<link type="text/css" href="{{ static 'atc_site/css/account/main.css' }}" rel="stylesheet">
+<link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'atc_site/css/account/main.css' %}" rel="stylesheet">
 
 <!-- Hero Start -->
 <div class="container-fluid pt-5 bg-primary hero-header">
@@ -19,7 +19,7 @@
                 </nav>
             </div>
             <div class="col-lg-6 align-self-end text-center text-lg-end">
-                <img class="img-fluid" src="{{ static 'atc_site/images/homepage/hero-img-2.png' }}" alt="" style="max-height: 465px;">
+                <img class="img-fluid" src="{% static 'atc_site/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
             </div>
         </div>
     </div>
@@ -33,7 +33,7 @@
         <div class="text-white d-flex flex-row" style="height:200px;margin-top:-150px">
           <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
             {% if account.avatar %}
-              <img src="{{ static account.avatar }}"
+              <img src="{% static account.avatar %}"
                 alt="User Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
                 style="width: 150px;height:150px; z-index: 1">
             {% else %}
@@ -139,7 +139,7 @@
                       </div>
                       <div class="col-auto d-none d-lg-block">
                         {% set image = blog.image|replace('frontend/static/', '') %}
-                        <img class="img-fluid img-cover blog-small-image" src="{{ static image }}" alt="">
+                        <img class="img-fluid img-cover blog-small-image" src="{% static image }}" alt="">
                       </div>
                     </div>
                   </div>
