@@ -1,0 +1,204 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+<link type="text/css" href="{{ static 'atc_site/css/blog/blog.css' }}" rel="stylesheet">
+<link type="text/css" href="{{ static 'atc_site/css/account/main.css' }}" rel="stylesheet">
+
+<!-- Hero Start -->
+<div class="container-fluid pt-5 bg-primary hero-header">
+    <div class="container pt-5">
+        <div class="row g-5 pt-5">
+            <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                <h1 class="display-4 text-white mb-4 animated slideInRight">{{account.first_name}}&nbsp{{account.last_name}}'s Account</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                        <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a class="text-white" href="/account">Account</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">{{account.username}}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="col-lg-6 align-self-end text-center text-lg-end">
+                <img class="img-fluid" src="{{ static 'atc_site/images/homepage/hero-img-2.png' }}" alt="" style="max-height: 465px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid px-4">
+  <div class="row g-5 justify-content-center align-items-center">
+    <div class="col col-lg-12 col-xl-12 px-0">
+      <div class="card">
+        <div class="text-white d-flex flex-row" style="height:200px;margin-top:-150px">
+          <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+            {% if account.avatar %}
+              <img src="{{ static account.avatar }}"
+                alt="User Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px;height:150px; z-index: 1">
+            {% else %}
+              <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true"
+                alt="User Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
+                style="width: 150px; min-height:150px; object-fit:cover; z-index: 1">
+            {% endif %}
+            {% if social|length == 0 %}
+                <a onclick="followBtn()" class="btn btn-dark" data-mdb-ripple-color="dark"
+                style="z-index: 1;">Follow</a>
+            {% else %}
+                {% set is_following = namespace(value=false) %}
+                {% for follow in social %}
+                    {% if follow.follower_id == user.id and follow.following_id == account.id %} 
+                      {% set is_following.value = true %}
+                    {% endif %}
+                {% endfor %}
+                {% if is_following.value == true %} 
+                    <a  onclick="followBtn()" class="btn btn-outline-dark" data-mdb-ripple-color="dark"
+                      style="z-index: 1;">
+                      Unfollow 
+                    </a>
+                {% else %}
+                    <a onclick="followBtn()"  class="btn btn-dark" data-mdb-ripple-color="dark"
+                    style="z-index: 1;">Follow</a>
+                {% endif %}
+          {% endif %}
+          </div>
+          <div class="ms-3" style="z-index:2;margin-top: 160px;">
+            <h3 class="mb-0">{{account.first_name}}&nbsp{{account.last_name}}</h3>
+            <p class="m-0 pb-2 text-black-50" style="font-weight:100;">@{{account.username}}</p>
+          </div>
+        </div>
+        <div class="p-5 text-black" style="background-color: #f8f9fa;margin-top:-50px">
+          <div class="d-flex justify-content-end text-center py-2">
+            <div>
+              <p class="mb-1 h5">{{ num_blogs }}</p>
+              <p class="small text-muted mb-0">Blogs</p>
+            </div>
+            <div class="px-3">
+              <p class="mb-1 h5">{{ followers }}</p>
+              <p class="small text-muted mb-0">Followers</p>
+            </div>
+            <div>
+              <p class="mb-1 h5">{{ following }}</p>
+              <p class="small text-muted mb-0">Following</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-4 text-black">
+          <div class="mb-5">
+            <p class="lead fw-normal mb-1">About&nbsp{{account.first_name}}</p>
+            <div class="p-4" style="background-color: #f8f9fa;">
+              {% if account.bio.user_bio|length != 0 %}
+                <p class="m-0">{{ account.bio.user_bio }}</p>
+              {% else %}
+                <p class="m-0">This user has not written a bio yet.</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <p class="lead fw-normal mb-0">Recent Blogs</p>
+          </div>
+          {% if blogs|length == 0 %}
+            <div class="row py-5 mb-2 px-5 mx-5 text-center">
+              <p class="text-center text-muted">{{account.first_name}}&nbsphas not posted a blog yet, want to get notified?</p>
+              <div class="px-5">
+                <button type="button" class=" btn btn-outline-secondary btn-lg btn-block" href="#">Notify Me!</button> <!-- will need to check if user is logged in -->
+              </div>
+            </div>
+          {% else %}
+            <div class="row blog-row mb-2">
+              {% for blog in blogs %}
+                  <div class="col-md-6 flex">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
+                      <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
+                        <h3 class="mb-0" style="font-size:1.5rem">{{blog.title}}</h3>
+                        <div class="my-1 text-muted"><small>{{blog.date_posted.strftime("%B %d, %Y")}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{account.username}}</small></div>
+                        <p class="card-text mb-auto my-1">{{blog.description}}</p>
+                        <div class="button-container" style="display: flex; justify-content: space-between;">                          
+                          <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
+                          <div class="LD-area text-dark">
+                            {% set likes = namespace(value=0) %}
+                            {% set dislikes = namespace(value=0) %}
+                            {% for rating in ratings %}
+                                {% if rating.blog_id == blog.id %}
+                                    {% if rating.rating %}
+                                        {% set likes.value = likes.value + 1 %}
+                                    {% elif rating.rating is defined and not rating.rating %}
+                                        {% set dislikes.value = dislikes.value + 1 %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
+                                <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
+                            </div>
+                            <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
+                            <div class="LD-area-sub">
+                                <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-auto d-none d-lg-block">
+                        {% set image = blog.image|replace('frontend/static/', '') %}
+                        <img class="img-fluid img-cover blog-small-image" src="{{ static image }}" alt="">
+                      </div>
+                    </div>
+                  </div>
+              {% endfor %}
+            </div>
+            <nav class="pagination my-3 mx-5 px-1 py-2 rounded-pill" aria-label="Blog pagination"  style="background-color: #f8f9fa;display:flex;justify-content:space-between">
+              <div class="d-flex px-1">
+                  {% if blogs.has_previous %}
+                      {% if blogs.number == blogs.paginator.page_range|min %}
+                          <a id="prev" class="btn btn-outline-primary rounded-pill me-2" href="{{ url_for('account.user_account_page', user_username=account.username, page=(blogs.paginator.page_range|max) }}" aria-label="Previous"><i class="fas fa-chevron-left"></i></a>
+                      {% else %}
+                          <a id="prev" class="btn btn-outline-primary rounded-pill me-2" href="{{ url_for('account.user_account_page', user_username=account.username, page=(blogs.number-1) }}" aria-label="Previous"><i class="fas fa-chevron-left"></i></a>
+                      {% endif %}
+                  {% else %}
+                      <a id="prev" class="btn btn-outline-primary rounded-pill me-2 disabled" aria-label="Previous"><i class="fas fa-chevron-left"></i></a>
+                  {% endif %}
+                  {% if blogs.has_next %}
+                      {% if blogs.number == blogs.paginator.page_range|max %}
+                          <a id="next" class="btn btn-outline-primary rounded-pill" href="{{ url_for('account.user_account_page', user_username=account.username, page=(blogs.paginator.page_range|min) }}" aria-label="Next"><i class="fas fa-chevron-right"></i></a>
+                      {% else %}
+                          <a id="next" class="btn btn-outline-primary rounded-pill" href="{{ url_for('account.user_account_page', user_username=account.username, page=(blogs.number+1) }}" aria-label="Next"><i class="fas fa-chevron-right"></i></a>
+                      {% endif %}
+                  {% else %}
+                      <a id="next" class="btn btn-outline-primary rounded-pill disabled" aria-label="Next"><i class="fas fa-chevron-right"></i></a>
+                  {% endif %}
+              </div>
+              <div class="d-flex">
+                  {% for page_num in blogs.paginator.page_range %}
+                      {% if blogs.number == page_num %}
+                          <a class="btn btn-outline-primary rounded-pill me-2 active">{{ page_num }}</a>
+                      {% else %}
+                          <a class="btn btn-outline-primary rounded-pill me-2" href="{{ url_for('account.user_account_page', user_username=account.username, page=page_num }}">{{ page_num }}</a>
+                      {% endif %}
+                  {% endfor %}
+              </div>
+          </nav>  
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function followBtn() {
+    if ("{{user.is_authenticated}}" == 'True') {
+        fetch('/account/{{account.username}}/follow', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => response.json())
+          .catch(error => console.error(error));
+          window.location.href = "/account/{{account.username}}";
+    } else {
+        window.location.href = "/login";
+    }
+  }
+</script>
+
+{% endblock %}

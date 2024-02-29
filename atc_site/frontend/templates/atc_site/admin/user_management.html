@@ -1,0 +1,257 @@
+{% extends "atc_site/template/main-template.html" %}
+{% load static %}
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{{ static 'atc_site/css/admin/manage_users.css' }}">
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Manage Users</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/admin">Admin</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Manage Users</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{{ static 'atc_site/images/homepage/hero-img-2.png' }}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    <div class="container-fluid p-5">
+        <h1 class="text-center mb-4">All Users</h1>
+        <div class="mb-3 mx-5 px-1 py-2 rounded-pill" style="background-color: #f8f9fa;display:flex;justify-content:space-between">
+            <div class="d-flex mx-1">
+                <!--<select name="sort" id="sort" class="btn btn-outline-primary rounded-pill me-2" id="sort-by-select">
+                    <option value="">Sort By</option>
+                    <option value="asc">ASC</option>
+                    <option value="desc">DESC</option>
+                </select>-->
+                <a href="/admin/add" class="btn btn-outline-primary rounded-pill me-2">Add User</a>
+            </div>
+            <div class="d-flex">
+                <div class="position-relative">
+                    <input type="text" name="search" id="search-input" style="padding-left: 50px;padding-right:50px" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search Id, Name, Usermame, Email">
+                    <div id="search-results" class="position-absolute w-100 bg-white border rounded-top" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="table-wrapper p-0 m-0">
+            <table class="table table-striped table-hover" id="user-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>		
+                        <th>Username</th>				
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for _user_ in users %}
+                        <tr onclick="LinkAcountPage()">
+                            <td>{{ _user_.id }}</td>
+                            <td><a href="/account/{{ _user_.username }}"><span class="icon">
+                                {% if _user_.avatar %}
+                                    <img
+                                    style="width:22.5px; border-radius:50%; margin-right: 8px; margin-bottom: 1.25px"
+                                    src="{{ static _user_.avatar }}"
+                                    alt="avatar" /></span>
+                                {% else %}   
+                                    <img
+                                    style="width:22.5px;height:22.5px; object-fit:cover; border-radius:50%; margin-right: 8px; margin-bottom: 1.25px"
+                                    src="https://api.dicebear.com/6.x/initials/svg?seed={{_user_.first_name}}&randomizeIds=true"
+                                    alt="avatar" /></span>
+                                {% endif %}
+                                </span></a>{{ _user_.first_name }}&nbsp{{ _user_.last_name }}
+                            </td>
+                            <td>{{ _user_.username }}</td>
+                            <td>{{ _user_.email }}</td>  
+                            {% if _user_.admin %}                      
+                                <td>Admin</td>
+                            {% else %}
+                                <td>User</td>
+                            {% endif %}
+                            {% if _user_ == user %}
+                                <td><span class="status text-success">&bull;</span> Active</td>
+                            {% else %}
+                                <td><span class="status text-danger">&bull;</span> Inactive</td>
+                            {% endif %}
+                            <td>
+                                {% if _user_ != user %}
+                                    {% if _user_.admin == false %}
+                                        <div class="inline">
+                                            <a href="/account/{{_user_.username}}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-user"></i></a>
+                                            <a href="/admin/{{ _user_.id }}/manage" class="settings ms-1" title="Settings" data-toggle="tooltip"><i class="fa fa-cog"></i></a>
+                                            <a href="/admin/{{ _user_.id }}/delete" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    {% else %}
+                                        <a href="/account/{{_user_.username}}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-user"></i></a>
+                                        <!--<a href="/admin/{{ _user_.id }}/manage" class="settings ms-1" title="Settings" data-toggle="tooltip"><i class="fa fa-cog"></i></a>-->
+                                    {% endif %}
+                                {% else %}
+                                    <a href="/account" class="view" title="View" data-toggle="tooltip"><i class="fa fa-user"></i></a>
+                                    <a href="/account/manage" class="settings" title="Settings" data-toggle="tooltip"><i class="fa fa-cog"></i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <nav class="pagination my-3 mt-4 mx-5 px-1 py-2 rounded-pill" aria-label="Users pagination"  style="background-color: #f8f9fa;display:flex;justify-content:space-between">
+            <div class="d-flex px-1">
+                {% if users.has_previous %}
+                    {% if users.number == users.paginator.page_range|min %}
+                        <a id="prev" class="btn btn-outline-primary rounded-pill me-2" href="{{ url_for('admin.admin_users', page=(users.paginator.page_range|max) }}" aria-label="Previous"><i class="fas fa-chevron-left"></i></a>
+                    {% else %}
+                        <a id="prev" class="btn btn-outline-primary rounded-pill me-2" href="{{ url_for('admin.admin_users', page=(users.number-1) }}" aria-label="Previous"><i class="fas fa-chevron-left"></i></a>
+                    {% endif %}
+                {% else %}
+                    <a id="prev" class="btn btn-outline-primary rounded-pill me-2 disabled" aria-label="Previous"><i class="fas fa-chevron-left"></i></a>
+                {% endif %}
+                {% if users.has_next %}
+                    {% if users.number == users.paginator.page_range|max %}
+                        <a id="next" class="btn btn-outline-primary rounded-pill" href="{{ url_for('admin.admin_users', page=(users.paginator.page_range|min) }}" aria-label="Next"><i class="fas fa-chevron-right"></i></a>
+                    {% else %}
+                        <a id="next" class="btn btn-outline-primary rounded-pill" href="{{ url_for('admin.admin_users', page=(users.number+1) }}" aria-label="Next"><i class="fas fa-chevron-right"></i></a>
+                    {% endif %}
+                {% else %}
+                    <a id="next" class="btn btn-outline-primary rounded-pill disabled" aria-label="Next"><i class="fas fa-chevron-right"></i></a>
+                {% endif %}
+            </div>
+            <div class="d-flex">
+                {% for page_num in users.paginator.page_range %}
+                    {% if users.number == page_num %}
+                        <a class="btn btn-outline-primary rounded-pill me-2 active">{{ page_num }}</a>
+                    {% else %}
+                        <a class="btn btn-outline-primary rounded-pill me-2" href="{{ url_for('admin.admin_users', page=page_num }}">{{ page_num }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </nav>  
+    </div>     
+
+    <script>
+        function sortByAsc() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("user-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[0];
+                y = rows[i + 1].getElementsByTagName("TD")[0];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+                }
+                if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                }
+            }
+        }
+
+        function sortByDesc() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("user-table");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[0];
+                y = rows[i + 1].getElementsByTagName("TD")[0];
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+                }
+                if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                }
+            }
+        }
+
+        // Get the search input field and user table
+        const searchInput = document.getElementById('search-input');
+        const userTable = document.getElementById('user-table');
+        const originalRows = Array.from(userTable.tBodies[0].rows); // get the original rows
+
+        // Add an event listener to the search input field
+        searchInput.addEventListener('input', () => {
+            // Get the current value of the search input field
+            const searchValue = searchInput.value.trim().toLowerCase();
+
+            // Loop through each row in the user table
+            const rows = Array.from(userTable.tBodies[0].rows); // get the rows in the tbody
+            if (searchValue === '') {
+                // Return the table to its original order
+                for (let i = 0; i < originalRows.length; i++) {
+                    userTable.tBodies[0].appendChild(originalRows[i]);
+                }
+            } else {
+                // Sort the rows based on the relevance of the search results
+                rows.sort((a, b) => {
+                    // Get the name, username, email, and id cells in each row
+                    const aIdCell = a.cells[0];
+                    const aNameCell = a.cells[1];
+                    const aUsernameCell = a.cells[2];
+                    const aEmailCell = a.cells[3];
+                    const bIdCell = b.cells[0];
+                    const bNameCell = b.cells[1];
+                    const bUsernameCell = b.cells[2];
+                    const bEmailCell = b.cells[3];
+
+                    // Count the number of matches in each row
+                    let aMatches = 0;
+                    let bMatches = 0;
+                    if (aIdCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        aMatches += 4;
+                    }
+                    if (aNameCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        aMatches += 3;
+                    }
+                    if (aUsernameCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        aMatches += 2;
+                    }
+                    if (aEmailCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        aMatches += 1;
+                    }
+                    if (bIdCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        bMatches += 4;
+                    }
+                    if (bNameCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        bMatches += 3;
+                    }
+                    if (bUsernameCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        bMatches += 2;
+                    }
+                    if (bEmailCell.textContent.trim().toLowerCase().includes(searchValue)) {
+                        bMatches += 1;
+                    }
+
+                    // Sort the rows based on the number of matches
+                    return bMatches - aMatches;
+                });
+
+                // Reorder the rows in the user table
+                for (const row of rows) {
+                    userTable.tBodies[0].appendChild(row); // append to the tbody
+                }
+            }
+        });
+    </script>
+{% endblock %}

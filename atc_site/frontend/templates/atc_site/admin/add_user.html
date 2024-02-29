@@ -1,0 +1,20 @@
+{% extends 'atc_site/template/login-signup.html' %}  
+{% load static %}        
+{% block content %}                   
+    <img style="width: 150px;padding-bottom:5%;" class="logo" src="{{ static 'atc_site/images/logos/atc-logo.svg' }}">   <!-- school logo -->
+    <form action="{{ url_for('admin.admin_add_user' }}" method="POST">   <!-- creates a form and calls upon the function contact_form_page and set's the method to POST-->
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+        <h1 style="font-weight:500; margin-bottom:5%">Add New User</h1>                 
+        <p style="color:red;margin-bottom:5%">{{error}}</p>
+        <div class="name-container">
+            <p><input name="first_name" type="text" class="text name-input" style="text-align:center" autocomplete="new-password" oninput="this.className = ''" placeholder="First Name" minlength="2" required /></p>
+            <p><input name="last_name" type="text" class="text name-input" style="text-align:center;margin-left: 5%" autocomplete="new-password" oninput="this.className = ''" placeholder="Last Name" minlength="2" required /></p>
+        </div>
+        <input name="email" type="email" style="text-align:center" placeholder="Email" minlength="10" required />        <!-- retrieves the users email -->     
+        <input name="password" type="password" class="textfield" style="text-align:center" placeholder="Password" minlength="8" required />    
+        <p><input name="confirm_password" type="password" class="text" autocomplete="new-password" style="text-align:center;" oninput="this.className = ''" placeholder="Confirm New Password" minlength="8" required /></p> 
+        <button type="submit" method="POST" name="submit" class="submit">Submit</button>
+        <a onclick="window.history.back()" class="go_back">Go Back</a>                                             
+    </form> 
+{% endblock %} 
