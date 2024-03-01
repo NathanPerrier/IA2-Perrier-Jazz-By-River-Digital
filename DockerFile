@@ -15,9 +15,12 @@ RUN pip install -r requirements.txt
 # Copy project
 COPY . /app/
 
+RUN python manage.py makemigrations
+RUN python manage.py migrate
+RUN python manage.py collectstatic --noinput
+
 # Run tests
 RUN python manage.py test
-RUN python manage.py collectstatic --noinput
 
 # Copy static files
 COPY staticfiles . /staticfiles/
