@@ -19,6 +19,13 @@ stages:
     displayName: Build
     pool: self
     steps:
+    - task: DownloadSecureFile@1
+      name: .env
+      inputs:
+        secureFile: '.env'
+    - script: |
+        cp $(envfile.secureFilePath) ./
+      displayName: 'Copy .env file to working directory'
     - task: Docker@2
       displayName: Build an image
       inputs:
