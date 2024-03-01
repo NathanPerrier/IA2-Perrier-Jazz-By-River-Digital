@@ -24,7 +24,7 @@ stages:
       inputs:
         secureFile: '.env'
     - script: |
-        copy $(envfile.secureFilePath) ./
+        copy $(envfile.secureFilePath) .\
       displayName: 'Copy .env file to working directory'
     - task: Docker@2
       displayName: Build an image
