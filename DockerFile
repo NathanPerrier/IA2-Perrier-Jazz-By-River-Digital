@@ -20,7 +20,7 @@ RUN python manage.py test
 RUN python manage.py collectstatic --noinput
 
 # Copy static files
-COPY staticfiles /staticfiles/
+COPY staticfiles . /staticfiles/
 
 # Create nginx user and group
 RUN groupadd -r nginx && useradd -r -g nginx nginx
