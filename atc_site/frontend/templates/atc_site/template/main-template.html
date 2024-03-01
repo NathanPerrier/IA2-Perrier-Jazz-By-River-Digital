@@ -65,6 +65,7 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu bg-light mt-2">
+                                <a href="/events/" class="dropdown-item">Events</a> <!-- have other evetns such as charity drives, etc. -->
                                 <a href="/weather/" class="dropdown-item">Weather</a>
                                 <a href="/erea" class="dropdown-item">EREA</a>
                                 <a href="/subjects" class="dropdown-item">Subjects</a>
@@ -95,7 +96,7 @@
                                     {% if user.is_superuser %}
                                         <a href="/admin/users" class="dropdown-item">Manage Users</a>
                                     {% endif %}
-                                    <a href="/blog/create" class="dropdown-item">Post A Blog</a>
+                                    <a href="/booking/edit" class="dropdown-item">Manage Booking</a>  <!-- IF BOOKING EXISTS -->
                                     <a href="/logout/" class="dropdown-item">Logout</a>
                                 </div>
                             </div>
