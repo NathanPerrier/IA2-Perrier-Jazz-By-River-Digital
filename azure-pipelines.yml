@@ -20,7 +20,7 @@ stages:
     pool: self
     steps:
     - task: DownloadSecureFile@1
-      name: .env
+      name: envfile
       inputs:
         secureFile: '.env'
     - script: |
