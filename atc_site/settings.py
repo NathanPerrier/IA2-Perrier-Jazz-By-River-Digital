@@ -55,14 +55,18 @@ INSTALLED_APPS = [
     "django_browser_reload",
     # "axes",
     
+    "atc_site",
+    
     "atc_site.backend.weather_app",
     "atc_site.backend.weather_app.locationImage",
+    "atc_site.backend.location",
     "atc_site.backend.weather_app.chatbot",
     "atc_site.backend.atc",
-    "atc_site",
+    "atc_site.backend.atc.booking",
     "atc_site.backend",
     "atc_site.backend.auth.forgot_password",
     "atc_site.unitTests",
+    "modeltranslation",
 ]
 
 MIDDLEWARE = [
