@@ -7,6 +7,9 @@ from . import views
 
 urlpatterns = [
     path("", main.index, name="atc_index"),
+    
+    path('booking/', include('atc_site.backend.atc.booking.urls')),
+    
     path("erea", main.erea, name="erea"),
     
     path("subjects", main.subjects, name="subjects"),
