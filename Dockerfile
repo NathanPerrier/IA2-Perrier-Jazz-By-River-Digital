@@ -1,4 +1,4 @@
-ROM python:3.8-slim-buster
+FROM python:3.8-slim-buster
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
