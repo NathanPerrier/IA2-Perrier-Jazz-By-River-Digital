@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     # "axes",
     
     "atc_site",
-    
+    "modeltranslation",
+
     "atc_site.backend.weather_app",
     "atc_site.backend.weather_app.locationImage",
     "atc_site.backend.location",
@@ -66,7 +67,6 @@ INSTALLED_APPS = [
     "atc_site.backend",
     "atc_site.backend.auth.forgot_password",
     "atc_site.unitTests",
-    "modeltranslation",
 ]
 
 MIDDLEWARE = [
