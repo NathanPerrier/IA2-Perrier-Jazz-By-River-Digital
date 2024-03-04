@@ -1,0 +1,200 @@
+{% extends 'template/main-template.html' %}
+{% block content %}
+    <link type="text/css" href="{% static 'atc_site/css/blog/create-edit.css' %}" rel="stylesheet">
+    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Edit An Event!</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/subjects">Blog</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">Edit</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static 'atc_site/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+    <div class="container-fluid py-5 px-3 bg-light">
+        <h1 class="text-center mb-4">Edit Your Blog!</h1>
+        <hr class="text-center mb-2" style="width:30%;margin-left:35%">
+
+        <div class="row justify-content-center bg-light">
+            <div class="col-md-12 bg-light">
+                <div class="card px-4 bg-light">
+                    <p class="text-center mt-2">Fill out all form fields to go to next step</p>
+    
+                    <form id="msform" id="multiStepForm" action="#" method="POST">
+                        <!-- progressbar -->
+                        <ul id="progressbar">
+                            <li class="active step" id="account"><strong>Title</strong></li>
+                            <li class="step" id="personal"><strong>Content</strong></li>
+                            <li class="step" id="payment"><strong>Image</strong></li>
+                            <li class="step" id="confirm"><strong>Confirm</strong></li>
+                        </ul>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <br>
+                        <!-- fieldsets -->
+                        <div class="tab">
+                            <div class="form-card">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <h2 class="fs-title">What is Your Blog About?</h2>
+                                    </div>
+                                    <div class="col-5">
+                                        <h2 class="steps">Step 1 - 4</h2>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Title <span style="color:red">*</span></label>
+                                <input type="text" name="title" maxlength="75" minlength="10" placeholder="What is the title of your blog?" value="{{blog.title}}" />
+                                <label class="fieldlabels">Description <span style="color:red">*</span></label>
+                                <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What your blog about?">{{blog.description}}</textarea>
+                                <!--<small id="char_count">100/100</small>-->
+                            </div>
+                            <button type="button" name="delete" class="go_back btn btn-danger px-5 py-3" onclick="deleteBlog()">Delete</button>
+                            <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepOne()">
+                                <span class="buttton__text">Next</span>
+                            </button>
+                        </div>
+                        <div class="tab">
+                            <div class="form-card">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <h2 class="fs-title">Write Your Blog!</h2>
+                                    </div>
+                                    <div class="col-5">
+                                        <h2 class="steps">Step 2 - 4</h2>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Blog Content <span style="color:red">*</span></label>
+                                <textarea id="textbox-2" name="content" rows="15" minlength="250" placeholder="What is your blog?">{{blog.content}}</textarea>
+                                <!--<small id="char_count">100/100</small>-->
+                            </div>
+                            <!--<input type="button" name="next" class="next action-button" value="Next"/>
+                            <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>-->
+                            <button type="button" name="previous" class="go_back btn btn-primary px-5 py-3" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                            <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepTwo()">
+                                <span class="buttton__text">Next</span>
+                            </button>
+                        </div>
+                        <div class="tab">
+                            <div class="form-card">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <h2 class="fs-title">Add Additonal Content:</h2>
+                                    </div>
+                                    <div class="col-5">
+                                        <h2 class="steps">Step 3 - 4</h2>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Upload Cover Photo (optional)</label>
+                                <input type="file" id="file-input" name="image" accept="image/*" />
+                                <label class="fieldlabels">Current Photo</label>
+                                <input type="text" name="image-current" id="image-current" value="{{blog.image.split('/')|last}}" readonly />
+                            </div>
+                            <button type="button" name="previous" class="go_back btn btn-primary px-5 py-3" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                            <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepThree()">
+                                <span class="buttton__text">Next</span>
+                            </button>
+                        </div>
+                        <div class="tab">
+                            <div class="form-card">
+                                <div class="row">
+                                    <div class="col-7">
+                                        <h2 class="fs-title">Confirm Blog Post</h2>
+                                    </div>
+                                    <div class="col-5">
+                                        <h2 class="steps">Step 4 - 4</h2>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Title:</label>
+                                <input type="text" name="title-confirm" id="title-confirm" readonly/>
+                                <label class="fieldlabels">Description:</label>
+                                <textarea id="description-confirm" name="description-confirm" rows="3" readonly></textarea>
+                                <label class="fieldlabels">Content:</label>
+                                <textarea id="content-confirm" name="content-confirm" rows="15" readonly></textarea>
+                                <label class="fieldlabels">Cover Photo:</label><br>
+                                <input type="text" name="image-confirm" id="image-confirm" readonly />
+                                <br><br>
+                                <div class="text-center">
+                                    <button type="button" name="previous" class="go_back btn btn-primary px-5 py-3" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                                    <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepFour()">
+                                        <span class="buttton__text">Post</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'atc_site/js/blogs/create-edit.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function deleteBlog() {
+            if (confirm("Are you sure you want to delete this blog?")) {
+                fetch('/blog/{{blog.id}}/delete', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.replace("/account");
+                    } else {
+                        alert(data.error);
+                    }
+                });
+                window.location.replace("/account");
+            }
+        }
+
+        function submitStepFour() {
+            var blogData = new FormData();
+            blogData.append('title', document.querySelector('input[name="title"]').value);
+            blogData.append('description', document.getElementById('textbox').value);
+            blogData.append('content', document.getElementById('textbox-2').value);
+            if (document.querySelector('input[name="image"]').files[0] == undefined) {
+                var image = "{{blog.image}}";  
+            } else {
+                var image = document.getElementById('file-input').files[0];
+            }
+            blogData.append('image', image);
+            
+        
+            fetch('/blog/{{blog.id}}/edit/post', {
+                method: 'POST',
+                body: blogData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.replace("/blog/"+{{blog.id}});
+                } else {
+                    alert(data.error);
+                }
+            });
+        }
+
+        const fileInput = document.getElementById("file-input");
+        const imageInput = document.getElementById("image-current");
+
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0].name;
+            imageInput.value = file;
+        });
+    </script>
+{% endblock %}

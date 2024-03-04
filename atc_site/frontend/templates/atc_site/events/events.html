@@ -1,8 +1,8 @@
 {% extends 'atc/template/main-template.html' %}
 {% block content %}
 
-    <link type="text/css" href="{% static 'css/blog/blog.css' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'css/account/main.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'atc_site/css/account/main.css' %}" rel="stylesheet">
 
     {% if events|length == 0 %}
         <div class="container-fluid py-5 px-5 bg-primary hero-header" style="height:100vh">
@@ -25,13 +25,7 @@
                                 <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
                                     <div class="pb-5">
                                     <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{blog.title}}</h1>
-                                    {% set author_id = blog.user_id %}
-                                    {% set author = namespace(value=none) %}
-                                    {% for _author_ in authors %}
-                                        {% if _author_.id == author_id %}
-                                            {% set author.value = _author_ %}
-                                        {% endif %}
-                                    {% endfor %}
+                                    
                                     <h4 class="text-white mb-2 animated slideInRight">Written By <a class="text-white" href="/account/{{ author.value.username }}">@{{ author.value.username }}</a></h4>
                                     <p class="text-white animated slideInRight">{{blog.description}}</p>
                                     <div class="my-3 animated slideInRight">
