@@ -64,11 +64,18 @@
 
         <!-- Account link on the bottom -->
         {% if is_authenticated %}
-          <div class="nav navbar-nav mt-auto" id="account-link" style="padding-left:5px">
-              <a class="nav-item nav-link mb-2 mt-auto" href="/weather/logout/"> <!-- account -->
-                  <i class="bi bi-person-circle"></i><span class="visually-hidden">Account</span>
-              </a>
-          </div>
+            {% if user.avatar %}
+                <a class="nav-item nav-link mb-2 mt-auto" href="/weather/logout/"> <img
+                style="width:22.5px; border-radius:50%;"
+                src="{% static avatar %}"
+                alt="avatar" /></span></a>
+            {% else %}
+                <a class="nav-item nav-link mb-2 mt-auto" href="/weather/logout/">
+                <img
+                style="width:22.5px;height:22.5px; object-fit:cover;border-radius:50%;"
+                src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true"
+                alt="avatar" /></span></a>
+            {% endif %} 
         {% else %}
           <div class="nav navbar-nav mt-auto" id="account-link" style="padding-left:5px">
               <a class="nav-item nav-link mb-2 mt-auto" href="/weather/login">
