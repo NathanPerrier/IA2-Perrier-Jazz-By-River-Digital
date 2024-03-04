@@ -11,6 +11,7 @@ This is a weather application built with Django, inspired by the innovative desi
 The application uses various APIs and AI technologies to provide users with accurate and up-to-date data.
 
 This website was built upon the previous repos:
+
 - [IA1-Weather-App-Django](https://github.com/nathan-perrier23/IA1-Weather-App-Django)
 - [Y11-T4-ATC-Blogging-Website](https://github.com/nathan-perrier23/Y11-T4-ATC-Blogging-Website)
 
