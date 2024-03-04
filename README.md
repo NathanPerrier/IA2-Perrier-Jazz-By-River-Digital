@@ -30,7 +30,7 @@ The application's design is user-friendly and intuitive, making it easy for user
 
 ### Running the Django Application Locally
 
-1. Ensure you have Python 3.8 installed on your machine. You can download it from [here](https://www.python.org/downloads/).
+1. Ensure you have Python 3.8 or later installed on your machine. You can download it from [here](https://www.python.org/downloads/).
 
 2. Clone the Github repository using:
 
