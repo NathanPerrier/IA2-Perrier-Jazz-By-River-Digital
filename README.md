@@ -6,7 +6,7 @@ IA2 - Digital Solutions - Year 12
 
 ## Description
 
-This is a weather application built with Django, inspired by the innovative design of modern sites. The application uses the Django framework and follows the MVC design pattern. It also includes user authentication features.
+This is an event booking and ticketing website for Ambrose Treacy College, a Brisbane Boys School. The website allows users to book tickets for various events organized by the school. It is built using Django framework and follows the MVC design pattern. The website also includes user authentication features to ensure secure access to the booking system.
 
 The application uses various APIs and AI technologies to provide users with accurate and up-to-date data.
 
