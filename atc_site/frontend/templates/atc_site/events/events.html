@@ -1,0 +1,235 @@
+{% extends 'atc/template/main-template.html' %}
+{% block content %}
+
+    <link type="text/css" href="{% static 'css/blog/blog.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'css/account/main.css' %}" rel="stylesheet">
+
+    {% if events|length == 0 %}
+        <div class="container-fluid py-5 px-5 bg-primary hero-header" style="height:100vh">
+            <div class="container pt-5">
+                <div class="row g-5 pt-5">
+                    <div class="col-lg-12 align-self-center text-center text-lg-start mb-lg-5">
+                        <h1 class="text-center display-4 text-white mb-4 animated slideInRight pt-5 mt-5"><i class="bi bi-exclamation-triangle display-1 text-center text-white"></i><br>There are currently no events to display,<br> sign up to our newsletter to be imformed of any new events!<br><a href="/#footer" class="btn btn-light py-sm-3 px-sm-5 mt-4 rounded-pill me-3 animated slideInRight">Signup to our Newsletter</a></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="owl-carousel testimonial-carousel" style="margin-top:-75px;height:100vh">
+            {% for blog in featured_blogs %}
+                <div class="testimonial-item container-fluid px-0 m-0 pt-5 hero bg-overlay-50" style="height:100vh">
+                    <div class="pb-5">
+                        <img class="bg-video" src="{% static image %}"> <!-- change to bg-video-2 to remove fixed position -->
+                        <div class="container px-3 py-5 bg-img">
+                            <div class="row g-5 mb-5">
+                                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                                    <div class="pb-5">
+                                    <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{blog.title}}</h1>
+                                    {% set author_id = blog.user_id %}
+                                    {% set author = namespace(value=none) %}
+                                    {% for _author_ in authors %}
+                                        {% if _author_.id == author_id %}
+                                            {% set author.value = _author_ %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <h4 class="text-white mb-2 animated slideInRight">Written By <a class="text-white" href="/account/{{ author.value.username }}">@{{ author.value.username }}</a></h4>
+                                    <p class="text-white animated slideInRight">{{blog.description}}</p>
+                                    <div class="my-3 animated slideInRight">
+                                        <div class="LD-area text-white">
+                                            <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
+                                                <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
+                                            </div>
+                                            <div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>
+                                            <div class="LD-area-sub">
+                                                <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="wow fadeInUp" data-wow-delay="0.5s">
+                                        <a href="/blog/{{blog.id}}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
+                                        {% if blog.user_id == user.id or user.admin %}
+                                        <a href="/blog/{{blog.id}}/edit" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Edit</a>
+                                        {% else %}
+                                            {% if social|length == 0 %}
+                                                <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Follow</a>
+                                            {% else %}                       
+                                                {% if is_following == true %} 
+                                                    <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Unfollow</a>
+                                                {% else %}
+                                                    <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Follow</a>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="container-fluid py-5 px-5 bg-secondary" id="recommended">
+            <div class="col-md-12 text-white text-center">
+                <h1 class="text-white text-center underline-primary mb-5" style="z-index:-10">Recommended Blogs</h1>
+                <div class="owl-carousel recommended-carousel" style="overflow-x:hidden">
+                    {% for blog in recommended_blogs %}  <!--have device and user tracking so it doesn't matter if user is signed in or not-->
+                        <div class="row blog-row mb-2">
+                            <div class=" col-sm-12 flex ps-4" style="height:500px">
+                                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white" style="min-width:100%">
+                                    <div class="col p-4 d-flex flex-column position-static" style="min-height: 250px">
+                                        <strong class="d-inline-block mb-2 text-primary">Reccomended</strong> <!-- tags and categories -->
+                                        <h3 class="mb-0">{{blog.title}}</h3>
+                                        <div class="my-1 text-muted"><small>{{blog.date_posted.strftime("%B %d, %Y")}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{author.value.username}}</small></div>
+                                        <p class="card-text mb-auto my-1">{{blog.description}}</p>
+                                        <div class="button-container" style="display: flex; justify-content: space-between;">                          
+                                            <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
+                                            <div class="LD-area text-dark">
+                                                <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
+                                                    <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.values }}</span>
+                                                </div>
+                                                <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
+                                                <div class="LD-area-sub">
+                                                    <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto d-none d-lg-block" style="max-height:250px;width:100%;">
+                                        <img class="img-fluid img-cover blog-small-image" src="{% static image %}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid p-0 bg-light">
+            <img class="img-fluid" src="{% static 'images/homepage/peaks-4.svg' %}">
+        </div>
+
+        <div class="container-fluid pb-4 px-5 bg-light" id="blog">
+            <h1 class="text-center mb-4">All Blogs</h1>
+            <div class="mb-5 mx-5 px-1 py-2 rounded-pill bg-white" style="display:flex;justify-content:space-between">
+                <div class="d-flex px-1">
+                    <select name="categories" id="categories" class="btn btn-outline-primary rounded-pill me-2">
+                        <option value="">Categories</option>
+                        <option value="category1">Category 1</option>
+                        <option value="category2">Category 2</option>
+                        <option value="category3">Category 3</option>
+                    </select>
+                    <select name="tags" id="tags" class="btn btn-outline-primary rounded-pill me-2">
+                        <option value="">Tags</option>
+                        <option value="tag1">Tag 1</option>
+                        <option value="tag2">Tag 2</option>
+                        <option value="tag3">Tag 3</option>
+                    </select>
+                </div>
+                <div class="d-flex">
+                    <select name="sort" id="sort" class="btn btn-outline-primary rounded-pill me-2">
+                        <option value="">Sort By</option>
+                        <option value="date">Date</option>
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                    </select>
+                    <input type="text" name="search" id="search-input" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search">
+                    <div id="search-results" class="position-absolute w-100 bg-white border rounded-top" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="row blog-row" id="blog-container">
+                {% for blog in blogs %}
+                    <div class="col-md-6 flex">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
+                            <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
+                            <h3 class="mb-0" style="font-size:1.5rem">{{blog.title}}</h3>
+                            <div class="my-1 text-muted"><small>{{blog.date_posted.strftime("%B %d, %Y")}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{author.value.username}}</small></div>
+                                <p class="card-text mb-auto my-1">{{blog.description}}</p>
+                                <div class="button-container" style="display: flex; justify-content: space-between;">                          
+                                    <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
+                                    <div class="LD-area text-dark">
+                                       
+                                        <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
+                                            <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
+                                        </div>
+                                        <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
+                                        <div class="LD-area-sub">
+                                            <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto d-none d-lg-block">
+                            
+                            <img class="img-fluid img-cover blog-small-image" src="{% static image %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+           
+
+            </div>
+        <div>
+    {% endif %}
+
+    <script>
+        const blogs = document.querySelectorAll('.blog');
+        const blogsPerPage = 4;
+        let currentPage = 1;
+
+        function showPage(page) {
+            const startIndex = (page - 1) * blogsPerPage;
+            const endIndex = startIndex + blogsPerPage;
+            for (let i = 0; i < blogs.length; i++) {
+                if (i >= startIndex && i < endIndex) {
+                    blogs[i].style.display = 'block';
+                } else {
+                    blogs[i].style.display = 'none';
+                }
+            }
+        }
+
+        showPage(currentPage);
+
+        const nextBtn = document.querySelector('#next');
+        const prevBtn = document.querySelector('#prev');
+
+        nextBtn.addEventListener('click', () => {
+            currentPage++;
+            if (currentPage > Math.ceil(blogs.length / blogsPerPage)) {
+                currentPage = 1;
+            }
+            showPage(currentPage);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentPage--;
+            if (currentPage < 1) {
+                currentPage = Math.ceil(blogs.length / blogsPerPage);
+            }
+            showPage(currentPage);
+        });
+
+        function followBtn(blog_id) {
+            if ("{{user.is_authenticated}}" == 'True') {
+                fetch('/blog/'+blog_id+'/follow', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  })
+                  .then(response => response.json())
+                  .catch(error => console.error(error));
+                  window.location.href = "/blog";
+            } else {
+                window.location.href = "/login";
+            }
+        }
+        
+        
+    </script>
+{% endblock %}

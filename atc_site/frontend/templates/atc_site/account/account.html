@@ -45,45 +45,27 @@
           </div>
           <div class="ms-3" style="z-index:2;margin-top: 160px;">
             <h3 class="mb-0">{{user.first_name}}&nbsp{{user.last_name}}</h3>
-            <p class="m-0 pb-2 text-black-50" style="font-weight:100;">@{{user.username}}</p>
+            <p class="m-0 pb-2 text-black-50" style="font-weight:100;">{{ user.group }}</p>
           </div>
         </div>
         <div class="p-5 text-black" style="background-color: #f8f9fa;margin-top:-50px">
           <div class="d-flex justify-content-end text-center py-2">
             <div>
-              <p class="mb-1 h5">{{ num_blogs }}</p>
-              <p class="small text-muted mb-0">Blogs</p>
-            </div>
-            <div class="px-3">
-              <p class="mb-1 h5">{{ followers }}</p>
-              <p class="small text-muted mb-0">Followers</p>
-            </div>
-            <div>
-              <p class="mb-1 h5">{{ following }}</p>
-              <p class="small text-muted mb-0">Following</p>
+              <p class="mb-1 h5">{{ num_bookings }}</p>
+              <p class="small text-muted mb-0">Bookings</p>
             </div>
           </div>
         </div>
         <div class="card-body p-4 text-black">
-          <div class="mb-3">
-            <p class="lead fw-normal mb-1">About&nbsp{{user.first_name}}</p>
-            <div class="p-4" style="background-color: #f8f9fa;">
-              {% if user.bio.user_bio|length != 0 %}
-                <p class="m-0">{{ user.bio.user_bio }}</p>
-              {% else %}
-                <p class="m-0 text-center">You have not written a bio yet. click to add one:<br><a href="/account/manage" class="btn btn-outline-dark mt-3 py-2 px-4">Edit Profile</a></p>
-              {% endif %}
-            </div>
-          </div>
           <div class="d-flex justify-content-between align-items-center mb-4">
-            <p class="lead fw-normal mb-0">Your Blogs</p>
+            <p class="lead fw-normal mb-0">Your Bookings</p>
           </div>
-          {% if blogs|length == 0 %}
+          {% if bookings|length == 0 %}
             <div class="row py-5 mb-2 px-5 mx-5 text-center">
-              <p class="text-center text-muted">There are no blogs just yet!</p>
+              <p class="text-center text-muted">Your have no upcoming events yet!</p>
               <!-- if a user if veiwing another users account, change to a 'Get Notified?' button-->
               <div class="px-5">
-                <a class=" btn btn-outline-secondary btn-lg btn-block" href="/blog/create">Create a Blog</a> 
+                <a class=" btn btn-outline-secondary btn-lg btn-block" href="/events">Find A Event</a> 
               </div>
             </div>
           {% else %}
