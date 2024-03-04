@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django_countries.fields import CountryField
 
-from .....models import CustomUser
+from ......models import CustomUser
 
 
 class PaymentStatus(models.Model):

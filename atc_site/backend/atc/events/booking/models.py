@@ -6,9 +6,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from .tickets.models import Tickets
-from .event.models import Event
+from ...events.models import Event
 from .payment.models import Payment
-from ....models import CustomUser
+from .....models import CustomUser
 
 from django_countries.fields import CountryField
 

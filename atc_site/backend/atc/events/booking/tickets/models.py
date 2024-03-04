@@ -4,7 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from ..event.models import Event
+from ....events.models import Event
 
 class Tickets(models.Model):
    event = models.ForeignKey(Event, on_delete=models.CASCADE)
