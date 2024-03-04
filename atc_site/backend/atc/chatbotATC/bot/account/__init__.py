@@ -1,0 +1,1 @@
+""" Allows users to edit their account details, view their bookings, and view their past bookings """
