@@ -10,7 +10,9 @@ This is a weather application built with Django, inspired by the innovative desi
 
 The application uses various APIs and AI technologies to provide users with accurate and up-to-date data.
 
-the main sources for data in this project are __________________. The data from ______.
+This website was built upon the previous repos:
+- [IA1-Weather-App-Django](https://github.com/nathan-perrier23/IA1-Weather-App-Django)
+- [Y11-T4-ATC-Blogging-Website](https://github.com/nathan-perrier23/Y11-T4-ATC-Blogging-Website)
 
 The application's design is user-friendly and intuitive, making it easy for users to navigate and find the information they're looking for. The design is also responsive, ensuring a seamless experience on desktop, tablets, and mobile devices.
 
