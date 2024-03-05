@@ -58,13 +58,14 @@
                                         <h2 class="steps">Step 1 - 4</h2>
                                     </div>
                                 </div>
-                                {{ google_places_api_key}}
                                 <label class="fieldlabels">Name <span style="color:red">*</span></label>
                                 <input type="text" name="name" maxlength="75" minlength="10" placeholder="What is the name of the event?"/>
                                 <label class="fieldlabels">Description <span style="color:red">*</span></label>
                                 <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?"></textarea>
                                 <label class="fieldlabels">Location <span style="color:red">*</span></label>
                                 <input type="text" name="name" maxlength="200" minlength="5" id="location-input" placeholder="Where will the event be held?"/>
+                                <label class="fieldlabels">Date of Event <span style="color:red">*</span></label>
+                                <input type="date" name="date" id="date"/>
                                 <!--<small id="char_count">100/100</small>-->
                             </div>
                             <!--<input type="button" name="next" onclick="next()" class="next action-button" value="Next"/>-->
@@ -82,9 +83,28 @@
                                         <h2 class="steps">Step 2 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Blog Content <span style="color:red">*</span></label>
-                                <textarea id="textbox-2" name="content" rows="15" minlength="250" placeholder="What is your blog?"></textarea>
-                                <!--<small id="char_count">100/100</small>-->
+                                <div class="d-flex justify-content-between">
+                                    <div class="form-group">
+                                        <label class="fieldlabels">Ticket Price<span style="color:red">*</span></label>
+                                        <input type="text" name="price" id="price" placeholder="How much will the tickets cost?"/>
+                                        <label class="fieldlabels">Currency<span style="color:red">*</span></label>
+                                        <select class="form-select" id="currency" name="currency">
+                                            <option value="AUD">AUD</option>
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                            <option value="GBP">GBP</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="fieldlabels">Sale Start Date<span style="color:red">*</span></label>
+                                        <input type="date" name="start-date" id="start-date"/> <!--! CANNOT BE LATER OR EQUAL TO EVENT DATE -->
+                                        <label class="fieldlabels">Sale End Date<span style="color:red">*</span></label> <!--! CANNOT BE LATER OR EQUAL THAN EVENT DATE OR EIRLIER OR EQUAL THAN START DATE -->
+                                        <input type="date" name="end-date" id="end-date"/>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Number of Tickets (Max. 2000)<span style="color:red">*</span></label>
+                                <input type="range" class="form-range" min="1" max="2000" id="number-tickets">    
+                                <small id="char_count">1/2000</small>                      
                             </div>
                             <!--<input type="button" name="next" class="next action-button" value="Next"/>
                             <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>-->
@@ -181,5 +201,12 @@
 
             
         };
+
+        const rangeInput = document.getElementById('number-tickets');
+        const displayElement = document.getElementById('char_count');
+
+        rangeInput.addEventListener('input', function() {
+            displayElement.textContent = this.value + "/2000";
+        });
     </script>
 {% endblock %}
