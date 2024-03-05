@@ -3,7 +3,7 @@
 {% block content %}
     <link type="text/css" href="{% static 'atc_site/css/blog/create-edit.css' %}" rel="stylesheet">
     <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-
+    <link type="text/css" href="{% static 'atc/css/blog/checkbox.css' %}" rel="stylesheet">
     <!-- Hero Start -->
     <div class="container-fluid pt-5 bg-primary hero-header">
         <div class="container pt-5">
@@ -64,9 +64,37 @@
                                 <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?"></textarea>
                                 <label class="fieldlabels">Location <span style="color:red">*</span></label>
                                 <input type="text" name="name" maxlength="200" minlength="5" id="location-input" placeholder="Where will the event be held?"/>
-                                <label class="fieldlabels">Date of Event <span style="color:red">*</span></label>
-                                <input type="date" name="date" id="date"/>
-                                <!--<small id="char_count">100/100</small>-->
+                                <div class="d-flex justify-content-between form-group">
+                                    <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                        <label class="fieldlabels">Date of Event <span style="color:red">*</span></label>
+                                        <input type="date" name="date" id="date"/>
+                                    </div>
+                                    <div class="form-field" style="flex: 0 1 49%;">
+                                        <label class="fieldlabels">Time of Event <span style="color:red">*</span></label>
+                                        <input type="time" name="time" id="time"/>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Extras:</label>
+                                <div class="d-flex justify-content-between form-group">
+                                    <div class="form-field inline">
+                                        <label class="container-checkbox">Event Vouchers
+                                            <input id="event-vouchers" type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="container-checkbox">Food and Drink
+                                            <input id="event-food-and-drink" type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-field">  
+                                        <label class="container-checkbox">Event Schedule
+                                            <input id="event-schedule" type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <!--<input type="button" name="next" onclick="next()" class="next action-button" value="Next"/>-->
                             <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3" onclick="submitStepOne()">
@@ -83,23 +111,24 @@
                                         <h2 class="steps">Step 2 - 4</h2>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-between">
-                                    <div class="form-group">
-                                        <label class="fieldlabels">Ticket Price<span style="color:red">*</span></label>
-                                        <input type="text" name="price" id="price" placeholder="How much will the tickets cost?"/>
-                                        <label class="fieldlabels">Currency<span style="color:red">*</span></label>
-                                        <select class="form-select" id="currency" name="currency">
-                                            <option value="AUD">AUD</option>
-                                            <option value="USD">USD</option>
-                                            <option value="EUR">EUR</option>
-                                            <option value="GBP">GBP</option>
-                                        </select>
+                                <div class="d-flex justify-content-between form-group">
+                                    <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                        <div class="d-flex justify-content-between form-group">
+                                            <label class="fieldlabels">Ticket Price<span style="color:red">*</span></label>
+                                            <input type="text" name="price" id="price" placeholder="How much will the tickets cost?"/>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="fieldlabels">Sale Start Date<span style="color:red">*</span></label>
-                                        <input type="date" name="start-date" id="start-date"/> <!--! CANNOT BE LATER OR EQUAL TO EVENT DATE -->
-                                        <label class="fieldlabels">Sale End Date<span style="color:red">*</span></label> <!--! CANNOT BE LATER OR EQUAL THAN EVENT DATE OR EIRLIER OR EQUAL THAN START DATE -->
-                                        <input type="date" name="end-date" id="end-date"/>
+                                    <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                        <div class="d-flex justify-content-between form-group">
+                                            <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                                <label class="fieldlabels">Sale Start Date<span style="color:red">*</span></label>
+                                                <input type="date" name="start-date" id="start-date"/> <!--! CANNOT BE LATER OR EQUAL TO EVENT DATE -->
+                                            </div>
+                                            <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                                <label class="fieldlabels">Sale End Date<span style="color:red">*</span></label> <!--! CANNOT BE LATER OR EQUAL THAN EVENT DATE OR EIRLIER OR EQUAL THAN START DATE -->
+                                                <input type="date" name="end-date" id="end-date"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <label class="fieldlabels">Number of Tickets (Max. 2000)<span style="color:red">*</span></label>
@@ -117,7 +146,7 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">Add Additonal Content:</h2>
+                                        <h2 class="fs-title">Add an Image:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 3 - 4</h2>
@@ -135,19 +164,20 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">Confirm Blog Post</h2>
+                                        <h2 class="fs-title">Confirm Event:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 4 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Title:</label>
-                                <input type="text" name="title-confirm" id="title-confirm" readonly/>
+                                <label class="fieldlabels">Nmae:</label>
+                                <input type="text" name="name-confirm" id="name-confirm" readonly/>
                                 <label class="fieldlabels">Description:</label>
                                 <textarea id="description-confirm" name="description-confirm" rows="3" readonly></textarea>
-                                <label class="fieldlabels">Content:</label>
-                                <textarea id="content-confirm" name="content-confirm" rows="15" readonly></textarea>
-                                <label class="fieldlabels">Cover Photo:</label><br>
+                                
+                                <!-- Other fields, add once can access!! -->
+
+                                <label class="fieldlabels">Event Image:</label><br>
                                 <input type="text" name="image-confirm" id="image-confirm" readonly />
                                 <br><br>
                                 <div class="text-center">

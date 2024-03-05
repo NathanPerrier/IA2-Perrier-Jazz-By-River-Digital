@@ -38,7 +38,6 @@ class PaymentStatus(models.Model):
 class Payment(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    amount = models.DecimalField(max_digits=10, decimal_places=2)
-   currency = CountryField()
    status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
    creation_time = models.DateTimeField(auto_now_add=True, blank=False)
    last_modified = models.DateTimeField(auto_now=True, blank=False)

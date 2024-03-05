@@ -6,7 +6,7 @@
         {% csrf_token %}
         <h1 style="font-weight:500; margin-bottom:5%">Login</h1>                 
         <p style="color:red;margin-bottom:5%">{{error}}</p>
-        <input name="email" style="text-align:center" placeholder="Username or Email" minlength="2" required />        <!-- retrieves the users email -->     
+        <input name="email" style="text-align:center" placeholder="Email" minlength="2" required />        <!-- retrieves the users email -->     
         <input name="password" type="password" class="textfield" style="margin:0; text-align:center" placeholder="Password" minlength="8" required />
         <div class="hyperlink"><a href="/forgot/">Forgot password?</a></div>        
         <button type="submit" method="POST" name="submit" class="submit">Submit</button>
