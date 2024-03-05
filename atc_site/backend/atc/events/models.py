@@ -19,7 +19,7 @@ class Event(models.Model):
    sale_end_date = models.DateTimeField(blank=False)
    creation_time = models.DateTimeField(auto_now_add=True, blank=False)
    last_modified = models.DateTimeField(auto_now=True, blank=False)
-   organizer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+   organizer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  #* whoever creates the event
    ticket_price = models.DecimalField(max_digits=10, decimal_places=2)
    currency = CountryField()
    image = models.ImageField(upload_to='images/events/', blank=True, null=True)

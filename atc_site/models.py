@@ -132,7 +132,7 @@ class CustomUser(AbstractBaseUser):
         return self.is_superuser
 
     def has_module_perms(self, app_label):
-        "Does the user have permissions to view the app `app_label`?"
+        "Does the user have permissions to view the app `atc_site`?"
         # True if the user is a superuser, else False
         return self.is_superuser
     

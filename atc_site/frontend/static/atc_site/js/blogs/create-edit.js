@@ -1,11 +1,12 @@
 
 
 function submitStepOne() {
-    var title = document.querySelector('input[name="title"]').value;
+    var title = document.querySelector('input[name="mame"]').value;
     var description = document.getElementById('textbox').value;
+    var lovation = document.querySelector('input[name="location"]').value;
 
 
-    if (!title || !description) {
+    if (!title || !description || !location) {
         alert('Inputs cannot be empty');
     } else {
         nextPrev(1);

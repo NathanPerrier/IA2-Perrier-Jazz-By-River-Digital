@@ -39,7 +39,7 @@
                         <!-- progressbar -->
                         <ul id="progressbar">
                             <li class="active step" id="account"><strong>About</strong></li>
-                            <li class="step" id="personal"><strong>Content</strong></li>
+                            <li class="step" id="personal"><strong>Tickets</strong></li>
                             <li class="step" id="payment"><strong>Image</strong></li>
                             <li class="step" id="confirm"><strong>Confirm</strong></li>
                         </ul>
@@ -52,16 +52,19 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">What is Your Blog About?</h2>
+                                        <h2 class="fs-title">What is Your Event About?</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 1 - 4</h2>
                                     </div>
                                 </div>
+                                {{ google_places_api_key}}
                                 <label class="fieldlabels">Name <span style="color:red">*</span></label>
                                 <input type="text" name="name" maxlength="75" minlength="10" placeholder="What is the name of the event?"/>
                                 <label class="fieldlabels">Description <span style="color:red">*</span></label>
                                 <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?"></textarea>
+                                <label class="fieldlabels">Location <span style="color:red">*</span></label>
+                                <input type="text" name="name" maxlength="200" minlength="5" id="location-input" placeholder="Where will the event be held?"/>
                                 <!--<small id="char_count">100/100</small>-->
                             </div>
                             <!--<input type="button" name="next" onclick="next()" class="next action-button" value="Next"/>-->
@@ -73,7 +76,7 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">Write Your Blog!</h2>
+                                        <h2 class="fs-title">Event Tickets:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 2 - 4</h2>
@@ -143,6 +146,7 @@
     <script src="{% static 'atc_site/js/blogs/create-edit.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_places_api_key }}&libraries=places"></script>
     <script>
         function submitStepFour() {
             var blogData = new FormData();
@@ -164,5 +168,18 @@
                 }
             });
         }
+
+        window.onload = function() {
+            var searchInput = document.getElementById('location-input');
+            
+            var options = {
+                componentRestrictions: {country: 'au'},
+                types: ['street_address', 'establishment', 'landmark']
+            };
+
+            var autocomplete = new google.maps.places.Autocomplete(searchInput, options);
+
+            
+        };
     </script>
 {% endblock %}
