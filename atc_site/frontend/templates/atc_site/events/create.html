@@ -27,7 +27,7 @@
     <!-- Hero End -->
 
     <div class="container-fluid py-5 px-3 bg-light">
-        <h1 class="text-center mb-4">Create A Event!</h1>
+        <h1 class="text-center mb-4">Create An Event!</h1>
         <hr class="text-center mb-2" style="width:30%;margin-left:35%">
 
         <div class="row justify-content-center bg-light">
@@ -52,7 +52,7 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">What is Your Event About?</h2>
+                                        <h2 class="fs-title">Event Detials:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 1 - 4</h2>
@@ -207,6 +207,16 @@
 
         rangeInput.addEventListener('input', function() {
             displayElement.textContent = this.value + "/2000";
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const year = today.getFullYear();
+        
+            dateInput.min = `${year}-${month}-${day}`;
         });
     </script>
 {% endblock %}
