@@ -7,4 +7,7 @@ urlpatterns = [
     path("", main.events, name="events"),
     
     path('booking/', include('atc_site.backend.atc.events.booking.urls')),
+    
+    path('create/', main.create_event, name='events'),
+    path('edit/<int:event_id>/', main.edit_event, name='events'),
 ]

@@ -22,5 +22,6 @@ class Event(models.Model):
    organizer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    ticket_price = models.DecimalField(max_digits=10, decimal_places=2)
    currency = CountryField()
+   image = models.ImageField(upload_to='images/events/', blank=True, null=True)
    
    

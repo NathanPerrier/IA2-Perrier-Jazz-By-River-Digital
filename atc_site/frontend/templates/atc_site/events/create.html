@@ -1,7 +1,7 @@
 {% extends 'atc_site/template/main-template.html' %}
 {% load static %}
 {% block content %}
-    <link type="text/css" href="{% static 'css/blog/create-edit.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'atc_site/css/blog/create-edit.css' %}" rel="stylesheet">
     <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
     <!-- Hero Start -->
@@ -13,7 +13,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
                             <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
-                            <li class="breadcrumb-item"><a class="text-white" href="/subjects">Blog</a></li>
+                            <li class="breadcrumb-item"><a class="text-white" href="/events/">Events</a></li>
                             <li class="breadcrumb-item text-white active" aria-current="page">Create</li>
                         </ol>
                     </nav>
@@ -27,7 +27,7 @@
     <!-- Hero End -->
 
     <div class="container-fluid py-5 px-3 bg-light">
-        <h1 class="text-center mb-4">Create A Blog!</h1>
+        <h1 class="text-center mb-4">Create A Event!</h1>
         <hr class="text-center mb-2" style="width:30%;margin-left:35%">
 
         <div class="row justify-content-center bg-light">
@@ -38,7 +38,7 @@
                     <form id="msform" id="multiStepForm" action="#" method="POST">
                         <!-- progressbar -->
                         <ul id="progressbar">
-                            <li class="active step" id="account"><strong>Title</strong></li>
+                            <li class="active step" id="account"><strong>About</strong></li>
                             <li class="step" id="personal"><strong>Content</strong></li>
                             <li class="step" id="payment"><strong>Image</strong></li>
                             <li class="step" id="confirm"><strong>Confirm</strong></li>
@@ -58,10 +58,10 @@
                                         <h2 class="steps">Step 1 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Title <span style="color:red">*</span></label>
-                                <input type="text" name="title" maxlength="75" minlength="10" placeholder="What is the title of your blog?"/>
+                                <label class="fieldlabels">Name <span style="color:red">*</span></label>
+                                <input type="text" name="name" maxlength="75" minlength="10" placeholder="What is the name of the event?"/>
                                 <label class="fieldlabels">Description <span style="color:red">*</span></label>
-                                <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What your blog about?"></textarea>
+                                <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?"></textarea>
                                 <!--<small id="char_count">100/100</small>-->
                             </div>
                             <!--<input type="button" name="next" onclick="next()" class="next action-button" value="Next"/>-->
@@ -146,19 +146,19 @@
     <script>
         function submitStepFour() {
             var blogData = new FormData();
-            blogData.append('title', document.querySelector('input[name="title"]').value);
+            blogData.append('name', document.querySelector('input[name="name"]').value);
             blogData.append('description', document.getElementById('textbox').value);
             blogData.append('content', document.getElementById('textbox-2').value);
             blogData.append('image', document.getElementById('file-input').files[0]);
             
-            fetch('/blog/create/post', {
+            fetch('/blog/events/post', {
                 method: 'POST',
                 body: blogData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.replace("/blog/"+data.id);
+                    window.location.replace("/events/"+data.id);
                 } else {
                     alert(data.error);
                 }
