@@ -10,7 +10,7 @@ from ....handles import login_required
 def events(request):
     return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
-@staff_member_required
+@staff_member_required  #! redirects to /accounts/login
 def create_event(request):
     if request.user.is_superuser:
         return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY')})
