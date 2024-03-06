@@ -12,33 +12,16 @@ from ......models import CustomUser
 
 class PaymentStatus(models.Model):
    status = models.CharField(max_length=256, blank=False)
-   # payment status message
-   status_message = models.CharField(max_length=256, blank=False)
-   # payment status time
-   status_time = models.DateTimeField(auto_now=True, blank=False)
-   # payment status raw
-   status_raw = models.TextField(blank=False)
-   # payment status code
    status_code = models.CharField(max_length=256, blank=False)
-   # payment status message
-   status_message = models.CharField(max_length=256, blank=False)
-   # payment status time
-   status_time = models.DateTimeField(auto_now=True, blank=False)
-   # payment status raw
-   status_raw = models.TextField(blank=False)
-   # payment status code
-   status_code = models.CharField(max_length=256, blank=False)
-   # payment status message
-   status_message = models.CharField(max_length=256, blank=False)
-   # payment status time
-   status_time = models.DateTimeField(auto_now=True, blank=False)
-
-
+   last_modified = models.DateTimeField(auto_now=True, blank=False)
+   creation_time = models.DateTimeField(auto_now_add=True, blank=False)
+   
+   def __str__(self):
+      return self.status
 
 class Payment(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    amount = models.DecimalField(max_digits=10, decimal_places=2)
-   status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
    creation_time = models.DateTimeField(auto_now_add=True, blank=False)
    last_modified = models.DateTimeField(auto_now=True, blank=False)
    # payment gateway specific fields
