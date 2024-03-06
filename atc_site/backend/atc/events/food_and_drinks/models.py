@@ -11,11 +11,16 @@ class FoodAndDrinksItem(models.Model):
     discount = models.FloatField(blank=True) #? min
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
     last_modification = models.DateTimeField(auto_now=True, blank=False)
+    vendor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
+    
+class EventFoodandDrinks(models.Model):
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    food_and_drinks_item = models.ForeignKey(FoodAndDrinksItem, on_delete=models.CASCADE)
+    
     
 class FoodAndDrinks(models.Model):
     item = models.ManyToManyField(FoodAndDrinksItem, blank=False)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=0, blank=False)
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
     last_modification = models.DateTimeField(auto_now=True, blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
