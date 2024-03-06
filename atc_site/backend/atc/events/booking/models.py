@@ -7,13 +7,16 @@ from django.utils.translation import gettext_lazy as _
 
 from .tickets.models import Tickets
 from ...events.models import Events
-from .payment.models import Payment
+from .payment.models import Payment, PaymentStatus
 from .....models import CustomUser
 from ..vouchers.models import Voucher
 from ..food_and_drinks.models import FoodAndDrinks
 
 class BookingStatus(models.Model):
-   pass
+   status = models.CharField(max_length=50, blank=False)
+   user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+   payment_status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
+   last_modified = models.DateTimeField(auto_now=True, blank=False)
 
 
 class Booking(models.Model):
