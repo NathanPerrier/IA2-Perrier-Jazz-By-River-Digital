@@ -1,5 +1,6 @@
 from django.db import models
 from .....models import CustomUser
+from ..models import Events
 
 class Voucher(models.Model):
     code = models.CharField(max_length=255, unique=True)
@@ -12,3 +13,7 @@ class Voucher(models.Model):
 
     def __str__(self):
         return self.code
+    
+class EventVoucher(models.Model):
+    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)

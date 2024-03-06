@@ -13,7 +13,7 @@ class FoodAndDrinksItem(models.Model):
     last_modification = models.DateTimeField(auto_now=True, blank=False)
     vendor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
     
-class EventFoodandDrinks(models.Model):
+class EventFoodAndDrinks(models.Model):
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
     food_and_drinks_item = models.ForeignKey(FoodAndDrinksItem, on_delete=models.CASCADE)
     

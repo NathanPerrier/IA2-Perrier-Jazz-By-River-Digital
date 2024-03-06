@@ -25,8 +25,8 @@ class Events(models.Model):
    last_modified = models.DateTimeField(auto_now=True, blank=False)
    organizer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  #* whoever creates the event
    ticket_price = models.DecimalField(max_digits=10, decimal_places=2)
-   vouchers = models.ManyToManyField('Voucher', blank=True)
-   food_and_drinks = models.ManyToManyField('FoodAndDrinks', blank=True)
+   vouchers = models.ManyToManyField('EventVoucher', blank=True)
+   food_and_drinks = models.ManyToManyField('EventFoodAndDrinks', blank=True)
    schedule = models.ForeignKey('EventSchedule', on_delete=models.CASCADE, blank=True, null=True)
    image = models.ImageField(upload_to='images/events/', blank=True, null=True)
    
