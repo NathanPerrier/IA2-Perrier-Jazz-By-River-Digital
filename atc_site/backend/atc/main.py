@@ -5,6 +5,10 @@ from django.views.decorators.csrf import csrf_protect
 
 from .subjects import *
 from .terms import *
+from .auth import *
+from .accounts.main import *
+
+from .events.models import Events
 
 
 #* split into respective folders and files later on
@@ -21,20 +25,6 @@ def subjects(request):
 def terms(request):
     return render(request, 'atc_site//terms and policies.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
-@csrf_protect
-def login_page(request, error=''):
-    return render(request, 'atc_site//login.html', {'error': error, 'range_25': range(25)}) #'google_maps_api_key': config("GOOGLE_MAPS_API_KEY")
-
-@csrf_protect
-def register_page(request, error=''):
-    return render(request, 'atc_site//register.html', {'error': error, 'range_25': range(25)}) #'google_maps_api_key': config("GOOGLE_MAPS_API_KEY")
-
-@csrf_protect
-def forgot_password_page(request, error=''):
-    return render(request, 'atc_site//forgot_password.html', {'error': error, 'range_25': range(25)})
-
-def account_page(request):
-    return render(request, 'atc_site/account//account.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 @require_POST
 #@handle_newsletter

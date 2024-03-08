@@ -45,13 +45,13 @@
           </div>
           <div class="ms-3" style="z-index:2;margin-top: 160px;">
             <h3 class="mb-0">{{user.first_name}}&nbsp{{user.last_name}}</h3>
-            <p class="m-0 pb-2 text-black-50" style="font-weight:100;">{{ user.group }}</p>
+            <p class="m-0 pb-2 text-black-50" style="font-weight:100;">{{ user_group }}</p>
           </div>
         </div>
         <div class="p-5 text-black" style="background-color: #f8f9fa;margin-top:-50px">
           <div class="d-flex justify-content-end text-center py-2">
             <div>
-              <p class="mb-1 h5">{{ num_bookings }}</p>
+              <p class="mb-1 h5">{{ bookings|length }}</p>
               <p class="small text-muted mb-0">Bookings</p>
             </div>
           </div>

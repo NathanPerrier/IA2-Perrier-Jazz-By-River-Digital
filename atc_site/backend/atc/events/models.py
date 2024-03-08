@@ -30,6 +30,33 @@ class Events(models.Model):
    schedule = models.ForeignKey('EventSchedule', on_delete=models.CASCADE, blank=True, null=True)
    image = models.ImageField(upload_to='images/events/', blank=True, null=True)
    
+   @classmethod
+   def get_event(cls, event_id):
+      return cls.objects.get(pk=event_id)
+   
+   @classmethod
+   def get_events(cls):
+      return cls.objects.all()
+   
+   @classmethod
+   def get_events_by_organiser(cls, user_id):
+      return cls.objects.filter(organizer=user_id)
+   
+   @classmethod
+   def get_event_by_name(cls, name):
+      return cls.objects.get(name=name)
+   
+   @classmethod
+   def get_event_by_date(cls, date):
+      return cls.objects.filter(date=date)
+   
+   @classmethod
+   def get_event_by_location(cls, location):
+      return cls.objects.filter(location=location)
+   
+   
+   
+   
 class EventSchedule(models.Model):
    event = models.ForeignKey(Events, on_delete=models.CASCADE)
    event_item = models.ManyToManyField('EventScheduleItem')

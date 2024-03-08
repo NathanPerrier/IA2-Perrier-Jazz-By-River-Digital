@@ -29,3 +29,23 @@ class Booking(models.Model):
    food_and_drinks = models.ManyToManyField(FoodAndDrinks, blank=True)
    creation_time = models.DateTimeField(auto_now_add=True, blank=False)
    last_modified = models.DateTimeField(auto_now=True, blank=False)
+   
+   @classmethod
+   def get_booking(cls, booking_id):
+      return cls.objects.get(pk=booking_id)
+   
+   @classmethod
+   def get_bookings(cls):
+      return cls.objects.all()
+   
+   @classmethod
+   def get_bookings_by_user(cls, user_id):
+      return cls.objects.filter(user=user_id)
+   
+   @classmethod
+   def get_bookings_by_event(cls, event_id):
+      return cls.objects.filter(event=event_id)
+   
+   @classmethod
+   def get_bookings_by_status(cls, status_id):
+      return cls.objects.filter(status=status_id)
