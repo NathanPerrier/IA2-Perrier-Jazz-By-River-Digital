@@ -322,7 +322,7 @@
     flex-shrink: 0;
     padding-top: 17px;
     padding-bottom: 15px;
-    color: var(--light);
+    color: #000;
     background-color: #ffffff80; /*! change*/
     border-top: 3px solid var(--primary);
 }
@@ -351,7 +351,7 @@
     padding-right: 75px;
     background-color: transparent;
     font-size: 16px;
-    color: var(--light);
+    color: #000;
     line-height: 20px;
     min-height: 20px !important;
 }
