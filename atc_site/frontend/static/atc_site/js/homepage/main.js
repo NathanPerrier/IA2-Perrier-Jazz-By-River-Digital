@@ -50,7 +50,8 @@
             $('.account').removeClass('text-primary').css('top', '-150px');
             $('.account').addClass('text-light').css('top', '0px');
             $('.login-button').removeClass('text-primary border-primary').css('top', '-150px');
-            $('.register-button').removeClass('text-white bg-primary border-primary').css('top', '-1500px');
+            $('.register-button').removeClass('text-white bg-primary border-primary').css('top', '-150px');
+            $('.register-button').addClass('text-dark').css('top', '-150px');
             $('.navbar-toggler-icon').removeClass('navbar-toggler-icon-dark').css('top', '-150px');  
             $('.navbar-toggler-icon').addClass('navbar-toggler-icon-light').css('top', '-150px');  
         }
