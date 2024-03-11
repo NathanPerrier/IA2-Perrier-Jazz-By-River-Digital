@@ -22,10 +22,9 @@
         const scrolled = window.scrollY;
         
         const scaleFactor = 1 + (scrolled * 0.0005);
-        const top = -50 - scaleFactor;
-        
-        image.style.transform = `translate3d(0, ${scrolled * -0.6}px, 0) scale(${scaleFactor * 1.25})`;
-        image.style.transform = `tranlateY(${top}px)`;
+        const top = scaleFactor/1.25;
+        image.style.display = 'block';
+        image.style.transform = `translate3d(0, ${scrolled * -0.6}px, 0) translateY(${top}px)  scale(${top * 1.25})`;
       });
       
 
@@ -56,6 +55,7 @@
             $('.navbar-toggler-icon').addClass('navbar-toggler-icon-light').css('top', '-150px');  
         }
     });
+
     $(window).scroll(function () {
         if ($(this).scrollTop() == 0) {
             $('.home-link').removeClass('bi-house').css('top', '0px');
