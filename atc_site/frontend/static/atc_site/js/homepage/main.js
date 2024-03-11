@@ -16,7 +16,7 @@
     new WOW().init();
 
 
-    // parallax video
+    // parallax image
     document.addEventListener('scroll', function() {
         const image = document.getElementById('parallaxVideo');
         const scrolled = window.scrollY;
