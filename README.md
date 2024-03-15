@@ -10,7 +10,7 @@ This is an event booking and ticketing website for Ambrose Treacy College, a Bri
 
 The application uses various APIs and AI technologies to provide users with accurate and up-to-date data.
 
-This website was built upon the previous repos:
+This website was built upon the previous repositories:
 
 - [IA1-Weather-App-Django](https://github.com/nathan-perrier23/IA1-Weather-App-Django)
 - [Y11-T4-ATC-Blogging-Website](https://github.com/nathan-perrier23/Y11-T4-ATC-Blogging-Website)
