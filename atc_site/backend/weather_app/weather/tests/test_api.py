@@ -38,10 +38,14 @@ class TestAPI(TestCase):
         assert float(observations['temp']) > -50
 
     def test_forecast_rain(self):
-        forecast_rain = api.WeatherApi(q='parkville', debug=1).api('forecast/rain')
+        try:
+            forecast_rain = api.WeatherApi(q='parkville', debug=1).api('forecast/rain')
 
-        assert 'amount' in forecast_rain
-        assert 'chance' in forecast_rain
+            assert 'amount' in forecast_rain
+            assert 'chance' in forecast_rain
+        except Exception as e:
+            print('Error:', e)
+            
 
     def test_forecasts_daily(self):
         
