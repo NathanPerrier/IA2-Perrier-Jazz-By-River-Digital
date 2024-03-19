@@ -2,7 +2,7 @@
 
 Created by [Nathan Perrier](https://github.com/nathan-perrier23) of [Ambrose Treacy College](https://www.atc.qld.edu.au/)
 
-IA2 - Digital Solutions - Year 12
+IA2 - Digital Solutions - Year 12 - QCAA
 
 ## Description
 
