@@ -5,7 +5,8 @@ function submitStepOne() {
     var description = document.getElementById('textbox').value;
     var location = document.querySelector('input[name="location"]').value;
 
-    // will have to check if extra checkboxes are checked. if so then extract the values of fields for field in n items
+    //! will have to check if extra checkboxes are checked. if so then extract the values of fields for field in n items
+    //! if schedule check will have to see for each event if the start time is less than the end time
     if (!name || !description || !location) {
         alert('Inputs cannot be empty');
     } else {

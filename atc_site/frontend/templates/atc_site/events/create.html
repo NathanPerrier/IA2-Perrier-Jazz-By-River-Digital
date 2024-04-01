@@ -95,6 +95,8 @@
                                         </label>
                                     </div>
                                 </div>
+
+                                <!-- Vouchers -->
                                 <div class=" justify-content-between d-none" id="event-vouchers-form">
                                     <label class="mb-1">Event Vouchers</label>
                                     <div class="container-fluid form-field">
@@ -119,6 +121,8 @@
                                         <button id="addVoucher" class="btn btn-primary mb-3">Add Voucher</button>
                                     </div>
                                 </div>
+
+                                <!-- Food and Drink -->
                                 <div class="justify-content-between d-none" id="event-foodAndDrink-form">
                                     <label>Food and Drink</label>
                                     <div class="container-fluid form-field">
@@ -163,6 +167,45 @@
                                         </div>
                                         
                                         <button id="addFoodAndDrink" class="btn btn-primary mb-3">Add Item</button>
+                                    </div>
+                                </div>
+                                
+
+                                <!-- Schedule -->
+                                <div class="justify-content-between d-none" id="event-schedule-form">
+                                    <label>Event Schedule</label>
+                                    <div class="container-fluid form-field">
+                                        <div id="scheduleContainer">
+                                            <div id="schedule0">
+                                                <div class="container-fluid">
+                                                    <div class="row schedule">
+                                                        <p class="m-0 p-0">Event 1</p>
+                                                        <div class="row">
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="title-schedule0">Title <span style="color:red">*</span></label>   <!-- title not name!! -->
+                                                                <input type="text" class="form-control" id="title-schedule0" name="title-schedule0">
+                                                            </div>
+                                                            <div class="col-md-8 form-group">
+                                                                <label for="description-schedule0">Description <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="description-schedule0" name="description-schedule0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                <label for="start-schedule0">Start Time <span style="color:red">*</span></label>
+                                                                <input type="time" name="time" id="time" class="form-control" id="start-schedule0" name="start-schedule0" />
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                <label for="end-schedule0">End Time <span style="color:red">*</span></label>
+                                                                <input type="time" name="time" id="time" class="form-control" id="end-schedule0" name="end-schedule0" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="addSchedule" class="btn btn-primary mb-3">Add Event</button>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +283,7 @@
                                         <h2 class="steps">Step 4 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Nmae:</label>
+                                <label class="fieldlabels">Name:</label>
                                 <input type="text" name="name-confirm" id="name-confirm" readonly/>
                                 <label class="fieldlabels">Description:</label>
                                 <textarea id="description-confirm" name="description-confirm" rows="3" readonly></textarea>
@@ -320,6 +363,18 @@
                 }
             });
         }
+
+        if (document.getElementById('event-schedule')) {
+            document.getElementById('event-schedule').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('event-schedule-form').classList.remove('d-none');
+                } else {
+                    document.getElementById('event-schedule-form').classList.add('d-none');
+                }
+            });
+        }
+
+
 
         const rangeInput = document.getElementById('number-tickets');
         const displayElement = document.getElementById('char_count');
@@ -436,6 +491,57 @@
                 foodAndDrinkIndex--;
             });
         });
-    
+
+        $(document).ready(function() {
+            var maxSchedule = 15;
+            var scheduleIndex = 1; //already one there
+
+            $('#addSchedule').click(function(event) {
+                event.preventDefault();
+                if (scheduleIndex < maxSchedule) {
+                    $('#scheduleContainer').append(`
+                        <div id="schedule${scheduleIndex}">
+                            <div class="container-fluid">
+                                <div class="row schedule">
+                                    <p class="m-0 p-0">Event ${scheduleIndex + 1}</p>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="title-schedule${scheduleIndex}">Title <span style="color:red">*</span></label>   <!-- title not name!! -->
+                                            <input type="text" class="form-control" id="title-schedule${scheduleIndex}" name="title-schedule${scheduleIndex}">
+                                        </div>
+                                        <div class="col-md-8 form-group">
+                                            <label for="description-schedule${scheduleIndex}">Description <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="description-schedule${scheduleIndex}" name="description-schedule${scheduleIndex}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="start-schedule${scheduleIndex}">Start Time <span style="color:red">*</span></label>
+                                            <input type="time" name="time" id="time" class="form-control" id="start-schedule${scheduleIndex}" name="start-schedule${scheduleIndex}" />
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label for="end-schedule${scheduleIndex}">End Time <span style="color:red">*</span></label>
+                                            <input type="time" name="time" id="time" class="form-control" id="end-schedule${scheduleIndex}" name="end-schedule${scheduleIndex}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 form-group align-self-end">
+                                        <button class="btn btn-danger removeSchedule mb-4">Remove Event</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    scheduleIndex++;
+                }
+            });
+
+            $('#scheduleContainer').on('click', '.removeSchedule', function(event) {
+                event.preventDefault();
+                $(this).closest('.schedule').remove();
+                scheduleIndex--;
+            });
+        });
+        
+
     </script>
 {% endblock %}
