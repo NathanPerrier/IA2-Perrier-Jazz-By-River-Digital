@@ -1,17 +1,3 @@
-# from django.contrib import admin
-# from allauth.account.models import EmailAddress
-# from .models import CustomUser
-# class EmailAddressAdmin(admin.ModelAdmin):
-#     def delete_model(self, request, obj):
-#         user = obj.user
-#         print(user)
-#         CustomUser().delete_by_id(user.id)
-#         super().delete_model(request, obj)
-#         user.delete()
-
-# admin.site.unregister(EmailAddress)
-# admin.site.register(EmailAddress, EmailAddressAdmin)
-
 from django.contrib import admin
 from allauth.account.models import EmailAddress
 from .models import CustomUser
@@ -28,6 +14,8 @@ from .backend.weather_app.chatbot.models import Message, Route
 from .backend.atc.chatbotATC.models import Message as ATCMessage
 from .backend.atc.models import Newsletter
 
+from django.contrib.auth.hashers import make_password
+
 
 class EmailAddressAdmin(admin.ModelAdmin):
     def delete_model(self, request, obj):
@@ -40,9 +28,18 @@ class EmailAddressAdmin(admin.ModelAdmin):
             user = CustomUser.objects.get(email=obj.email)
             user.delete()
         super().delete_queryset(request, queryset)
+        
 
-admin.site.unregister(EmailAddress)
-admin.site.register(EmailAddress, EmailAddressAdmin)
+class CustomUserAdmin(admin.ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if 'password' in form.changed_data:
+            obj.password = make_password(obj.password)
+        super().save_model(request, obj, form, change)
+    
+    def delete_model(self, request, obj):
+        super().delete_model(request, obj)
+        EmailAddress.objects.get(email=obj.email).delete()
+        obj.delete()
 
 # register custom tables
 
@@ -67,5 +64,13 @@ admin.site.register(Message)
 admin.site.register(Route)
 admin.site.register(Newsletter)
 admin.site.register(ATCMessage)
+
+# update tables
+
+admin.site.unregister(CustomUser)
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.unregister(EmailAddress)
+admin.site.register(EmailAddress, EmailAddressAdmin)
+
 admin.site.site_header = 'Ambrose Treacy College Admin Pannel'
 admin.site.site_title = 'ATC Admin'

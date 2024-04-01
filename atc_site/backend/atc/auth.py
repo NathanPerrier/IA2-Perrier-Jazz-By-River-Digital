@@ -14,3 +14,7 @@ def register_page(request, error=''):
 @csrf_protect
 def forgot_password_page(request, error=''):
     return render(request, 'atc_site//forgot_password.html', {'error': error, 'range_25': range(25)})
+
+
+def forgot_password_confirmed(request):
+    return render(request, 'atc_site//password_confirmed.html', {'range_25': range(25)})

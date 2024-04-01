@@ -44,6 +44,7 @@ urlpatterns = [
     path('forgot/get_email/', atc_views.forgot_password_get_email_view, name='forgot_password_get_email'),
     path('forgot/get_code/', atc_views.forgot_password_get_code_view, name='forgot_password_get_code'),
     path('forgot/set_password/', atc_views.forgot_password_set_password_view, name='forgot_password_set_password'),
+    path('forgot/confirmed', main.forgot_password_confirmed, name='forgot_password_confirmed'),
     
     path('account', main.account_page, name='account'),
     
