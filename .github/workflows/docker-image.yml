@@ -15,4 +15,37 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
+      env: 
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
+          CELERY_RESULT_BACKEND: ${{ secrets.CELERY_RESULT_BACKEND }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_BACKEND: ${{ secrets.REDIS_BACKEND }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TOMORROWIO_API_KEY: ${{ secrets.TOMORROWIO_API_KEY }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          OPENWEATHERMAP_API_KEY: ${{ secrets.OPENWEATHERMAP_API_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      env: 
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
+          CELERY_RESULT_BACKEND: ${{ secrets.CELERY_RESULT_BACKEND }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_BACKEND: ${{ secrets.REDIS_BACKEND }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TOMORROWIO_API_KEY: ${{ secrets.TOMORROWIO_API_KEY }}
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+          EMAIL_HOST_USER: ${{ secrets.EMAIL_HOST_USER }}
+          EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
+          OPENWEATHERMAP_API_KEY: ${{ secrets.OPENWEATHERMAP_API_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./app
