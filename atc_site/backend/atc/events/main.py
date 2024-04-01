@@ -14,7 +14,7 @@ def events(request):
 @staff_member_required  #! redirects to /accounts/login
 def create_event(request):
     if request.user.is_superuser:
-        return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY'), 'vendors': Group.objects.get(name='Vendors').user_set.all()})
+        return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY')}) #, 'vendors': Group.objects.get(name='Vendors').user_set.all()
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
 
 

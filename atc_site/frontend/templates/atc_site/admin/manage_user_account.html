@@ -27,11 +27,14 @@
 	<div class="profile-tab-nav border-right">
 		<div class="p-4">
 			<div class="img-circle text-primary text-center mb-3">
-				{% if 'http' in _user_.avatar %}
-					<a href="/account"><img src="{{ _user_.avatar %}" alt="Avatar Image" class="shadow"></a>
+				{% if _user_.avatar %}
+					<img src="{{ _user_.avatar.url }}"
+					alt="User Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
+					style="width: 150px; min-height:150px; object-fit:cover; z-index: 1">
 				{% else %}
-					{% set avatar = _user_.avatar|replace('frontend/static/', '') %}
-					<a href="/account"><img src="{% static avatar %}" alt="Avatar Image" class="shadow"></a>
+					<img src="https://api.dicebear.com/6.x/initials/svg?seed={{_user_.first_name}}&randomizeIds=true"
+						alt="User Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
+						style="width: 150px;height:150px; z-index: 1">
 				{% endif %}
 			</div>
 			<h4 class="text-center mb-1">{{_user_.first_name}}&nbsp{{_user_.last_name}}</h4>
@@ -61,7 +64,7 @@
 			<h3 class="mb-4">Account Details</h3>
 			<form action="{{ url_for('admin.validate_account_update', user_id=_user_.id }}" method="POST" enctype="multipart/form-data">
 				{{ formAccount.csrf_token }}
-        		{{ formAccount.hidden_tag( }}
+        		{{ formAccount.hidden_tag() }}
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -152,7 +155,7 @@
 			<h3 class="mb-4">Password Settings</h3>
 			<form action="{{ url_for('admin.validate_password_update', user_id=_user_.id }}" method="POST" enctype="multipart/form-data">
 				{{ formPassword.csrf_token }}
-				{{ formPassword.hidden_tag( }}
+				{{ formPassword.hidden_tag() }}
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -197,7 +200,7 @@
 			<h3 class="mb-4">Change Profile Picture</h3>
 			<form action="{{ url_for('admin.validate_picture_update', user_id=_user_.id }}" method="POST" enctype="multipart/form-data">
 				{{ formPicture.csrf_token }}
-				{{ formPicture.hidden_tag( }}
+				{{ formPicture.hidden_tag() }}
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">

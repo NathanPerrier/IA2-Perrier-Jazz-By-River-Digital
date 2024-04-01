@@ -67,7 +67,6 @@ INSTALLED_APPS = [
     "atc_site.backend.atc.events",
     "atc_site.backend.atc.events.booking",
     "atc_site.backend",
-    "atc_site.backend.auth.forgot_password",
     "atc_site.unitTests",
 ]
 
@@ -93,6 +92,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ROOT_URLCONF = "atc_site.urls"
+
+# SITE_ID = 1
 
 default_app_config = 'atc_site.apps.ATC_SiteConfig'
 

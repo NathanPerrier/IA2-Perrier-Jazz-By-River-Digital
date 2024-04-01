@@ -81,7 +81,7 @@
                                     {% if user.avatar %}
                                         <img
                                         style="width:22.5px; border-radius:50%; margin-left: 8px; margin-bottom: 1.25px"
-                                        src="{% static avatar %}"
+                                        src="{{ user.avatar.url }}"
                                         alt="avatar" /></span>
                                     {% else %}
                                         
@@ -97,6 +97,7 @@
                                     {% if user.is_superuser %}
                                         <a href="/admin" class="dropdown-item">Admin Pannel</a>
                                         <a href="/admin/users" class="dropdown-item">Manage Users</a>
+                                        <a href="/events/create/" class="dropdown-item">Create An Event</a>
                                     {% endif %}
                                     <a href="/booking/edit" class="dropdown-item">Manage Booking</a>  <!-- IF BOOKING EXISTS -->
                                     <a href="/logout/" class="dropdown-item">Logout</a>

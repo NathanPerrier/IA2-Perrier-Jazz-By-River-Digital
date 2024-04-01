@@ -30,7 +30,7 @@
         <div class="text-white d-flex flex-row" style="height:200px;margin-top:-150px">
           <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
             {% if user.avatar %}
-              <img src="{% static user.avatar %}"
+              <img src="{{ user.avatar.url }}"
               alt="User Avatar" class="img-fluid img-thumbnail mt-4 mb-2"
               style="width: 150px; min-height:150px; object-fit:cover; z-index: 1">
             {% else %}

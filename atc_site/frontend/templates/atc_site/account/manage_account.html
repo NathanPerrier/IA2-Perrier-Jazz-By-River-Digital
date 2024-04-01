@@ -27,7 +27,7 @@
 		<div class="p-4">
 			<div class="img-circle text-primary text-center mb-3">
 				{% if user.avatar %}
-					<a href="/account"><img src="{% static user.avatar %}" alt="Avatar Image" class="shadow"></a>
+					<a href="/account"><img src="{{ user.avatar.url }}" alt="Avatar Image" class="shadow"></a>
 				{% else %}
 					<a href="/account"><img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true" alt="Avatar Image" class="shadow"></a>
 				{% endif %}

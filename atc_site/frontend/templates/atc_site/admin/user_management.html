@@ -61,7 +61,7 @@
                                 {% if _user_.avatar %}
                                     <img
                                     style="width:22.5px; border-radius:50%; margin-right: 8px; margin-bottom: 1.25px"
-                                    src="{% static _user_.avatar %}"
+                                    src="{{ _user_.avatar.url }}"
                                     alt="avatar" /></span>
                                 {% else %}   
                                     <img
