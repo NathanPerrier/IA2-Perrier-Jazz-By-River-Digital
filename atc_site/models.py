@@ -2,6 +2,8 @@ from typing import Any
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.contrib.auth.models import Group
+from allauth.account.models import EmailAddress
+from django.contrib.auth import get_user_model
 import re
 
 class CustomUserManager(BaseUserManager):
@@ -90,6 +92,7 @@ class CustomUserManager(BaseUserManager):
     def delete_by_id(self, id):
         try:
             self.get(id=id).delete()
+            EmailAddress.objects.get(user=id).delete()
             return True
         except CustomUser.DoesNotExist:
             return False
@@ -97,6 +100,7 @@ class CustomUserManager(BaseUserManager):
     def delete_by_email(self, email):
         try:
             self.get(email=email).delete()
+            EmailAddress.objects.get(email=email).delete()
             return True
         except:
             return False

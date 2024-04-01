@@ -13,6 +13,7 @@ from ...atc.main import register_page as register_page_atc
 from ...weather_app.main import register_page as register_page_weather
 from ...atc.main import *
 from ....models import CustomUser, CustomUserManager
+from allauth.account.models import EmailAddress
 from ...auth.register.models import RegisterAuth
 
 def register_get_email_view(request, error=''):
@@ -29,8 +30,9 @@ def register_get_code_view(request):
 
 def register_set_password_view(request):
     if request.method == 'POST':
-        
         user = CustomUser.objects.check_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=request.POST['password'])
+        email = EmailAddress(user=user, email=user.email, primary=(True if user.is_superuser else False), verified=True)
+        email.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return JsonResponse({'success': True, 'error': ''})
     return register_page_weather(request) if 'weather' in request.path else register_page_atc(request)   
