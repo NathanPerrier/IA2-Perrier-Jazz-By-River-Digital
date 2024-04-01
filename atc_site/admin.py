@@ -36,10 +36,10 @@ class CustomUserAdmin(admin.ModelAdmin):
             obj.password = make_password(obj.password)
         super().save_model(request, obj, form, change)
     
-    def delete_model(self, request, obj):
-        super().delete_model(request, obj)
-        EmailAddress.objects.get(email=obj.email).delete()
-        obj.delete()
+    # def delete_model(self, request, obj):
+    #     super().delete_model(request, obj)
+    #     EmailAddress.objects.get(email=obj.email).delete()
+    #     obj.delete()
 
 # register custom tables
 
