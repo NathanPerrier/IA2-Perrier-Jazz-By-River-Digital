@@ -28,14 +28,14 @@
 
     <div class="container-fluid py-5 px-3 bg-light">
         <h1 class="text-center mb-4">Create An Event!</h1>
-        <hr class="text-center mb-2" style="width:30%;margin-left:35%">
-
+        <hr class="text-center mb-2" style="width:30%;margin-left:35%"> 
         <div class="row justify-content-center bg-light">
             <div class="col-md-12 bg-light">
                 <div class="card px-4 bg-light">
                     <p class="text-center mt-2">Fill out all form fields to go to next step</p>
     
                     <form id="msform" id="multiStepForm" action="#" method="POST">
+                        {% csrf_token %}
                         <!-- progressbar -->
                         <ul id="progressbar">
                             <li class="active step" id="account"><strong>About</strong></li>
@@ -59,7 +59,7 @@
                                     </div>
                                 </div>
                                 <label class="fieldlabels">Name <span style="color:red">*</span></label>
-                                <input type="text" name="name" maxlength="75" minlength="10" placeholder="What is the name of the event?"/>
+                                <input type="text" name="name" id='event-name' maxlength="75" minlength="10" placeholder="What is the name of the event?"/>
                                 <label class="fieldlabels">Description <span style="color:red">*</span></label>
                                 <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?"></textarea>
                                 <label class="fieldlabels">Location <span style="color:red">*</span></label>
@@ -93,6 +93,76 @@
                                             <input id="event-schedule" type="checkbox">
                                             <span class="checkmark"></span>
                                         </label>
+                                    </div>
+                                </div>
+                                <div class=" justify-content-between d-none" id="event-vouchers-form">
+                                    <label class="mb-1">Event Vouchers</label>
+                                    <div class="container-fluid form-field">
+                                        <div id="voucherContainer">
+                                            <div id="voucher0">
+                                                <div class="container-fluid">
+                                                    <div class="row voucher">
+                                                        <p class="m-0 p-0">Voucher 1</p>
+                                                        <div class="col-md-4 form-group">
+                                                            <label for="name-voucher0">Name <span style="color:red">*</span></label>
+                                                            <input type="text" class="form-control" id="name-voucher0" name="name-voucher0">
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <label for="description-voucher0">Description <span style="color:red">*</span></label>
+                                                            <input type="text" class="form-control" id="description-voucher0" name="description-voucher0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="addVoucher" class="btn btn-primary mb-3">Add Voucher</button>
+                                    </div>
+                                </div>
+                                <div class="justify-content-between d-none" id="event-foodAndDrink-form">
+                                    <label>Food and Drink</label>
+                                    <div class="container-fluid form-field">
+                                        <div id="foodAndDrinkContainer">
+                                            <div id="foodAndDrink0">
+                                                <div class="container-fluid">
+                                                    <div class="row foodAndDrink">
+                                                        <p class="m-0 p-0">Item 1</p>
+                                                        <div class="row">
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="name-foodAndDrink0">Name <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="name-foodAndDrink0" name="name-foodAndDrink0">
+                                                            </div>
+                                                            <div class="col-md-8 form-group">
+                                                                <label for="description-foodAndDrink0">Description <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="description-foodAndDrink0" name="description-foodAndDrink0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="price-foodAndDrink0">Price <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="price-foodAndDrink0" name="price-foodAndDrink0">
+                                                            </div>
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="quantity-foodAndDrink0">Quantity <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="quantity-foodAndDrink0" name="quantity-foodAndDrink0">
+                                                            </div>
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="vendor-foodAndDrink0">Vendor <span style="color:red">*</span></label>
+                                                                <select class="form-select" id="vendor-foodAndDrink0" name="vendor-foodAndDrink0">
+                                                                    <option value="1">Vendor 1</option>
+                                                                    <option value="2">Vendor 2</option>
+                                                                    <option value="3">Vendor 3</option>
+                                                                    <option value="4">Vendor 4</option>
+                                                                    <option value="5">Vendor 5</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="addFoodAndDrink" class="btn btn-primary mb-3">Add Item</button>
                                     </div>
                                 </div>
                             </div>
@@ -193,6 +263,7 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'atc_site/js/blogs/create-edit.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
@@ -224,13 +295,31 @@
             
             var options = {
                 componentRestrictions: {country: 'au'},
-                types: ['street_address', 'establishment', 'landmark']
+                types: ['street_address', 'landmark', 'school', 'church', 'city_hall']
             };
 
-            var autocomplete = new google.maps.places.Autocomplete(searchInput, options);
-
-            
+            var autocomplete = new google.maps.places.Autocomplete(searchInput, options);   
         };
+
+        if (document.getElementById('event-vouchers')) {
+            document.getElementById('event-vouchers').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('event-vouchers-form').classList.remove('d-none');
+                } else {
+                    document.getElementById('event-vouchers-form').classList.add('d-none');
+                }
+            });
+        }
+
+        if (document.getElementById('event-food-and-drink')) {
+            document.getElementById('event-food-and-drink').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('event-foodAndDrink-form').classList.remove('d-none');
+                } else {
+                    document.getElementById('event-foodAndDrink-form').classList.add('d-none');
+                }
+            });
+        }
 
         const rangeInput = document.getElementById('number-tickets');
         const displayElement = document.getElementById('char_count');
@@ -242,11 +331,111 @@
         document.addEventListener('DOMContentLoaded', (event) => {
             const dateInput = document.getElementById('date');
             const today = new Date();
-            const day = String(today.getDate()).padStart(2, '0');
-            const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const day = String(today.getDate()+1).padStart(2, '0'); // Add one day to current date
+            const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0
             const year = today.getFullYear();
         
             dateInput.min = `${year}-${month}-${day}`;
         });
+
+        $(document).ready(function() {
+            var maxVouchers = 3;
+            var voucherIndex = 1; //already one there
+
+            $('#addVoucher').click(function(event) {
+                event.preventDefault();
+                if (voucherIndex < maxVouchers) {
+                    $('#voucherContainer').append(`
+                        <div id="voucher${voucherIndex}">
+                            <div class="container-fluid">
+                                <div class="row voucher">
+                                    <p class="m-0 p-0">Voucher ${voucherIndex + 1}</p>
+                                    <div class="col-md-4 form-group">
+                                        <label for="name-voucher${voucherIndex}">Name <span style="color:red">*</span></label>
+                                        <input type="text" class="form-control" id="name-voucher${voucherIndex}" name="name-voucher${voucherIndex}">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="description-voucher${voucherIndex}">Description <span style="color:red">*</span></label>
+                                        <input type="text" class="form-control" id="description-voucher${voucherIndex}" name="description-voucher${voucherIndex}">
+                                    </div>
+                                    <div class="col-md-2 form-group align-self-end">
+                                        <button class="btn btn-danger removeVoucher mb-4">Remove Voucher</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    voucherIndex++;
+                }
+            });
+
+            $('#voucherContainer').on('click', '.removeVoucher', function(event) {
+                event.preventDefault();
+                $(this).closest('.voucher').remove();
+                voucherIndex--;
+            });
+        });
+
+        
+        $(document).ready(function() {
+            var maxFoodAndDrink = 10;
+            var foodAndDrinkIndex = 1; //already one there
+
+            $('#addFoodAndDrink').click(function(event) {
+                event.preventDefault();
+                if (foodAndDrinkIndex < maxFoodAndDrink) {
+                    $('#foodAndDrinkContainer').append(`
+                        <div id="foodAndDrink${foodAndDrinkIndex}">
+                            <div class="container-fluid">
+                                <div class="row foodAndDrink">
+                                    <p class="m-0 p-0">Item ${foodAndDrinkIndex + 1}</p>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="name-foodAndDrink${foodAndDrinkIndex}">Name <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="name-foodAndDrink${foodAndDrinkIndex}" name="name-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                        <div class="col-md-8 form-group">
+                                            <label for="description-foodAndDrink${foodAndDrinkIndex}">Description <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="description-foodAndDrink${foodAndDrinkIndex}" name="description-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="price-foodAndDrink${foodAndDrinkIndex}">Price <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="price-foodAndDrink${foodAndDrinkIndex}" name="price-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="quantity-foodAndDrink${foodAndDrinkIndex}">Quantity <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="quantity-foodAndDrink${foodAndDrinkIndex}" name="quantity-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="vendor-foodAndDrink${foodAndDrinkIndex}">Vendor <span style="color:red">*</span></label>
+                                            <select class="form-select" id="vendor-foodAndDrink${foodAndDrinkIndex}" name="vendor-foodAndDrink${foodAndDrinkIndex}">
+                                                <option value="1">Vendor 1</option>
+                                                <option value="2">Vendor 2</option>
+                                                <option value="3">Vendor 3</option>
+                                                <option value="4">Vendor 4</option>
+                                                <option value="5">Vendor 5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 form-group align-self-end">
+                                        <button class="btn btn-danger removeFoodAndDrink mb-4">Remove Item</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    foodAndDrinkIndex++;
+                }
+            });
+
+            $('#foodAndDrinkContainer').on('click', '.removeFoodAndDrink', function(event) {
+                event.preventDefault();
+                $(this).closest('.foodAndDrink').remove();
+                foodAndDrinkIndex--;
+            });
+        });
+    
     </script>
 {% endblock %}
