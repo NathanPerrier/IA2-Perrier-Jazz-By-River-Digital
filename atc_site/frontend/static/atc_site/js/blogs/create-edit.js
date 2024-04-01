@@ -8,6 +8,7 @@ function submitStepOne() {
     //! will have to check if extra checkboxes are checked. if so then extract the values of fields for field in n items
     //! if schedule check will have to see for each event if the start time is less than the end time
     //! every event after that must have a start time greater than the previous end time
+    //! start time of first event cannot be before the start time of the event
     if (!name || !description || !location) {
         alert('Inputs cannot be empty');
     } else {
