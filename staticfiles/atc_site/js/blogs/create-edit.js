@@ -1,12 +1,15 @@
 
 
 function submitStepOne() {
-    var title = document.querySelector('input[name="mame"]').value;
+    var name = document.querySelector('input[name="name"]');
     var description = document.getElementById('textbox').value;
-    var lovation = document.querySelector('input[name="location"]').value;
+    var location = document.querySelector('input[name="location"]').value;
 
-
-    if (!title || !description || !location) {
+    //! will have to check if extra checkboxes are checked. if so then extract the values of fields for field in n items
+    //! if schedule check will have to see for each event if the start time is less than the end time
+    //! every event after that must have a start time greater than the previous end time
+    //! start time of first event cannot be before the start time of the event
+    if (!name || !description || !location) {
         alert('Inputs cannot be empty');
     } else {
         nextPrev(1);
@@ -127,15 +130,15 @@ function validateForm() {
     return valid; // return the valid status
 }
 
-// function fixStepIndicator(n) {
-//     // This function removes the "active" class of all steps...
-//     var i, x = document.getElementsByClassName("step");
-//     for (i = 0; i < x.length; i++) {
-//     x[i].className = x[i].className.replace(" active", "");
-//     }
-//     //... and adds the "active" class on the current step:
-//     x[n].className += " active";
-// }
+function fixStepIndicator(n) {
+    // This function removes the "active" class of all steps...
+    var i, x = document.getElementsByClassName("step");
+    for (i = 0; i < x.length; i++) {
+    x[i].className = x[i].className.replace(" active", "");
+    }
+    //... and adds the "active" class on the current step:
+    x[n].className += " active";
+}
 $('#nextBtn').click(function(){
     $('form').animate({height: "toggle", opacity: "toggle"}, 100000);
 }); 
