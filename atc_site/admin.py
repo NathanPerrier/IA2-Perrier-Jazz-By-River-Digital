@@ -1,68 +1,13 @@
-from django.contrib import admin
-from allauth.account.models import EmailAddress
-from .models import CustomUser
-from .backend.auth.register.models import RegisterAuth
-from .backend.auth.forgot_password.models import ForgotPasswordAuth
-from .backend.weather_app.locationImage.models import LocationImagesModel
-from .backend.atc.events.models import Events, EventSchedule, EventScheduleItem
-from .backend.atc.events.vouchers.models import Voucher, EventVoucher
-from .backend.atc.events.food_and_drinks.models import FoodAndDrinks, EventFoodAndDrinks, FoodAndDrinksItem
-from .backend.atc.events.booking.models import Booking, BookingStatus
-from .backend.atc.events.booking.payment.models import Payment, PaymentStatus
-from .backend.location.models import UserLocationModel
-from .backend.weather_app.chatbot.models import Message, Route
-from .backend.atc.chatbotATC.models import Message as ATCMessage
-from .backend.atc.models import Newsletter
-from django.contrib.auth.models import Group
-from django.core.exceptions import ValidationError
-
-
-from django.contrib.auth.hashers import make_password
-
-
-class EmailAddressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'primary', 'verified')
-    def delete_model(self, request, obj):
-        user = CustomUser.objects.get(email=obj.email)
-        super().delete_model(request, obj)
-        user.delete()
-
-    def delete_queryset(self, request, queryset):
-        for obj in queryset:
-            user = CustomUser.objects.get(email=obj.email)
-            user.delete()
-        super().delete_queryset(request, queryset)
-        
-
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'is_superuser', 'is_staff', 'last_login')
-    search_fields = ('email', 'is_superuser', 'is_staff', 'first_name', 'last_name')
-    def save_model(self, request, obj, form, change):
-        if 'password' in form.changed_data:
-            obj.password = make_password(obj.password)
-        super().save_model(request, obj, form, change)
-    
-    # def delete_model(self, request, obj):
-    #     super().delete_model(request, obj)
-    #     EmailAddress.objects.get(email=obj.email).delete()
-    #     obj.delete()
-    
-class FoodAndDrinksItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'description')
-    search_fields = ('name', 'price', 'description')
-    
-    def save_model(self, request, obj, form, change):
-        vendor_group = Group.objects.get(name='Vendor')
-        if obj.vendor not in CustomUser.objects.filter(groups=vendor_group):
-            raise ValidationError("CustomUser must be in the Vendor group")
-        super().save_model(request, obj, form, change)
+from .atc_admin.__init__ import *
+from .atc_admin.config import *
 
 # register custom tables
 
-admin.site.register(CustomUser)
-admin.site.register(RegisterAuth)
-admin.site.register(ForgotPasswordAuth)
+admin.site.register(CustomUser) # -
+admin.site.register(RegisterAuth, RegisterAuthAdmin) 
+admin.site.register(ForgotPasswordAuth, ForgotPasswordAuthAdmin)
 admin.site.register(LocationImagesModel)
+admin.site.register(UserLocationModel)
 admin.site.register(Events)
 admin.site.register(EventSchedule)
 admin.site.register(EventScheduleItem)
@@ -75,7 +20,6 @@ admin.site.register(Booking)
 admin.site.register(BookingStatus)
 admin.site.register(Payment)
 admin.site.register(PaymentStatus)
-admin.site.register(UserLocationModel)
 admin.site.register(Message)
 admin.site.register(Route)
 admin.site.register(Newsletter)

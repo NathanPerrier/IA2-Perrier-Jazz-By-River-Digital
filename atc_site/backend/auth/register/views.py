@@ -31,7 +31,7 @@ def register_get_code_view(request):
 def register_set_password_view(request):
     if request.method == 'POST':
         user = CustomUser.objects.check_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=request.POST['password'])
-        email = EmailAddress(user=user, email=user.email, primary=(True if user.is_superuser else False), verified=True)
+        email = EmailAddress(user=user, email=user.email, primary=True, verified=True)
         email.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return JsonResponse({'success': True, 'error': ''})
