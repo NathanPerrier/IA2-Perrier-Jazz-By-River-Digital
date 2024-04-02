@@ -21,6 +21,7 @@ from django.contrib.auth.hashers import make_password
 
 
 class EmailAddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'primary', 'verified')
     def delete_model(self, request, obj):
         user = CustomUser.objects.get(email=obj.email)
         super().delete_model(request, obj)
