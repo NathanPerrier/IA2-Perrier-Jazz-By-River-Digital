@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from allauth.account.models import EmailAddress
 from ..models import CustomUser
 from ..backend.auth.register.models import RegisterAuth
@@ -8,6 +8,7 @@ from ..backend.atc.events.models import Events, EventSchedule, EventScheduleItem
 from ..backend.atc.events.vouchers.models import Voucher, EventVoucher
 from ..backend.atc.events.food_and_drinks.models import FoodAndDrinks, EventFoodAndDrinks, FoodAndDrinksItem
 from ..backend.atc.events.booking.models import Booking, BookingStatus
+from ..backend.atc.events.booking.tickets.models import Tickets
 from ..backend.atc.events.booking.payment.models import Payment, PaymentStatus
 from ..backend.location.models import UserLocationModel
 from ..backend.weather_app.chatbot.models import Message, Route
@@ -20,3 +21,5 @@ from django.core.exceptions import ValidationError
 import datetime
 from django import forms
 from django.contrib.auth.hashers import make_password
+from django.urls import path
+from django.shortcuts import redirect

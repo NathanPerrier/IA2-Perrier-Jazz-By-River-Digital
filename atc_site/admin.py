@@ -18,11 +18,12 @@ admin.site.register(EventFoodAndDrinks)
 admin.site.register(FoodAndDrinksItem)
 admin.site.register(Booking)
 admin.site.register(BookingStatus)
+admin.site.register(Tickets)
 admin.site.register(Payment)
 admin.site.register(PaymentStatus)
 admin.site.register(Message)
 admin.site.register(Route)
-admin.site.register(Newsletter)
+admin.site.register(Newsletter, NewsletterAdmin)
 admin.site.register(ATCMessage)
 
 # update tables
