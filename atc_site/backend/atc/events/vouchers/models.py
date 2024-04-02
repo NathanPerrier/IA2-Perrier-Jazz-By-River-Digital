@@ -1,8 +1,14 @@
 from django.db import models
 from .....models import CustomUser
-from ..models import Events
-
+from ..models import Events    
+    
+class EventVoucher(models.Model):
+    name = models.CharField(max_length=200, blank=False)
+    description = models.TextField(blank=False)
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    
 class Voucher(models.Model):
+    voucher = models.ForeignKey(EventVoucher, on_delete=models.CASCADE)
     code = models.CharField(max_length=255, unique=True)
     purchase_amount = models.DecimalField(max_digits=10, decimal_places=2)
     amount_left = models.DecimalField(max_digits=10, decimal_places=2)
@@ -13,7 +19,3 @@ class Voucher(models.Model):
 
     def __str__(self):
         return self.code
-    
-class EventVoucher(models.Model):
-    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
-    event = models.ForeignKey(Events, on_delete=models.CASCADE)
