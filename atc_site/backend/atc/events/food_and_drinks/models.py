@@ -32,7 +32,7 @@ class EventFoodAndDrinks(models.Model):
     
     
 class FoodAndDrinks(models.Model):
-    item = models.ManyToManyField(FoodAndDrinksItem, blank=False)
+    item = models.ForeignKey(FoodAndDrinksItem, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1, blank=False, validators=[MinValueValidator(1)])
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
     last_modification = models.DateTimeField(auto_now=True, blank=False)
