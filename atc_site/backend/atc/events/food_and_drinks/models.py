@@ -3,6 +3,8 @@ from ..models import Events
 from .....models import CustomUser
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
+
 
     
 class FoodAndDrinksItem(models.Model):
@@ -17,9 +19,10 @@ class FoodAndDrinksItem(models.Model):
 
     
     def save(self, *args, **kwargs):
+        vendor_group = Group.objects.get(name='Vendor')
         if self.quantity_sold > self.stock:
             raise ValueError("Sold quantity cannot be more than available quantity")
-        if self.vendor not in CustomUser.groups.filter(name='Vendor'):
+        if self.vendor not in CustomUser.objects.filter(groups=vendor_group):
             raise ValidationError("CustomUser must be in the Vendor group")
         super().save(*args, **kwargs)
     

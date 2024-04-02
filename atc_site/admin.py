@@ -13,6 +13,9 @@ from .backend.location.models import UserLocationModel
 from .backend.weather_app.chatbot.models import Message, Route
 from .backend.atc.chatbotATC.models import Message as ATCMessage
 from .backend.atc.models import Newsletter
+from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
+
 
 from django.contrib.auth.hashers import make_password
 
@@ -31,6 +34,8 @@ class EmailAddressAdmin(admin.ModelAdmin):
         
 
 class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('email', 'first_name', 'last_name', 'is_superuser', 'is_staff', 'last_login')
+    search_fields = ('email', 'is_superuser', 'is_staff', 'first_name', 'last_name')
     def save_model(self, request, obj, form, change):
         if 'password' in form.changed_data:
             obj.password = make_password(obj.password)
@@ -40,6 +45,16 @@ class CustomUserAdmin(admin.ModelAdmin):
     #     super().delete_model(request, obj)
     #     EmailAddress.objects.get(email=obj.email).delete()
     #     obj.delete()
+    
+class FoodAndDrinksItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'description')
+    search_fields = ('name', 'price', 'description')
+    
+    def save_model(self, request, obj, form, change):
+        vendor_group = Group.objects.get(name='Vendor')
+        if obj.vendor not in CustomUser.objects.filter(groups=vendor_group):
+            raise ValidationError("CustomUser must be in the Vendor group")
+        super().save_model(request, obj, form, change)
 
 # register custom tables
 
