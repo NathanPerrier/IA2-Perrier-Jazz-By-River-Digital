@@ -2,6 +2,7 @@ from django.db import models
 from ..models import Events
 from .....models import CustomUser
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 
     
 class FoodAndDrinksItem(models.Model):
@@ -13,10 +14,13 @@ class FoodAndDrinksItem(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
     last_modification = models.DateTimeField(auto_now=True, blank=False)
     vendor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
+
     
     def save(self, *args, **kwargs):
         if self.quantity_sold > self.stock:
             raise ValueError("Sold quantity cannot be more than available quantity")
+        if self.vendor not in CustomUser.groups.filter(name='Vendor'):
+            raise ValidationError("CustomUser must be in the Vendor group")
         super().save(*args, **kwargs)
     
 class EventFoodAndDrinks(models.Model):
