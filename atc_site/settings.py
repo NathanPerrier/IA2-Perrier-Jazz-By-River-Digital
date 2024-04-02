@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'import_export', # test
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',

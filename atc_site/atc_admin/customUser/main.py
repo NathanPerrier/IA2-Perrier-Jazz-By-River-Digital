@@ -1,7 +1,7 @@
 from ..config import *
 
 
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('email', 'first_name', 'last_name', 'is_superuser', 'is_staff', 'last_login')
     search_fields = ('email', 'is_superuser', 'is_staff', 'first_name', 'last_name')
     def save_model(self, request, obj, form, change):

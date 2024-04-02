@@ -11,7 +11,7 @@ class RegisterAuthForm(forms.ModelForm):
             raise ValidationError('Reset code must be 6 characters long')
         return reset_code
 
-class RegisterAuthAdmin(admin.ModelAdmin):
+class RegisterAuthAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = RegisterAuthForm
     list_display = ('email', 'reset_code', 'expiration_time')
     search_fields = ('email', 'reset_code', 'expiration_time')

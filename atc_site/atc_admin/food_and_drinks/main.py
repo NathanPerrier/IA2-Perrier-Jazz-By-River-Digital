@@ -13,7 +13,7 @@ class FoodAndDrinksForm(forms.ModelForm):
     
 
     
-class FoodAndDrinksAdmin(admin.ModelAdmin):
+class FoodAndDrinksAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = FoodAndDrinksForm
     list_display = ('item', 'quantity', 'user', 'event')
     search_fields = ('item', 'quantity', 'event')

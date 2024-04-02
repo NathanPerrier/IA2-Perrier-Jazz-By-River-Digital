@@ -6,7 +6,7 @@ class EmailAddressForm(forms.ModelForm):
         fields = '__all__'
 
 
-class EmailAddressAdmin(admin.ModelAdmin):
+class EmailAddressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'email', 'primary', 'verified')
     search_fields = ('email', 'primary', 'verified')
     

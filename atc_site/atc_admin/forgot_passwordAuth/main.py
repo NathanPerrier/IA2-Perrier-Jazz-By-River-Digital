@@ -11,7 +11,7 @@ class ForgotPasswordAuthForm(forms.ModelForm):
             raise ValidationError('Reset code must be 6 characters long')
         return reset_code
 
-class ForgotPasswordAuthAdmin(admin.ModelAdmin):
+class ForgotPasswordAuthAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = ForgotPasswordAuthForm
     list_display = ('user', 'reset_code', 'expiration_time')
     search_fields = ('user', 'reset_code', 'expiration_time')

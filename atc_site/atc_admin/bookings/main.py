@@ -5,6 +5,6 @@ class BookingForm(forms.ModelForm):
         model = Booking
         fields = '__all__'
     
-class BookingAdmin(admin.ModelAdmin):
+class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'event', 'tickets', 'payment', 'last_modified')
     search_fields = ('event', 'status')

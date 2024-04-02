@@ -5,6 +5,6 @@ class PaymentForm(forms.ModelForm):
         model = Payment
         fields = '__all__'
 
-class PaymentAdmin(admin.ModelAdmin):
+class PaymentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'amount', 'method', 'status', 'last_modified')
     search_fields = ('amount', 'method', 'status', 'last_modified')

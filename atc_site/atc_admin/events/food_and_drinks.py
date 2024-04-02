@@ -1,4 +1,4 @@
 from ..config import *
 
-class EventFoodAndDrinksAdmin(admin.ModelAdmin):
+class EventFoodAndDrinksAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('id', 'event', 'food_and_drinks_item')

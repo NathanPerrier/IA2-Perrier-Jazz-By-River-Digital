@@ -5,6 +5,6 @@ class ATCMessageForm(forms.ModelForm):
         model = ATCMessage
         fields = '__all__'
 
-class ATCMessageAdmin(admin.ModelAdmin):
+class ATCMessageAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'role', 'content', 'model')
     search_fields = ('role', 'content', 'model')

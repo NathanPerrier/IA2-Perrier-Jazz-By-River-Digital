@@ -5,7 +5,7 @@ class TicketsForm(forms.ModelForm):
         model = Tickets
         fields = '__all__'
 
-class TicketsAdmin(admin.ModelAdmin):
+class TicketsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'sent')
 
     

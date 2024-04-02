@@ -21,5 +21,13 @@ from django.core.exceptions import ValidationError
 import datetime
 from django import forms
 from django.contrib.auth.hashers import make_password
+from import_export.admin import ImportExportModelAdmin #test
 from django.urls import path
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.http import HttpResponse
+import json
+import csv
+import io
+
+class CsvImportForm(forms.Form):
+    csv_file = forms.FileField()

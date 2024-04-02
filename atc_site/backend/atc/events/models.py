@@ -59,7 +59,7 @@ class Events(models.Model):
    
 class EventSchedule(models.Model):
    event = models.ForeignKey(Events, on_delete=models.CASCADE)
-   event_item = models.ManyToManyField('EventScheduleItem')
+   event_item = models.name = models.ForeignKey('EventScheduleItem', on_delete=models.CASCADE)
    
 class EventScheduleItem(models.Model):
    start_time = models.TimeField(blank=False)

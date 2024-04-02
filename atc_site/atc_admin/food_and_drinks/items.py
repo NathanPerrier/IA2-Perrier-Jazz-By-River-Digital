@@ -18,7 +18,7 @@ class FoodAndDrinksItemForm(forms.ModelForm):
             raise ValidationError("CustomUser must be in the Vendor group")
         return vendor
     
-class FoodAndDrinksItemAdmin(admin.ModelAdmin):
+class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = FoodAndDrinksItemForm
     list_display = ('name', 'description', 'price', 'stock', 'quantity_sold', 'vendor')
     search_fields = ('name', 'price', 'description', 'stock', 'quantity_sold')
