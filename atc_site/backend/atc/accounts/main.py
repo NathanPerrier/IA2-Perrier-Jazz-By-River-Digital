@@ -12,3 +12,8 @@ def account_page(request):
         return render(request, 'atc_site/account//account.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'user_group': [group.name for group in Group.objects.filter(customuser=request.user)][0], 'bookings': Booking().get_bookings_by_user(request.user.id)})
     else: return redirect('/login')
    
+@csrf_protect
+def manage_account_page(request):
+    if request.user.is_authenticated:
+        return render(request, 'atc_site/account/manage_account.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'user_group': [group.name for group in Group.objects.filter(customuser=request.user)][0]})
+    else: return redirect('/login')

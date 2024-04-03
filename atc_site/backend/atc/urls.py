@@ -47,6 +47,7 @@ urlpatterns = [
     path('forgot/confirmed', main.forgot_password_confirmed, name='forgot_password_confirmed'),
     
     path('account', main.account_page, name='account'),
+    path('account/manage', main.manage_account_page, name='manage_account'),
     
     path('logout/', views.logout_view, name='logout'),
 ]

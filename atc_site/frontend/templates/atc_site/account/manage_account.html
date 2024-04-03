@@ -1,7 +1,7 @@
 {% extends "atc_site/template/main-template.html" %}
 {% load static %}
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/account/style.css' %}">
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'atc_site/css/account/style.css' %}">
 <div class="container-fluid pt-5 bg-primary hero-header">
 	<div class="container pt-5">
 		<div class="row g-5 pt-5">
@@ -16,13 +16,13 @@
 				</nav>
 			</div>
 			<div class="col-lg-6 align-self-end text-center text-lg-end">
-				<img class="img-fluid" src="{% static '/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
+				<img class="img-fluid" src="{% static 'atc_site/images/homepage/hero-img-2.png' %}" alt="" style="max-height: 465px;">
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="bg-white shadow rounded-lg d-block d-sm-flex">
+<div class="bg-white shadow d-block d-sm-flex" style="border-radius: 0;">
 	<div class="profile-tab-nav border-right">
 		<div class="p-4">
 			<div class="img-circle text-primary text-center mb-3">
@@ -59,7 +59,7 @@
 			<h3 class="mb-4">Account Details</h3>
 			<form action="{{ url_for('account.validate_account_update' %}" method="POST" enctype="multipart/form-data">
 				{{ formAccount.csrf_token }}
-        		{{ formAccount.hidden_tag() }}
+
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -82,25 +82,7 @@
 							{% endif %}
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Phone number</label>
-							{% if user.phone_number == None %}
-								<input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number">
-							{% else %}
-								<input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{user.phone_number}}">
-							{% endif %}
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>username*</label>
-							<input type="text" class="form-control" name="username" id="username" value="{{user.username}}">
-							{% if error == 'Username already in use' %}	
-								<p class="text-danger mt-1">{{error}}</p>
-							{% endif %}
-						</div>
-					</div>
+					
 					<div class="col-md-6">
 						<div class="form-group row">
 							<label for="address" class="mr-2">Address*</label>
@@ -122,14 +104,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-12">
-						<div class="form-group">
-							<label>Bio</label>
-							<textarea class="form-control" id="bio" name="bio" rows="4">{{ bio.user_bio }}</textarea> <!-- !! TEST -->
-						</div>
-					</div>
+					
 				</div>
-				<div class="row">
+				<div class="row mt-3">
 					<div class="col-md-11">
 						<p class="text-danger"><button id="account-update-button" type="submit" name="submit" class="btn btn-primary">Update</button>
 						<a id="cancel-button-account" onclick="window.location.reload()" class="btn btn-outline-danger ms-1">Cancel</a>
@@ -146,11 +123,11 @@
 				</div>
 			</form>
 		</div>
-		<div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+		<div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab" style="width:75.4vw">
 			<h3 class="mb-4">Password Settings</h3>
 			<form action="{{ url_for('account.validate_password_update' %}" method="POST" enctype="multipart/form-data">
 				{{ formPassword.csrf_token }}
-				{{ formPassword.hidden_tag() }}
+		
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -176,26 +153,26 @@
 				<div>
 					<p class="text-danger"><button id="password-update-button" type="submit" name="submit" class="btn btn-primary">Update</button>
 					<a id="cancel-button-password" onclick="window.location.reload()" class="btn btn-outline-danger">Cancel</a>
-					{% with messages = get_flashed_messages(with_categories=true) %}
-						{% if messages %}
-							{% for category, message in messages %}
-								{% if message != 'Please log in to access this page.' and message != '' %}
-									<script>
-										alert('{{ message }}');
-									</script>
-									<span class="ms-2 text-danger" style="border: 1.15px solid;"></span><span class="ms-2"></span>{{ message }}</p>
-								{% endif %}
-							{% endfor %}
-						{% endif %}
-					{% endwith %}</span>
+			
+					{% if messages %}
+						{% for category, message in messages %}
+							{% if message != 'Please log in to access this page.' and message != '' %}
+								<script>
+									alert('{{ message }}');
+								</script>
+								<span class="ms-2 text-danger" style="border: 1.15px solid;"></span><span class="ms-2"></span>{{ message }}</p>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					</span>
 				</div>
 			</form>
 		</div>
-		<div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
+		<div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab" style="width:75.4vw;">
 			<h3 class="mb-4">Change Profile Picture</h3>
 			<form action="{{ url_for('account.validate_picture_update' %}" method="POST" enctype="multipart/form-data">
 				{{ formPicture.csrf_token }}
-				{{ formPicture.hidden_tag() }}
+		
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
@@ -216,20 +193,20 @@
 					<div class="col-md-11">
 						<p class="text-danger"><button id="picture-update-button"  name="submit" type="submit" class="btn btn-primary">Update</button>
 						<a id="cancel-button-picture" onclick="window.location.reload()" class="btn btn-outline-danger">Cancel</a>
-						{% with messages = get_flashed_messages(with_categories=true) %}
-							{% if messages %}
-								{% for category, message in messages %}
-									{% if category == 'error-2' %}
-										{% if message != 'Please log in to access this page.' and message != '' %}
-											<script>
-												alert('{{ message }}');
-											</script>
-											<span class="ms-2 text-danger" style="border: 1.15px solid;"></span><span class="ms-2"></span>{{ message }}</p>
-										{% endif %}
+					
+						{% if messages %}
+							{% for category, message in messages %}
+								{% if category == 'error-2' %}
+									{% if message != 'Please log in to access this page.' and message != '' %}
+										<script>
+											alert('{{ message }}');
+										</script>
+										<span class="ms-2 text-danger" style="border: 1.15px solid;"></span><span class="ms-2"></span>{{ message }}</p>
 									{% endif %}
-								{% endfor %}
-							{% endif %}
-						{% endwith %}</span>
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+						</span>
 					</div>
 					<div class="col-md-1 text-right">
 						<a id="restore-button" href="/account/manage/picture/restore" class="btn btn-danger">Restore</a>
