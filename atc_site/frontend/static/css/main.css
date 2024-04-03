@@ -402,7 +402,18 @@ h6,
     z-index: -5;
 }
 
-
+.bg-video-2 {
+    /* margin-top: -75px;    */
+    top:-50px;
+    position: fixed;  /* absolute */
+    overflow: hidden !important;
+    background-size: cover;  
+    object-fit: cover; 
+    transform: translate3d(0, 0, 0);
+    width: 100%;
+    height: calc(100% + 50px);
+    z-index: -5;
+}
 
 /*** Section Title ***/
 .section-title::before {

@@ -4,12 +4,13 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import Group
+from .models import Events
 from decouple import config
 
 from ....handles import login_required
 
 def events(request):
-    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
+    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : Events.objects.all() })
 
 @staff_member_required  #! redirects to /accounts/login
 def create_event(request):

@@ -17,33 +17,22 @@
         </div>
     {% else %}
         <div class="owl-carousel testimonial-carousel" style="margin-top:-75px;height:100vh">
-            {% for blog in featured_blogs %}
+            {% for event in events %}
                 <div class="testimonial-item container-fluid px-0 m-0 pt-5 hero bg-overlay-50" style="height:100vh">
                     <div class="pb-5">
-                        <img class="bg-video" src="{% static image %}"> <!-- change to bg-video-2 to remove fixed position -->
+                        <img class="bg-video-2" src="{{ event.image.url }}" id="parallaxVideo"> <!-- change to bg-video-2 to remove fixed position -->
                         <div class="container px-3 py-5 bg-img">
-                            <div class="row g-5 mb-5">
+                            <div class="row g-5 mb-5 mt-5 pb-5">
                                 <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
                                     <div class="pb-5">
-                                    <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{blog.title}}</h1>
+                                    <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{event.name}}</h1>
                                     
-                                    <h4 class="text-white mb-2 animated slideInRight">Written By <a class="text-white" href="/account/{{ author.value.username }}">@{{ author.value.username }}</a></h4>
-                                    <p class="text-white animated slideInRight">{{blog.description}}</p>
-                                    <div class="my-3 animated slideInRight">
-                                        <div class="LD-area text-white">
-                                            <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                                <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
-                                            </div>
-                                            <div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>
-                                            <div class="LD-area-sub">
-                                                <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <h4 class="text-white mb-2 animated slideInRight">{{event.location}} | {{ event.date|date:"d F, Y"  }}</h4>
+                                    <p class="text-white animated slideInRight">{{event.description}}</p>
                                     <div class="wow fadeInUp" data-wow-delay="0.5s">
-                                        <a href="/blog/{{blog.id}}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
-                                        {% if blog.user_id == user.id or user.admin %}
-                                        <a href="/blog/{{blog.id}}/edit" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Edit</a>
+                                        <a href="/events/{{blog.id}}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                        {% if user.is_superuser %}
+                                        <a href="/events/{{blog.id}}/edit" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Edit</a>
                                         {% else %}
                                             {% if social|length == 0 %}
                                                 <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Follow</a>
@@ -102,11 +91,11 @@
             </div>
         </div>
         <div class="container-fluid p-0 bg-light">
-            <img class="img-fluid" src="{% static 'images/homepage/peaks-4.svg' %}">
+            <img class="img-fluid" src="{% static 'atc_site/images/homepage/peaks-4.svg' %}">
         </div>
 
         <div class="container-fluid pb-4 px-5 bg-light" id="blog">
-            <h1 class="text-center mb-4">All Blogs</h1>
+            <h1 class="text-center mb-4">All Our Events</h1>
             <div class="mb-5 mx-5 px-1 py-2 rounded-pill bg-white" style="display:flex;justify-content:space-between">
                 <div class="d-flex px-1">
                     <select name="categories" id="categories" class="btn btn-outline-primary rounded-pill me-2">
@@ -134,7 +123,7 @@
                 </div>
             </div>
             <div class="row blog-row" id="blog-container">
-                {% for blog in blogs %}
+                {% for blog in events %}
                     <div class="col-md-6 flex">
                         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
                             <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
