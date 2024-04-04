@@ -22,7 +22,7 @@ class BookingStatus(models.Model):
 class Booking(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    event = models.ForeignKey(Events, on_delete=models.CASCADE)
-   tickets = models.ForeignKey(Tickets, on_delete=models.CASCADE)
+   ticket = models.ForeignKey(Tickets, on_delete=models.CASCADE)
    payment = models.ForeignKey(Payment, on_delete=models.CASCADE)
    status = models.ForeignKey(BookingStatus, on_delete=models.CASCADE)
    vouchers = models.ManyToManyField(Voucher, blank=True)

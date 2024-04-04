@@ -29,6 +29,7 @@ class Events(models.Model):
    food_and_drinks = models.ManyToManyField('EventFoodAndDrinks', blank=True)
    schedule = models.ForeignKey('EventSchedule', on_delete=models.CASCADE, blank=True, null=True)
    image = models.ImageField(upload_to='images/events/', blank=True, null=True)
+   payment_link = models.URLField(blank=True, null=True)
    
    @classmethod
    def get_event(cls, event_id):

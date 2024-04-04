@@ -28,6 +28,10 @@ from django.http import HttpResponse
 import json
 import csv
 import io
+import stripe
+from decouple import config
+
+stripe.api_key = config('STRIPE_API_KEY')
 
 class CsvImportForm(forms.Form):
     csv_file = forms.FileField()

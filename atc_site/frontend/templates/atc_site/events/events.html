@@ -30,7 +30,7 @@
                                     <h4 class="text-white mb-2 animated slideInRight">{{event.location}} | {{ event.date|date:"d F, Y"  }}</h4>
                                     <p class="text-white animated slideInRight">{{event.description}}</p>
                                     <div class="wow fadeInUp" data-wow-delay="0.5s">
-                                        <a href="/events/{{event.id}}/book" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                        <a href="https://buy.stripe.com/6oE29W52O2Oo2l2cMM" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
                                         {% if user.is_superuser %}
                                         <a href="/events/{{event.id}}/edit" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Edit</a>
                                         {% else %}
