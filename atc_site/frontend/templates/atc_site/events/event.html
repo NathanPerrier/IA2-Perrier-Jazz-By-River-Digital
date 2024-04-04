@@ -42,6 +42,52 @@
             </div>
             <hr style="margin-left:10%" width="80%">
         </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <h1 class="text-center">Event Schedule</h1>
+          </div>
+          <div class="col-lg-9">
+            <div class="row">
+              {% for item in schedule %}
+                <div class="col-lg-4">
+                  <div class="card my-2">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ item.title }}</h5>
+                      <div><p class="card-text">{{ item.start_time }}  -  {{item.end_time}}</p></div>
+                      <div class="border-bottom pt-1 my-2"></div>
+                      <p class="card-text">{{ item.description }}</p></div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-9">
+            <div class="row">
+              {% for item in food_and_drinks %}
+                <div class="col-lg-4">
+                  <div class="card my-2">
+                    <div class="card-body">
+                      <div class="row">
+                        <img src="{{ item.image.url }}" class="img-fluid" alt="...">
+                      </div>
+                      <div class="row">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">{{ item.description }}</p></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+          </div>
+          <div class="col-lg-3">
+            <h1 class="text-center">Event Food and Drinks</h1>
+            </div>
+          </div>
+        </div>
+      </div>
         <!-- schedule, food and drinks, vouchers -->
     </div>
 </div>
