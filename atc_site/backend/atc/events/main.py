@@ -33,4 +33,4 @@ def edit_event(request, event_id):
 def days_to_go(date1, date2):
     date1 = date1.replace(tzinfo=None)
     date2 = date2.replace(tzinfo=None)
-    return (date2 - date1).days
+    return abs((date2 - date1).days)
