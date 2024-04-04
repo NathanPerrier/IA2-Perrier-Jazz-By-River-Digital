@@ -78,7 +78,7 @@
             <div class="d-flex rounded p-3 wow fadeInRightBig" data-wow-delay="0.1s" style="background: rgba(256, 256, 256, 0.1);">
                 <i class="fa-solid fa-dollar-sign fa-3x text-white"></i>
                 <div class="ps-3">
-                    <h2 class="text-white mb-0" data-toggle="counter-up">{{ event.ticket_price }}</h2>
+                    <h2 class="text-white mb-0" data-toggle="counter-up">{{ event.ticket_price|floatformat:"2" }}</h2>
                     <p class="text-white mb-0">Ticket Price</p> <!-- if 0 then free -->
                 </div>
             </div>
