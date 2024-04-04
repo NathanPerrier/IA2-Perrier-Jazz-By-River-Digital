@@ -103,7 +103,7 @@
                                 <label class="fieldlabels">Upload Cover Photo (optional)</label>
                                 <input type="file" id="file-input" name="image" accept="image/*" />
                                 <label class="fieldlabels">Current Photo</label>
-                                <input type="text" name="image-current" id="image-current" value="{{blog.image.split('/')|last}}" readonly />
+                                <input type="text" name="image-current" id="image-current" value="{{event.image.url}}" readonly />
                             </div>
                             <button type="button" name="previous" class="go_back btn btn-primary px-5 py-3" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
                             <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepThree()">

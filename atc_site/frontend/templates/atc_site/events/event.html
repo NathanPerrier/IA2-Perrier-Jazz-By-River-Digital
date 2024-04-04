@@ -1,0 +1,328 @@
+{% extends 'atc_site/template/main-template.html' %}
+{% load static %}
+{% block content %}
+<link type="text/css" href="{% static 'css/blog/blog.css' %}" rel="stylesheet">
+<!-- Hero Start -->
+<div class="container-fluid p-0 m-0 hero bg-overlay-50">  <!--bg-overlay-40?-->
+    <img class="bg-video" src="{{ event.image.url }}" id="parallaxVideo"> <!-- change to bg-video-2 to remove fixed position -->
+    <div class="container px-3 py-5 bg-img">
+        <div class="row g-5 mb-5">
+            <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+              <div class="pb-5">
+                <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{ event.name }}</h1>
+                <h4 class="text-white mb-2 animated slideInRight">{{event.location}} | {{ event.date|date:"d F, Y"  }}</h4>
+                <p class="text-white animated slideInRight">{{event.description}}</p>
+               
+                <div class="wow fadeInUp" data-wow-delay="0.5s">
+                  <a href="{{ event.payment_link }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                  {% if user.is_authenticated %}
+                    {% if user.is_superuser %}
+                      <a href="/events/{{event.id}}/edit/" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Edit</a>
+                    {% endif %}
+                  {% endif %}           
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero End -->
+
+<!-- Blog Start -->
+<div class="container-fluid py-5 bg-light" id="blog">
+    <div class="container">
+        <div class="text-center my-2">
+            <h2 class="fw-bold mb-1">{{event.name}}</h2>
+            <small class="mb-3">{{event.location}} | {{ event.date|date:"d F, Y"  }}</small>
+        </div>
+        <div class="pb-3">
+            <hr style="margin-left:25%" width="50%">
+            <div class="mx-5">
+                <p class="text-muted my-2 mx-5 text-center"><i>{{event.description}}</i></p> 
+            </div>
+            <hr style="margin-left:10%" width="80%">
+        </div>
+        <!-- schedule, food and drinks, vouchers -->
+    </div>
+</div>
+<!-- Blog End -->
+
+<!-- social Start -->
+<div class="container-fluid py-2 bg-secondary">
+    <div class="contaiiner py-2 px-2">
+      <div class="row">
+        <div class="col-sm-2 my-2">
+            <div class="d-flex rounded p-3 wow fadeInLeft" data-wow-delay="0.45s" style="background: rgba(256, 256, 256, 0.1);">
+                <i class="fa fa-money-bill fa-3x text-white"></i>
+                <div class="ps-3">
+                    <h2 class="text-white mb-0" data-toggle="counter-up">{{ event.sold }}</h2>
+                    <p class="text-white mb-0">Tickets sold</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 my-2">
+            <div class="d-flex rounded p-3 wow fadeInLeftBig" data-wow-delay="0.1s" style="background: rgba(256, 256, 256, 0.1);">
+                <i class="fa fa-ticket fa-3x text-white"></i>
+                <div class="ps-3">
+                    <h2 class="text-white mb-0" data-toggle="counter-up">{{ event.available_tickets }}</h2>
+                    <p class="text-white mb-0">Tickets Left</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 my-2">
+          <a class="text-white" href="{{ event.payment_link }}"><div class="d-flex align-items-center justify-content-center rounded p-3 wow fadeIn text-center" data-wow-delay="0.6s" style="background: rgba(256, 256, 256, 0.1);">
+            <h1 style="font-size:3em" class="text-white">Book Now!</h1>
+          </div></a>
+        </div>
+        <div class="col-sm-2 my-2">
+            <div class="d-flex rounded p-3 wow fadeInRightBig" data-wow-delay="0.1s" style="background: rgba(256, 256, 256, 0.1);">
+                <i class="fa-solid fa-dollar-sign fa-3x text-white"></i>
+                <div class="ps-3">
+                    <h2 class="text-white mb-0" data-toggle="counter-up">{{ event.ticket_price }}</h2>
+                    <p class="text-white mb-0">Ticket Price</p> <!-- if 0 then free -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2 my-2">
+            <div class="d-flex rounded p-3 wow fadeInRight" data-wow-delay="0.45s" style="background: rgba(256, 256, 256, 0.1);">
+                <i class="fa-solid fa-calendar-days fa-3x text-white"></i>
+                <div class="ps-3">
+                    <h2 class="text-white mb-0" data-toggle="counter-up">{{ days_to_go }}</h2>
+                    <p class="text-white mb-0">Days to Go</p>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- social End -->
+
+<script src="https://kit.fontawesome.com/02870e7611.js" crossorigin="anonymous"></script>
+<script>
+    function link() {
+        var element = document.getElementById("home-link");
+        element.classList.add("active");
+        var nav = document.getElementById("navbar")
+        nav.classList.add("bg-overlay-50")
+    };
+    link();
+
+    function followBtn(blog_id) {
+      if ("{{user.is_authenticated}}" == 'True') {
+          fetch('/blog/'+blog_id+'/follow', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function likeBtn() {
+      if ("{{user.is_authenticated}}" == 'True') {
+          fetch('/blog/{{blog.id}}/like', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function dislikeBtn() {
+      if ("{{user.is_authenticated}}" == 'True') {
+          fetch('/blog/{{blog.id}}/dislike', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function postComment() {
+      if ("{{user.is_authenticated}}" == 'True') {
+        if (document.getElementById("comment").value == "") {
+          alert("Please enter a comment");
+          return;
+        } else {
+          var data = {
+            comment: document.getElementById("comment").value
+          }
+          fetch('/blog/{{blog.id}}/comment', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+        }
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function editComment(comment_id) {
+      if ("{{user.is_authenticated}}" == 'True') {
+        if (document.getElementById("comment-edit-input-"+comment_id).value == "") {
+          alert("Please enter a comment");
+          return;
+        } else {
+          var data = {
+            comment: document.getElementById("comment-edit-input-"+comment_id).value
+          }
+          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/edit', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+        }
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function editRelatedComment(comment_id) {
+      if ("{{user.is_authenticated}}" == 'True') {
+        if (document.getElementById("comment-related-edit-input-"+comment_id).value == "") {
+          alert("Please enter a comment");
+          return;
+        } else {
+          var data = {
+            comment: document.getElementById("comment-related-edit-input-"+comment_id).value
+          }
+          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/edit', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+        }
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function relpyToComment(comment_id) {
+      if ("{{user.is_authenticated}}" == 'True') {
+        if (document.getElementById("comment-reply-input-"+comment_id).value == "") {
+          alert("Please enter a comment");
+          return;
+        } else {
+          var data = {
+            comment: document.getElementById("comment-reply-input-"+comment_id).value
+          }
+          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/reply', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+        }
+      } else {
+          window.location.href = "/login";
+      }
+    }
+
+    function deleteComment(comment_id) {
+      if ("{{user.is_authenticated}}" == 'True') {
+        var result = confirm("Are you sure you want to delete your comment?");
+        if (result) {
+          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/delete', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(response => response.json())
+            .catch(error => console.error(error));
+            window.location.href = "/blog/{{blog.id}}";
+        }
+      } else {
+        window.location.href = "/login";
+      }
+    }
+
+    function toggleReplyInput(comment_id) {
+      var inputDiv = document.getElementById("reply-section-"+comment_id);
+      
+      resetVariableDisplays();
+
+      if (inputDiv.style.display === "none") {
+        inputDiv.style.display = "block";
+      } else {
+        inputDiv.style.display = "none";
+      }
+    }
+
+    function toggleEditInput(comment_id) {
+      var inputDiv = document.getElementById("comment-edit-"+comment_id);
+      var commentDiv = document.getElementById("comment-"+comment_id);
+
+      resetVariableDisplays();
+
+      if (inputDiv.style.display === "none") {
+        inputDiv.style.display = "block";
+        commentDiv.style.display = "none";
+      } else {
+        inputDiv.style.display = "none";
+        commentDiv.style.display = "block";
+      }
+    }
+
+    function resetVariableDisplays() {
+      var variableInputs = document.getElementsByClassName("variable-input");
+      var variableContents = document.getElementsByClassName("variable-content");
+      for (var i = 0; i < variableInputs.length; i++) {
+        variableInputs[i].style.display = "none";
+      }
+      for (var i = 0; i < variableContents.length; i++) {
+        variableContents[i].style.display = "block";
+      }
+    }
+
+    function closeEditDiv(comment_id) {
+      var inputDiv = document.getElementById("comment-edit-"+comment_id);
+      var commentDiv = document.getElementById("comment-"+comment_id);
+      inputDiv.style.display = "none";
+      commentDiv.style.display = "block";
+      
+    }
+
+    function closeReplyDiv(comment_id) {
+      var inputDiv = document.getElementById("reply-section-"+comment_id);    
+      inputDiv.style.display = "none"; 
+    }
+</script>
+{% endblock %}

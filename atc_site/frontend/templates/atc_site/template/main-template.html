@@ -257,7 +257,7 @@
                 alert("Please enter a valid email address");
                 return;
             }
-            fetch('newsletter_ajax/', { // Replace with the correct URL
+            fetch('/newsletter_ajax/', { // Replace with the correct URL
                 method: 'POST',
                 body: emailData,
                 headers: { 'X-CSRFToken': getCookie('csrftoken') },
