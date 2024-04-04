@@ -15,27 +15,28 @@ class EventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if change: #! doesn't work
-            product = stripe.Product.modify(
-                id=obj.id,
-                name=obj.name,
-                active=True,
-                description=obj.description,
-                images=[obj.image.url],
-                # default_price=price.id,
-            )
-            price = stripe.Price.modify(
-                product=obj.id,
-                unit_amount=obj.ticket_price*100,  
-                currency="AUD",
-            )
+            pass
+            # product = stripe.Product.modify(
+            #     id=obj.id,
+            #     name=obj.name,
+            #     active=True,
+            #     description=obj.description,
+            #     images=[obj.image.url],
+            #     # default_price=price.id,
+            # )
+            # price = stripe.Price.modify(
+            #     product=obj.id,
+            #     unit_amount=obj.ticket_price*100,  
+            #     currency="AUD",
+            # )
             
-            stripe.Product.modify(
-                id=product.id,
-                default_price=price.id,
-            )
+            # stripe.Product.modify(
+            #     id=product.id,
+            #     default_price=price.id,
+            # )
             
-            link = stripe.PaymentLink.modify(line_items=[{"price": price.id, "quantity": 1}])
-            obj.payment_link = link.url
+            # link = stripe.PaymentLink.modify(line_items=[{"price": price.id, "quantity": 1}])
+            # obj.payment_link = link.url
             
         else:
             product = stripe.Product.create(
