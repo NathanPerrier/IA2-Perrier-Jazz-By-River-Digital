@@ -364,15 +364,18 @@ h6,
 } */
 
 .bg-video-2 {
-    margin-top:-75px;
-    position: absolute;  /* absolute */
-    overflow: hidden !important;
-    background-size: cover;  
-    object-fit: cover; 
-    transform: translate3d(0, 0, 0);
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    height: 100%;
     width: 100%;
-    height: calc(100% + 75px);
-    z-index: -5;
+    overflow: hidden !important;
+    z-index: -100;
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .bg-video {

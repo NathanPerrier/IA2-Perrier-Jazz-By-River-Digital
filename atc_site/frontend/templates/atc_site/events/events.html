@@ -88,66 +88,64 @@
 
         <div class="container-fluid pb-4 px-5 bg-light" id="blog">
             <h1 class="text-center mb-4">All Our Events</h1>
-            <div class="mb-5 mx-5 px-1 py-2 rounded-pill bg-white" style="display:flex;justify-content:space-between">
-                <div class="d-flex px-1">
-                    <select name="categories" id="categories" class="btn btn-outline-primary rounded-pill me-2">
-                        <option value="">Categories</option>
-                        <option value="category1">Category 1</option>
-                        <option value="category2">Category 2</option>
-                        <option value="category3">Category 3</option>
-                    </select>
-                    <select name="tags" id="tags" class="btn btn-outline-primary rounded-pill me-2">
-                        <option value="">Tags</option>
-                        <option value="tag1">Tag 1</option>
-                        <option value="tag2">Tag 2</option>
-                        <option value="tag3">Tag 3</option>
-                    </select>
-                </div>
-                <div class="d-flex">
-                    <select name="sort" id="sort" class="btn btn-outline-primary rounded-pill me-2">
-                        <option value="">Sort By</option>
-                        <option value="date">Date</option>
-                        <option value="title">Title</option>
-                        <option value="author">Author</option>
-                    </select>
-                    <input type="text" name="search" id="search-input" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search">
-                    <div id="search-results" class="position-absolute w-100 bg-white border rounded-top" style="display: none;"></div>
+            <div class="row px-5 mr-3 event-search-bar" id="search-bar">
+                <div class="mb-5 px-1 py-2 rounded-pill bg-white" style="display:flex;justify-content:space-between">
+                    <div class="d-flex px-1">
+                        <select name="categories" id="categories" class="btn btn-outline-primary rounded-pill me-2">
+                            <option value="">Categories</option>
+                            <option value="category1">Music</option>
+                            <option value="category2">Sport</option>
+                            <option value="category3">Academics</option>
+                            <option value="category4">Social</option>
+                        </select>
+                        <select name="tags" id="tags" class="btn btn-outline-primary rounded-pill me-2">
+                            <option value="">Tags</option>
+                            <option value="tag1">Year 10</option>
+                            <option value="tag2">Year 11</option>
+                            <option value="tag3">Year 12</option>
+                            <option value="tag4">Parents and Friends</option>
+                        </select>
+                    </div>
+                    <div class="d-flex">
+                        <select name="sort" id="sort" class="btn btn-outline-primary rounded-pill me-2">
+                            <option value="">Sort By</option>
+                            <option value="date">Date</option>
+                            <option value="title">Title</option>
+                            <option value="author">Author</option>
+                        </select>
+                        <input type="text" name="search" id="search-input" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search">
+                        <div id="search-results" class="position-absolute w-100 bg-white border rounded-top" style="display: none;"></div>
+                    </div>
                 </div>
             </div>
             <div class="row blog-row" id="blog-container">
                 {% for event in events %}
                     <div class="col-md-6 flex">
                         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
-                            <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
-                            <h3 class="mb-0" style="font-size:1.5rem">{{event.name}}</h3>
-                            <div class="my-1 text-muted"><small>{{event.location}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ event.date|date:"d F, Y" }}</small></div>
-                                <p class="card-text mb-auto my-1">{{event.description}}</p>
-                                <div class="button-container" style="display: flex; justify-content: space-between;">                          
-                                    <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
-                                    <div class="LD-area text-dark">
-                                       
-                                        <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                            <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
-                                        </div>
-                                        <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
-                                        <div class="LD-area-sub">
-                                            <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                            <div style="min-height: 40%">
+                                <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
+                                <h3 class="mb-0" style="font-size:1.5rem">{{event.name}}</h3>
+                                <div class="my-1 text-muted"><small>{{event.location}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ event.date|date:"d F, Y" }}</small></div>
+                                    <p class="card-text mb-auto my-1">{{event.description}}</p>
+                                    <div class="button-container mt-2" style="display: flex; justify-content: space-between;">                          
+                                        <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
+                                        <div class="LD-area text-dark">
+                                            <a href="{{ event.payment_link }}" style="z-index:5">
+                                                <div class="p-2 rounded bg-secondary text-center">
+                                                    <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-auto d-none d-lg-block">
-                            
-                            <img class="img-fluid img-cover blog-small-image" style="width:100%;object-fit:cover;" src="{{ event.image.url }}" alt="">
+                            <div class="col-auto d-none d-lg-block" style="max-height:60%;">  <!-- remove max-height? -->                   
+                                <img class="img-fluid img-cover blog-small-image" style="width:100%;object-fit:cover;" src="{{ event.image.url }}" alt="">
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-
-
-           
-
             </div>
         <div>
     {% endif %}

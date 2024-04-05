@@ -34,6 +34,12 @@
     color: #ff0000 !important;
 }
 
+@media (max-width: 740px) {
+  #search-bar, .event-search-bar {
+    display: none;
+  }
+}
+
 .blog-small-image {
     width: 300px;
     height: 100%; /* Maintain the aspect ratio */

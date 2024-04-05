@@ -92,30 +92,26 @@
                   </select>
                   <input type="text" name="search" id="search" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search">
               </div>
-          </div>
+            </div>
             <div class="row blog-row mb-2">
-              {% for blog in blogs %}
+              {% for booking in bookings %}
                   <div class="col-md-6 flex">
                     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
                       <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
-                        <h3 class="mb-0" style="font-size:1.5rem">{{blog.title}}</h3>
-                        <div class="my-1 text-muted"><small>23/05/2006</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{user.username}}</small></div>
-                        <p class="card-text mb-auto my-1">{{blog.description}}</p>
+                        <h3 class="mb-0" style="font-size:1.5rem">{{ booking.payment.item }}</h3>
+                        <div class="my-1 text-muted"><small>{{booking.event.name}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ booking.event.date|date:"d M, Y" }}</small></div>
+                        <p class="card-text mb-auto my-1">{{booking.description}}</p>
                         <div class="button-container" style="display: flex; justify-content: space-between;">                          
-                          <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
-                          <div class="LD-area text-dark">
-                            <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
-                            </div>
-                            <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
-                            <div class="LD-area-sub">
-                                <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                          <a href="/booking/{{ booking.id }}/" class="stretched-link mt-2">View Booking &#8594;</a>
+                          <div class="LD-area text-white">
+                            <div class="p-2 rounded bg-secondary text-center">  <!-- change color based on status -->
+                              <h6 class="m-0 p-0 text-center text-white">{{ booking.status.status }}</h6>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div class="col-auto d-none d-lg-block">
-                        <img class="img-fluid img-cover blog-small-image" src="{% static image }}" alt="">
+                        <img class="img-fluid img-cover blog-small-image" src="{{ booking.event.image.url }}" alt="">
                       </div>
                     </div>
                   </div>
