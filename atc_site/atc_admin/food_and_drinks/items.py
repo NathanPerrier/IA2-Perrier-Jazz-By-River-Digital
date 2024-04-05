@@ -20,7 +20,7 @@ class FoodAndDrinksItemForm(forms.ModelForm):
     
 class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = FoodAndDrinksItemForm
-    list_display = ('name', 'description', 'price', 'stock', 'quantity_sold', 'vendor')
+    list_display = ('name', 'description', 'price', 'stock', 'quantity_sold', 'vendor', 'image', 'last_modified')
     search_fields = ('name', 'price', 'description', 'stock', 'quantity_sold')
 
         

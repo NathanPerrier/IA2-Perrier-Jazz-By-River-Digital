@@ -62,7 +62,8 @@ def get_event_food_and_drinks(event_id):
                 'name': item.name,
                 'description': item.description,
                 'price': item.price,
-                'creation_time': item.creation_time,
-                'last_modified': item.last_modified,
+                'vemdor': item.vendor,
+                'stock': item.stock,
+                'image': item.image,
             })
     return food_and_drinks_items

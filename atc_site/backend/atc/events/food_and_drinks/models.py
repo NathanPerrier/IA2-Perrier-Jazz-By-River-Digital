@@ -13,8 +13,9 @@ class FoodAndDrinksItem(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=False)
     stock = models.IntegerField(default=0, blank=False, validators=[MinValueValidator(0)]) #? min
     quantity_sold = models.IntegerField(default=0, blank=False, validators=[MinValueValidator(0)])
+    image = models.ImageField(upload_to='food_and_drinks/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
-    last_modification = models.DateTimeField(auto_now=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, blank=False)
     vendor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
 
     
