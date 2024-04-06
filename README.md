@@ -59,6 +59,8 @@ The application's design is user-friendly and intuitive, making it easy for user
     GOOGLE_PLACES_API_KEY = 'your-google-places-api-key'
 
     STRIPE_API_KEY = 'your-stripe-api-key'
+    
+    STRIPE_WEBHOOK_SECRET = 'your-stripe-webhook-secret'
 
     DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
@@ -155,6 +157,8 @@ The application's design is user-friendly and intuitive, making it easy for user
     GOOGLE_PLACES_API_KEY = 'your-google-places-api-key'
 
     STRIPE_API_KEY = 'your-stripe-api-key'
+
+    STRIPE_WEBHOOK_SECRET = 'your-stripe-webhook-secret'
 
     DJANGO_SETTINGS_MODULE= atc_site.settings
     ```

@@ -16,6 +16,7 @@ class Voucher(models.Model):
     last_modified = models.DateTimeField(auto_now=True, blank=False)
     expiration_date = models.DateTimeField(blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    # stripe_price_id = models.CharField(max_length=256, blank=True, null=True)
 
     # def __str__(self):
     #     return self.code

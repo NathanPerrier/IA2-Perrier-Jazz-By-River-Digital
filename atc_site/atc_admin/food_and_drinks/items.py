@@ -22,5 +22,47 @@ class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     form = FoodAndDrinksItemForm
     list_display = ('name', 'description', 'price', 'stock', 'quantity_sold', 'vendor', 'image', 'last_modified')
     search_fields = ('name', 'price', 'description', 'stock', 'quantity_sold')
+    
+    def save_model(self, request, obj, form, change):
+        try:
+            product = stripe.Product.create(
+                id=str(obj.id),
+                name=obj.name,
+                active=True,
+                description=obj.description,
+            )
+            
+            price = stripe.Price.create(
+                product=product.id,
+                unit_amount=int(obj.price*100),  
+                currency="aud",
+            )
+            
+            stripe.Product.modify(
+                id=product.id,
+                default_price=price.id,
+            )
+        except Exception as e:
+            print(e)
+            product = stripe.Product.modify(
+                id=str(obj.id),
+                name=obj.name,
+                active=True,
+                description=obj.description,
+            )
+            price = stripe.Price.create(
+                product=product.id,
+                unit_amount=int(obj.price*100),  
+                currency="aud",
+            )
+            
+            stripe.Product.modify(
+                id=product.id,
+                default_price=price.id,
+            )
+        # link = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
+        obj.stripe_price_id = price.id
+        super().save_model(request, obj, form, change)
+        
 
         

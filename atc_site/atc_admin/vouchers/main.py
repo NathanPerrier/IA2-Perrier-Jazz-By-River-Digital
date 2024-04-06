@@ -22,4 +22,6 @@ class VoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if 'code' in form.changed_data:
             obj.code = make_password(obj.code)
+            
+        # stripe voucher
         super().save_model(request, obj, form, change)
