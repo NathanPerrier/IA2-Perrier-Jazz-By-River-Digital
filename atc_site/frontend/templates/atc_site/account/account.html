@@ -101,12 +101,12 @@
                         <h3 class="mb-0" style="font-size:1.5rem">{{ booking.event.name }}</h3>
                         <div class="my-1 text-muted"><small>{{booking.event.location }}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ booking.event.date|date:"d M, Y" }}</small></div>
                         <p class="card-text mb-auto my-1">Includes: 
-                          <a style="z-index:50" href="/booking/{{ booking.id }}/ticket/"><span class="badge bg-primary text-white">Ticket</span></a>
+                          <span class="badge bg-primary text-white">Ticket</span>
                           {% if booking.food_and_drinks %}
-                            <a style="z-index:50" href="/booking/{{ booking.id }}/foodanddrinks/"><span class="badge bg-secondary text-white">Food & Drinks</span></a>
+                            <span class="badge bg-secondary text-white">Food & Drinks</span>
                           {% endif %}
                           {% if booking.vouchers %}
-                          <a style="z-index:50" href="/booking/{{ booking.id }}/vouchers/"><span class="badge bg-secondary text-white">Vouchers</span></a>
+                            <span class="badge bg-secondary text-white">Vouchers</span>
                           {% endif %}
                         </p>
               

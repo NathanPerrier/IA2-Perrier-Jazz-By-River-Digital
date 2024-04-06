@@ -4,6 +4,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import Group
+from ....models import CustomUser
 from .models import Events, EventSchedule, EventScheduleItem
 from .food_and_drinks.models import FoodAndDrinks, FoodAndDrinksItem, EventFoodAndDrinks
 from decouple import config
@@ -14,10 +15,10 @@ from ....handles import login_required
 def events(request):
     return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : Events.objects.all() })
 
-@staff_member_required  #! redirects to /accounts/login
+@staff_member_required  
 def create_event(request):
     if request.user.is_superuser:
-        return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY')}) #, 'vendors': Group.objects.get(name='Vendors').user_set.all()
+        return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY'), 'vendors' : CustomUser.objects.filter(groups__name='Vendor')}) #, 'vendors': Group.objects.get(name='Vendors').user_set.all()
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
 
 
@@ -67,3 +68,5 @@ def get_event_food_and_drinks(event_id):
                 'image': item.image,
             })
     return food_and_drinks_items
+
+

@@ -3,7 +3,7 @@
 {% block content %}
     <link type="text/css" href="{% static 'atc_site/css/blog/create-edit.css' %}" rel="stylesheet">
     <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <link type="text/css" href="{% static 'atc/css/blog/checkbox.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'atc_site/css/blog/checkbox.css' %}" rel="stylesheet">
     <!-- Hero Start -->
     <div class="container-fluid pt-5 bg-primary hero-header">
         <div class="container pt-5">
@@ -75,24 +75,24 @@
                                     </div>
                                 </div>
                                 <label class="fieldlabels">Extras:</label> <!-- dynamically add additional fields based on selected extras -->
-                                <div class="d-flex justify-content-between form-group">
+                                <div class="d-flex justify-content-between form-group mb-3">
                                     <div class="form-field inline d-flex">
-                                        <label class="container-checkbox">Event Vouchers
-                                            <input id="event-vouchers" type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
+                                        <div class="checkbox">
+                                            <input class="checkbox-flip" id="event-vouchers" type="checkbox">
+                                            <label for="event-vouchers"><span></span>Event Vouchers</label>
+                                        </div>
                                     </div>
-                                    <div class="form-field">
-                                        <label class="container-checkbox">Food and Drink
-                                            <input id="event-food-and-drink" type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
+                                    <div class="form-field  inline d-flex">
+                                        <div class="checkbox">
+                                            <input class="checkbox-flip" id="event-food-and-drink" type="checkbox">
+                                            <label for="event-food-and-drink"><span></span>Food and Drink</label>
+                                        </div>
                                     </div>
-                                    <div class="form-field">  
-                                        <label class="container-checkbox">Event Schedule
-                                            <input id="event-schedule" type="checkbox">
-                                            <span class="checkmark"></span>
-                                        </label>
+                                    <div class="form-field  inline d-flex">  
+                                        <div class="checkbox">
+                                            <input class="checkbox-flip" id="event-schedule" type="checkbox">
+                                            <label for="event-schedule"><span></span>Event Schedule</label>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -153,12 +153,18 @@
                                                             <div class="col-md-4 form-group mb-3">
                                                                 <label for="vendor-foodAndDrink0">Vendor <span style="color:red">*</span></label>
                                                                 <select class="form-select" id="vendor-foodAndDrink0" name="vendor-foodAndDrink0">
-                                                                    <option value="1">Vendor 1</option>
-                                                                    <option value="2">Vendor 2</option>
-                                                                    <option value="3">Vendor 3</option>
-                                                                    <option value="4">Vendor 4</option>
-                                                                    <option value="5">Vendor 5</option>
+                                                                    {% for vendor in vendors %}
+                                                                        <option value="{{ vendor.id }}">{{ vendor.email }}</option>
+                                                                    {% endfor %}
                                                                 </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row align-self-end  mb-4">
+                                                            <div class="d-flex col-md-12">
+                                                                <div class="col-md-8 form-group">
+                                                                    <label for="image-foodAndDrink${foodAndDrinkIndex}">Image <span style="color:red">*</span></label>
+                                                                    <input type="file" id="image-foodAndDrink${foodAndDrinkIndex}" name="image-foodAndDrink${foodAndDrinkIndex}" accept="image/*">
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -466,16 +472,20 @@
                                         <div class="col-md-4 form-group mb-3">
                                             <label for="vendor-foodAndDrink${foodAndDrinkIndex}">Vendor <span style="color:red">*</span></label>
                                             <select class="form-select" id="vendor-foodAndDrink${foodAndDrinkIndex}" name="vendor-foodAndDrink${foodAndDrinkIndex}">
-                                                <option value="1">Vendor 1</option>
-                                                <option value="2">Vendor 2</option>
-                                                <option value="3">Vendor 3</option>
-                                                <option value="4">Vendor 4</option>
-                                                <option value="5">Vendor 5</option>
+                                                {% for vendor in vendors %}
+                                                    <option value="{{ vendor.id }}">{{ vendor.email }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 form-group align-self-end">
-                                        <button class="btn btn-danger removeFoodAndDrink mb-4">Remove Item</button>
+                                    <div class="row align-self-end mb-4 d-flex">
+                                        <div class="col-md-8 form-group">
+                                            <label for="image-foodAndDrink${foodAndDrinkIndex}">Image <span style="color:red">*</span></label>
+                                            <input type="file" id="image-foodAndDrink${foodAndDrinkIndex}" name="image-foodAndDrink${foodAndDrinkIndex}" accept="image/*">
+                                        </div>
+                                        <div class="col-lg-1 ms-auto mb-0">
+                                            <button class="btn btn-danger removeFoodAndDrink mt-3">Remove Item</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
