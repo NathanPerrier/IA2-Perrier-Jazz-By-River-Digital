@@ -31,8 +31,9 @@ def edit_event(request, event_id):
         return render(request, 'atc_site//events//edit.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY')})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
 
-def checkout_success(request, event_id):
-    return render(request, 'atc_site//checkout_success.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
+# def checkout_success(request, event_id):
+#     stripe.Invoice.create("in_1MtHbELkdIwHu7ixl4OzzPMv")
+#     return render(request, 'atc_site//checkout_success.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated})
 
 def days_to_go(date1, date2):
     date1 = date1.replace(tzinfo=None)

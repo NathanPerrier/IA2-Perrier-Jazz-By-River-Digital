@@ -7,6 +7,10 @@ from django.core.cache import cache
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import logout
+from decouple import config
+import stripe
+
+stripe.api_key = config('STRIPE_API_KEY')
 
 from ...main import *
 from ...atc.main import register_page as register_page_atc
@@ -33,6 +37,14 @@ def register_set_password_view(request):
         user = CustomUser.objects.check_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=request.POST['password'])
         email = EmailAddress(user=user, email=user.email, primary=True, verified=True)
         email.save()
+        create_stripe_customer(user)
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         return JsonResponse({'success': True, 'error': ''})
     return register_page_weather(request) if 'weather' in request.path else register_page_atc(request)   
+
+def create_stripe_customer(user):
+    stripe.Customer.create(
+        id=f'customuser-{str(user.id)}',
+        name=str(user.first_name + ' ' + user.last_name),
+        email=user.email,
+    )
