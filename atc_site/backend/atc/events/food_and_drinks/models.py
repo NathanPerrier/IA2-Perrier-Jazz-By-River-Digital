@@ -1,6 +1,7 @@
 from django.db import models
 from ..models import Events
 from .....models import CustomUser
+from ..booking.models import Booking
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group
@@ -40,3 +41,8 @@ class FoodAndDrinks(models.Model):
     last_modification = models.DateTimeField(auto_now=True, blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    
+class BookingFoodAndDrinks(models.Model):
+    food_and_drinks = models.ForeignKey(FoodAndDrinks, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)

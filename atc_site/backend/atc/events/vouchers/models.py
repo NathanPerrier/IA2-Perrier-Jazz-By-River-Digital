@@ -1,5 +1,6 @@
 from django.db import models
 from .....models import CustomUser
+from ..booking.models import Booking
 from ..models import Events    
     
 class EventVoucher(models.Model):
@@ -20,3 +21,8 @@ class Voucher(models.Model):
 
     # def __str__(self):
     #     return self.code
+    
+class BookingVouchers(models.Model):
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

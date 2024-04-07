@@ -5,8 +5,8 @@ from ..backend.auth.register.models import RegisterAuth
 from ..backend.auth.forgot_password.models import ForgotPasswordAuth
 from ..backend.weather_app.locationImage.models import LocationImagesModel
 from ..backend.atc.events.models import Events, EventSchedule, EventScheduleItem
-from ..backend.atc.events.vouchers.models import Voucher, EventVoucher
-from ..backend.atc.events.food_and_drinks.models import FoodAndDrinks, EventFoodAndDrinks, FoodAndDrinksItem
+from ..backend.atc.events.vouchers.models import Voucher, EventVoucher, BookingVouchers
+from ..backend.atc.events.food_and_drinks.models import FoodAndDrinks, EventFoodAndDrinks, FoodAndDrinksItem, BookingFoodAndDrinks
 from ..backend.atc.events.booking.models import Booking, BookingStatus
 from ..backend.atc.events.booking.tickets.models import Tickets
 from ..backend.atc.events.booking.payment.models import Payment, PaymentStatus
