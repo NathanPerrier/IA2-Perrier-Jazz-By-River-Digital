@@ -26,3 +26,6 @@ class BookingVouchers(models.Model):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
     voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    
+        
+    
