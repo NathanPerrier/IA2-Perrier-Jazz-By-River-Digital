@@ -25,7 +25,6 @@ class Events(models.Model):
    last_modified = models.DateTimeField(auto_now=True, blank=False)
    organizer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  #* whoever creates the event
    ticket_price = models.DecimalField(max_digits=10, decimal_places=2)
-   schedule = models.ForeignKey('EventSchedule', on_delete=models.CASCADE, blank=True, null=True)
    image = models.ImageField(upload_to='images/events/', blank=True, null=True)
    stripe_price_id = models.CharField(max_length=256, blank=True, null=True)
    
@@ -58,7 +57,7 @@ class Events(models.Model):
    
 class EventSchedule(models.Model):
    event = models.ForeignKey(Events, on_delete=models.CASCADE)
-   event_item = models.name = models.ForeignKey('EventScheduleItem', on_delete=models.CASCADE)
+   event_item = models.ForeignKey('EventScheduleItem', on_delete=models.CASCADE)
    
 class EventScheduleItem(models.Model):
    start_time = models.TimeField(blank=False)
