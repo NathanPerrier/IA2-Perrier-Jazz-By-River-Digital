@@ -22,7 +22,9 @@ class PaymentStatus(models.Model):
 class Payment(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    amount = models.DecimalField(max_digits=10, decimal_places=2)
-   item = models.CharField(max_length=256, blank=False)
+   currency = models.CharField(max_length=256, blank=False)
+   stripe_invoice_id = models.CharField(max_length=256, blank=False)
+   stripe_payment_id = models.CharField(max_length=256, blank=False)
    creation_time = models.DateTimeField(auto_now_add=True, blank=False)
    last_modified = models.DateTimeField(auto_now=True, blank=False)
    method = models.CharField(max_length=256, blank=False)

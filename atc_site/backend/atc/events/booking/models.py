@@ -17,7 +17,7 @@ class BookingStatus(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    payment_status = models.ForeignKey(PaymentStatus, on_delete=models.CASCADE)
    last_modified = models.DateTimeField(auto_now=True, blank=False)
-
+   stripe_invoice_id = models.CharField(max_length=256, blank=True, null=True)
 
 class Booking(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -27,6 +27,7 @@ class Booking(models.Model):
    status = models.ForeignKey(BookingStatus, on_delete=models.CASCADE)
    vouchers = models.ManyToManyField(Voucher, blank=True)
    food_and_drinks = models.ManyToManyField(FoodAndDrinks, blank=True)
+   stripe_invoice_id = models.CharField(max_length=256, blank=True, null=True)
    creation_time = models.DateTimeField(auto_now_add=True, blank=False)
    last_modified = models.DateTimeField(auto_now=True, blank=False)
    

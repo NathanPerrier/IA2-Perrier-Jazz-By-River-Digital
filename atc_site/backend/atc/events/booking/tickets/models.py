@@ -12,3 +12,4 @@ class Tickets(models.Model):
    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
    creation_date = models.DateTimeField(auto_now_add=True, blank=False)
    sent = models.BooleanField(default=False)
+   stripe_invoice_id = models.CharField(max_length=256, blank=True, null=True)

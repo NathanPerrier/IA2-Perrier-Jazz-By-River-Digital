@@ -6,6 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .food_and_drinks.models import FoodAndDrinks, FoodAndDrinksItem, EventFoodAndDrinks
 from .vouchers.models import Voucher, EventVoucher
+from .booking.models import Booking, BookingStatus
+from .booking.tickets.models import Tickets
+from .booking.payment.models import Payment, PaymentStatus
 from .models import Events
 
 stripe.api_key = config('STRIPE_API_KEY')
@@ -37,6 +40,7 @@ def create_ticket_checkout_session(request, event_id):
                 'address': 'auto',
             },
             automatic_tax={'enabled': True},
+            billing_address_collection='required',
             # cross_sell={'products': [[str(item.stripe_price_id) for item in food_and_drink_items]]} # [voucher.stripe_price_id for voucher in Voucher.objects.filter(id=[eventVoucher.id for eventVoucher in EventVoucher.objects.filter(event=event.id)])]]},
         )
         return redirect(checkout_session.url)
@@ -47,8 +51,6 @@ def create_ticket_checkout_session(request, event_id):
 def checkout_success(request, event_id):
     try:
         if stripe.checkout.Session.retrieve(checkout_session.id).payment_status == 'paid':
-            
-            
             invoice = stripe.Invoice.create(
                 customer=checkout_session.customer,
                 payment_method=request.POST.get('payment_method_id'),
@@ -57,7 +59,58 @@ def checkout_success(request, event_id):
                 payment_intent=request.POST.get('payment_intent_id'),
                 payment_settings={'payment_method_options': {'card': {'request_three_d_secure': 'automatic'}}},    
             )
+            
+            event = Events.get_event(event_id)
+            event.available_tickets -= 1
+            event.sold += 1
+            event.save()
+            
+            BookingStatus.objects.create(
+                status='Confirmed',
+                user=request.user,
+                payment_status=PaymentStatus.objects.get(status='PAID'),
+                stripe_invoice_id=invoice.id,
+            )
+            
+            Tickets.objects.create(
+                user=request.user,
+                event=event,
+                sent=True,
+                stripe_invoice_id=invoice.id,
+            )
+
+            Payment.objects.create(  #issue here
+                user=request.user,
+                amount=checkout_session.amount_total,
+                stripe_invoice_id=invoice.id,
+                method=checkout_session.payment_method_types[0],
+                currency=checkout_session.currency,
+                stripe_payment_id=stripe.checkout.Session.retrieve(checkout_session.id).payment_intent,
+                status=PaymentStatus.objects.get(status='PAID'),
+            )
+            print('PAYMENT CREATED')
+            food_and_drinks = []
+            vouchers= []
+            
             for product in checkout_session.list_line_items():
+                print('FOOD AND DRINKS')
+                if product.price.id in [item.stripe_price_id for item in FoodAndDrinksItem.objects.all()]:
+                    print('FOOD AND DRINKS ITEM')
+                    print(product.price.id)
+                    food_and_drink = FoodAndDrinks.objects.create(
+                        user=request.user,
+                        event=event,
+                        quantity=product.quantity,
+                        item=EventFoodAndDrinks.objects.get(food_and_drinks_item=FoodAndDrinksItem.objects.get(stripe_price_id=product.price.id)),
+                    )
+                    print('FOOD AND DRINKS ITEM CREATED')
+                    item = FoodAndDrinksItem.objects.get(stripe_price_id=product.price.id)
+                    item.stock -= product.quantity
+                    item.quantity_sold += product.quantity
+                    item.save()
+                    
+                    food_and_drinks.append(food_and_drink)           
+                    
                 stripe.InvoiceItem.create(
                     customer=checkout_session.customer,
                     quantity=product.quantity,
@@ -66,6 +119,17 @@ def checkout_success(request, event_id):
                     description=product.description,
                     invoice=invoice.id,
                 )
+            
+            # Booking.objects.create(
+            #     user=request.user,
+            #     event=event,
+            #     ticket=Tickets.objects.get(stripe_invoice_id=invoice.id),
+            #     payment=Payment.objects.get(stripe_invoice_id=invoice.id),
+            #     status=BookingStatus.objects.get(stripe_invoice_id=invoice.id),
+            #     vouchers=[voucher for voucher in vouchers],
+            #     food_and_drinks=[item for item in food_and_drinks], #works?
+            #     stripe_invoice_id=invoice.id,
+            # )
             paid_invoice = stripe.Invoice.pay(invoice.id, paid_out_of_band=True)
             return redirect(paid_invoice.hosted_invoice_url, code=303)
         else:
