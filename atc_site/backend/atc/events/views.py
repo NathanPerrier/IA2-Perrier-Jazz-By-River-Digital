@@ -30,7 +30,7 @@ def create_ticket_checkout_session(request, event_id):
                 checkout_session = stripe.checkout.Session.create(
                     customer=f'customuser-{str(request.user.id)}',
                     payment_method_types=['card'],
-                    line_items=([
+                    line_items=([   #! fix
                         {
                             'price': event.stripe_price_id,  
                             'quantity': 1,
