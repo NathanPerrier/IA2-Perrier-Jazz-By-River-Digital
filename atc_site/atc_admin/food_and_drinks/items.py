@@ -26,7 +26,7 @@ class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         try:
             product = stripe.Product.create(
-                id=str(obj.id),
+                id=f'food-and-drinks-{str(obj.id)}',
                 name=obj.name,
                 active=True,
                 description=obj.description,
@@ -42,10 +42,17 @@ class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 id=product.id,
                 default_price=price.id,
             )
+            
+            for voucher in Voucher.objects.filter(event=obj.event):
+                stripe.Coupon.modify(
+                    id=f'voucher-{str(voucher.id)}',
+                    applies_to={'products':[f'food-and-drinks-{item.id}' for item in FoodAndDrinksItem.objects.filter(event=obj.event)]},
+                )
+                
         except Exception as e:
             print(e)
             product = stripe.Product.modify(
-                id=str(obj.id),
+                id=f'food-and-drinks-{str(obj.id)}',
                 name=obj.name,
                 active=True,
                 description=obj.description,
@@ -62,6 +69,7 @@ class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             )
         # link = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
         obj.stripe_price_id = price.id
+        obj.stripe_product_id = product.id
         super().save_model(request, obj, form, change)
         
 

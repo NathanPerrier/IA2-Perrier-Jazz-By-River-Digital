@@ -16,7 +16,7 @@ class EventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         try:
             product = stripe.Product.create(
-                id=str(obj.id),
+                id=f'events-{str(obj.id)}',
                 name=obj.name,
                 active=True,
                 description=obj.description,
@@ -36,7 +36,7 @@ class EventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         except Exception as e:
             print(e)
             product = stripe.Product.modify(
-                id=str(obj.id),
+                id=f'events-{str(obj.id)}',
                 name=obj.name,
                 active=True,
                 description=obj.description,

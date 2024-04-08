@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+
 from .food_and_drinks.models import FoodAndDrinks, FoodAndDrinksItem, EventFoodAndDrinks, BookingFoodAndDrinks
 from .vouchers.models import Voucher, EventVoucher, BookingVouchers
 from .booking.models import Booking, BookingStatus
@@ -23,9 +25,12 @@ def create_ticket_checkout_session(request, event_id):
     event = Events.get_event(event_id)
     if event.available_tickets > 0:
         if event.sale_release_date < timezone.now() and event.sale_end_date > timezone.now():
-            food_and_drink_items = []
+            additional_items = []
             for item in EventFoodAndDrinks.objects.filter(event=event):
-                food_and_drink_items.append(FoodAndDrinksItem.objects.get(id=item.food_and_drinks_item.id))
+                additional_items.append(FoodAndDrinksItem.objects.get(id=item.food_and_drinks_item.id))
+                
+            for voucher in EventVoucher.objects.filter(event=event):    
+                additional_items.append(voucher)
 
             try:
                 checkout_session = stripe.checkout.Session.create(
@@ -36,7 +41,7 @@ def create_ticket_checkout_session(request, event_id):
                             'price': event.stripe_price_id,  
                             'quantity': 1,
                         }
-                    ]) + ([{'price': str(item.stripe_price_id), 'quantity': 1, "adjustable_quantity": {"enabled": True, "minimum": 0, "maximum": item.stock}} for item in food_and_drink_items]),
+                    ]) + ([{'price': str(item.stripe_price_id), 'quantity': 1, "adjustable_quantity": {"enabled": True, "minimum": 0, "maximum": get_stock(item)}} for item in additional_items]),
                     mode='payment',
                     success_url=request.build_absolute_uri(f'/events/{str(event.id)}/checkout/success/'),
                     cancel_url=request.build_absolute_uri(f'/events/{str(event.id)}/'),
@@ -131,8 +136,43 @@ def checkout_success(request, event_id):
                     item.quantity_sold += product.quantity
                     item.save()
                     
-                      
+                if product.price.id in [item.stripe_price_id for item in EventVoucher.objects.all()]:
+                    print('VOUCHER')
+                    event_voucher=EventVoucher.objects.get(stripe_price_id=product.price.id)
                     
+                    voucher = Voucher.objects.create(
+                        user=request.user,
+                        voucher=event_voucher,
+                        code=Voucher.generate_code(),
+                        purchase_amount=product.price.unit_amount/100,
+                        amount_left=product.price.unit_amount/100,
+                        event=event,
+                        expiration_date=timezone.now() + timezone.timedelta(days=365),
+                    )
+                    
+                    stripe_voucher = stripe.Coupon.create(
+                        id=f'voucher-{str(voucher.id)}',
+                        name=event_voucher.name,
+                        amount_off=product.price.unit_amount,
+                        currency="aud",
+                        duration='forever',
+                        redeem_by=timezone.now() + timezone.timedelta(days=365),
+                        applies_to={'products':[item.stripe_product_id for item in FoodAndDrinksItem.objects.filter(event=event)]},
+                    )
+                    promo_code = stripe.PromotionCode.create(coupon=stripe_voucher.id, customer=checkout_session.customer, code=voucher.code)
+                    
+                    BookingVouchers.objects.create(
+                        voucher=voucher,
+                        user=request.user,
+                        booking=Booking.objects.get(stripe_invoice_id=invoice.id),
+                    )
+                    
+                    voucher.stripe_coupon_id = stripe_voucher.id
+                    voucher.stripe_code_id = promo_code.id
+                    voucher.code = make_password(voucher.code)
+                    voucher.save()
+            
+                print('INVOICE')  
                 stripe.InvoiceItem.create(
                     customer=checkout_session.customer,
                     quantity=product.quantity,
@@ -149,3 +189,8 @@ def checkout_success(request, event_id):
     except Exception as e:
         return JsonResponse({'error': str(e)})
 
+def get_stock(item):
+    try:
+        return item.stock
+    except:
+        return 1

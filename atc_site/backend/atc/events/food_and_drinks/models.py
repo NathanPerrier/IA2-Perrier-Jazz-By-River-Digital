@@ -18,7 +18,9 @@ class FoodAndDrinksItem(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
     last_modified = models.DateTimeField(auto_now=True, blank=False)
     vendor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
     stripe_price_id = models.CharField(max_length=256, blank=True, null=True)
+    stripe_product_id = models.CharField(max_length=256, blank=True, null=True)
 
     
     def save(self, *args, **kwargs):
