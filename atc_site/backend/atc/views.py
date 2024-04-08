@@ -50,6 +50,11 @@ def billing_portal_view(request):
    
     return redirect(billing_portal.url)
 
+@login_required
+def stripe_dashboard(request):
+    account = stripe.Account.create_login_link(f'customuser-{str(request.user.id)}')
+    return redirect(account.url, code=303)
+
 def stream_video_atc_site(request, video_path):
     video_path = os.path.join(settings.BASE_DIR, 'atc_site\\frontend\\static\\atc_site\\videos', video_path)
     def play_video(video_path):

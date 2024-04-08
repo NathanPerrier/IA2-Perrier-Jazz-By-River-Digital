@@ -49,6 +49,8 @@ urlpatterns = [
     path('account/billing/', views.billing_portal_view, name='billing_portal'),
     path('account/manage', main.manage_account_page, name='manage_account'),
     
+    path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
+    
     path('logout/', views.logout_view, name='logout'),
     
     path('404', errors.handler404, name='error_404'),

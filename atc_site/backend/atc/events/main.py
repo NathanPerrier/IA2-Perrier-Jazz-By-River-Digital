@@ -14,7 +14,7 @@ from django.utils import timezone
 from ....handles import login_required
 
 def events(request):
-    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : active_events()})
+    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : active_events(), 'now': timezone.now()})
 
 @staff_member_required  
 def create_event(request):
@@ -25,8 +25,8 @@ def create_event(request):
 
 def view_event(request, event_id):
     event = Events.objects.get(id=event_id)
-    if event.sale_release_date < timezone.now() and event.sale_end_date > timezone.now():
-        return render(request, 'atc_site//events//event.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event' : event, 'days_to_go': days_to_go(Events.objects.get(id=event_id).date, datetime.datetime.now()), 'schedule': get_event_schedule(event_id), 'food_and_drinks': get_event_food_and_drinks(event_id)})
+    if event.date > timezone.now():
+        return render(request, 'atc_site//events//event.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event' : event, 'days_to_go': days_to_go(Events.objects.get(id=event_id).date, datetime.datetime.now()), 'schedule': get_event_schedule(event_id), 'food_and_drinks': get_event_food_and_drinks(event_id), 'now': timezone.now()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'This event is no longer available. Please contact the administrator if you believe this is an error.'})
 
 @staff_member_required
@@ -82,6 +82,6 @@ def active_events():
     events = Events.objects.all()
     
     for event in events:
-        if event.sale_release_date < timezone.now() and event.sale_end_date > timezone.now():
+        if event.date > timezone.now():
             eventsList.append(event)
     return eventsList

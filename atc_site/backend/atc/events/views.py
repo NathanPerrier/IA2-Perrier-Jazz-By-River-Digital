@@ -147,3 +147,4 @@ def checkout_success(request, event_id):
             return redirect(f'/events/{str(event_id)}/checkout/', code=303)
     except Exception as e:
         return JsonResponse({'error': str(e)})
+
