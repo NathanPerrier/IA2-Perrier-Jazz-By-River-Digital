@@ -23,9 +23,10 @@ def create_ticket_checkout_session(request, event_id):
     event = Events.get_event(event_id)
     if event.available_tickets > 0:
         if event.sale_release_date < timezone.now() and event.sale_end_date > timezone.now():
-            food_and_drink_items = [FoodAndDrinksItem.objects.filter(id=eventItem.id).all() for eventItem in EventFoodAndDrinks.objects.filter(event=event.id).all()]
-            food_and_drink_items = [item for queryset in food_and_drink_items for item in queryset]
-            print(food_and_drink_items)
+            food_and_drink_items = []
+            for item in EventFoodAndDrinks.objects.filter(event=event):
+                food_and_drink_items.append(FoodAndDrinksItem.objects.get(id=item.food_and_drinks_item.id))
+
             try:
                 checkout_session = stripe.checkout.Session.create(
                     customer=f'customuser-{str(request.user.id)}',
