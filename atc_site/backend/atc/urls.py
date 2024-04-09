@@ -8,6 +8,7 @@ urlpatterns = [
     path("", main.index, name="atc_index"),
     
     path('events/', include('atc_site.backend.atc.events.urls')),
+    path('booking/', include('atc_site.backend.atc.events.booking.urls')),
     path("", include('atc_site.backend.atc.chatbotATC.urls')),
 
     path("erea", main.erea, name="erea"),

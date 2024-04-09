@@ -102,12 +102,16 @@
                         <div class="my-1 text-muted"><small>{{booking.event.location }}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ booking.event.date|date:"d M, Y" }}</small></div>
                         <p class="card-text mb-auto my-1">Includes: 
                           <span class="badge bg-primary text-white">Ticket</span>
-                          {% if food_and_drinks_booking %}
-                            <span class="badge bg-success text-white">Food & Drinks</span>
-                          {% endif %}
-                          {% if booking_voucher %}
-                          <span class="badge bg-secondary text-white">Vouchers</span>
-                          {% endif %}
+                          {% for item in food_and_drinks_booking %}
+                            {% if item == booking %}
+                              <span class="badge bg-secondary text-white">Food & Drinks</span>
+                            {% endif %}
+                          {% endfor %}
+                          {% for item in vouchers_booking %}
+                            {% if item == booking %}
+                              <span class="badge bg-secondary text-white">Vouchers</span>
+                            {% endif %}
+                          {% endfor %}
                         </p>
               
                         <!--<p class="card-text mb-auto my-1">{{booking.event.description}}</p>-->
