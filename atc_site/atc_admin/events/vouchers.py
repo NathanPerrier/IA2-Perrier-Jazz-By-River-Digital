@@ -4,6 +4,14 @@ class EventVoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('name', 'description', 'event', 'stripe_price_id')
     search_fields = ('name', 'description')
     
+    
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('<path:object_id>/delete/', self.admin_site.admin_view(self.delete_view), name='delete'),
+        ]
+        return custom_urls + urls
+    
     def save_model(self, request, obj, form, change):
         try:
             product = stripe.Product.create(
@@ -47,3 +55,12 @@ class EventVoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         obj.stripe_price_id = price.id
         print(obj.stripe_price_id)
         super().save_model(request, obj, form, change)
+        
+    
+    def delete_view(self, request, object_id, extra_context=None):
+        obj = self.get_object(request, object_id)
+        
+        stripe.Product.delete(id=f'event-voucher-{str(obj.id)}')
+        stripe.Price.modify(id=obj.stripe_price_id, active=False)
+        
+        return super().delete_view(request, object_id, extra_context)

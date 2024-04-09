@@ -20,6 +20,13 @@ class VoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'voucher', 'code', 'purchase_amount', 'amount_left', 'expiration_date')
     search_fields = ('voucher', 'purchase_amount', 'amount_left', 'expiration_date')
     
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('<path:object_id>/delete/', self.admin_site.admin_view(self.delete_view), name='delete'),
+        ]
+        return custom_urls + urls
+    
     def save_model(self, request, obj, form, change):
         try:
             voucher = stripe.Coupon.create(
@@ -53,3 +60,12 @@ class VoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         obj.stripe_code_id = promo_code.id
         obj.stripe_coupon_id = voucher.id     
         super().save_model(request, obj, form, change)
+        
+    
+    def delete_view(self, request, object_id, extra_context=None):
+        obj = self.get_object(request, object_id)
+        
+        stripe.Coupon.delete(f'voucher-{str(obj.id)}')
+        stripe.PromotionCode.modify(id=obj.stripe_code_id, active=False)
+        
+        return super().delete_view(request, object_id, extra_context)

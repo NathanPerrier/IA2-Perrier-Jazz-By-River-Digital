@@ -100,7 +100,7 @@ def checkout_success(request, event_id):
                 status=PaymentStatus.objects.get(status='PAID'),
             )
             
-            Booking.objects.create(
+            booking = Booking.objects.create(
                 user=request.user,
                 event=event,
                 ticket=Tickets.objects.get(stripe_invoice_id=invoice.id),
@@ -174,6 +174,7 @@ def checkout_success(request, event_id):
             
                 print('INVOICE')  
                 stripe.InvoiceItem.create(
+                    id=f'invoice-{booking.id}',
                     customer=checkout_session.customer,
                     quantity=product.quantity,
                     currency='aud',
