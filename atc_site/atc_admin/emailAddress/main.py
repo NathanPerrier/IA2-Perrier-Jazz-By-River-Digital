@@ -14,10 +14,22 @@ class EmailAddressForm(forms.ModelForm):
         elif email not in CustomUser.objects.values_list('email', flat=True):
             raise ValidationError('Email does not exist')
         return email
+    
+    def clean_primary(self):
+        primary = self.cleaned_data.get('primary')
+
+        if primary and not EmailAddress.objects.filter(user=self.instance.user, primary=True).exists():
+            EmailAddress.objects.filter(user=self.instance.user, primary=True).update(primary=False)
+        return primary
 
 class EmailAddressAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'email', 'primary', 'verified')
     search_fields = ('email', 'primary', 'verified')
+    
+    def save_model(self, request, obj, form, change):
+        if obj.primary:
+            EmailAddress.objects.filter(user=obj.user, primary=True).update(primary=False)
+        super().save_model(request, obj, form, change)
     
     def get_urls(self):
         urls = super().get_urls()
