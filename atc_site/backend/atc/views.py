@@ -6,6 +6,7 @@ import stripe
 from decouple import config
 from django.contrib.auth.decorators import login_required
 from .main import *
+import time, datetime
 
 stripe.api_key = config('STRIPE_API_KEY')
 
@@ -55,6 +56,17 @@ def stripe_dashboard(request):
     account = stripe.Account.create_login_link(f'customuser-{str(request.user.id)}')
     return redirect(account.url, code=303)
 
+@login_required
+def admin_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin_dashboard.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 
+                                                                'customers': stripe.Customer.list(), 
+                                                                'income': (stripe.Balance.retrieve()['available'][0]['amount']+stripe.Balance.retrieve()['pending'][0]['amount']) / 100,
+                                                                'customers_percentage_increase': get_customers_percentage_increase(),
+                                                                'customers_for_each_month_month': get_customers_for_each_month('month'), 'customers_for_each_month': get_customers_for_each_month(),
+                                                                'income_for_each_month_month': get_income_for_each_month('month'), 'income_for_each_month': get_income_for_each_month()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
 def stream_video_atc_site(request, video_path):
     video_path = os.path.join(settings.BASE_DIR, 'atc_site\\frontend\\static\\atc_site\\videos', video_path)
     def play_video(video_path):
@@ -87,3 +99,66 @@ def newsletter_ajax(request):
             return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
+    
+def get_customers_percentage_increase():
+    if len(stripe.Customer.list(created={'gte': int(time.time()) - 86400})) > 0:
+        percantage = (len(stripe.Customer.list()) - len(stripe.Customer.list(created={'gte': int(time.time()) - 86400}))/len(stripe.Customer.list(created={'gte': int(time.time()) - 86400})))*100
+        return f'+{percantage}%' if percantage > 0 else f'-{percantage}%'
+    return '+100%'
+
+def get_customers_for_each_month(option=False):
+    """ get 6 month data of number of stripe customers """
+    months = []
+    for i in range(6):
+        i=abs(i-6)
+        month = datetime.datetime.now() - datetime.timedelta(days=30*i)
+        months.append(month.strftime('%B'))
+    
+    if option:
+        return months
+    
+    print(months)
+    
+    customers_for_each_month = []
+    for i, month in enumerate(months):
+        customers_for_each_month.append(len(stripe.Customer.list(created={'lte': int(time.time()) - (86400*(i*30))})))
+        
+    print(customers_for_each_month)
+    return customers_for_each_month[::-1]
+
+def get_income_for_each_month(option=False):
+    months = []
+    for i in range(6):
+        i=abs(i-6)
+        month = datetime.datetime.now() - datetime.timedelta(days=30*i)
+        months.append(month.strftime('%B'))
+    
+    if option:
+        return months
+    
+    print(months)
+    print(' \n')
+    print(stripe.PaymentIntent.list(created={'lte': int(time.time()) - 86400})['data'])
+    print(' \n')
+    payouts_for_each_month = []
+    month_data = []
+    for i, month in enumerate(months):
+        print(stripe.PaymentIntent.list(created={'lte': int(time.time()) - (86400*(i*30))})['data'])
+        month_data.append(stripe.PaymentIntent.list(created={'lte': int(time.time()) - (86400*(i*30))})['data'])
+    
+    print(month_data)
+    
+    for transaction in month_data:
+        total = 0
+        try:
+            for amount in transaction:
+                print(amount['amount'])
+                total += amount['amount']
+            payouts_for_each_month.append(total/100)
+        except:
+            payouts_for_each_month.append(0)
+        
+        
+    
+    print(payouts_for_each_month)
+    return payouts_for_each_month[::-1]

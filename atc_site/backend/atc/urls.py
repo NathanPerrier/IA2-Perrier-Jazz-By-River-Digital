@@ -51,6 +51,7 @@ urlpatterns = [
     path('account/manage', main.manage_account_page, name='manage_account'),
     
     path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
+    path('admin/dashboard/', views.admin_dashboard, name='dashboard_admin'),
     
     path('logout/', views.logout_view, name='logout'),
     
