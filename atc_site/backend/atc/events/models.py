@@ -12,8 +12,8 @@ from django_countries.fields import CountryField
 from ....models import CustomUser
 
 class Events(models.Model):
-   name = models.CharField(max_length=40, blank=False)
-   description = models.CharField(max_length=100, blank=False)
+   name = models.CharField(max_length=50, blank=False)
+   description = models.CharField(max_length=200, blank=False)
    location = models.CharField(max_length=256, blank=False)
    date = models.DateTimeField(blank=False)
    time = models.TimeField(blank=False)
