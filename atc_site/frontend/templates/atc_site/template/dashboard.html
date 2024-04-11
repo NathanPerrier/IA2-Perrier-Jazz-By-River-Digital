@@ -33,6 +33,8 @@
       <link rel="stylesheet" href="{% static 'soft-ui-pro/css/nucleo-icons.css' %}">
       <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="{% static 'soft-ui-pro/css/nucleo-svg.css' %}">
+
+      <link rel="stylesheet" href="{% static 'soft-ui-pro/js/plugins/chartjs.min.js' %}">
       
       <link rel="stylesheet" id="pagestyle" href="{% static 'soft-ui-pro/css/soft-ui-dashboard.min.css' %}">
 
@@ -923,9 +925,9 @@
         </a>
         </li>
         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">CRM</li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
         </ol>
-        <h6 class="font-weight-bolder mb-0">CRM</h6>
+        <h6 class="font-weight-bolder mb-0">Admin Dashboard</h6>
         </nav>
         <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
         <a href="javascript:;" class="nav-link text-body p-0">
@@ -945,9 +947,12 @@
         </div>
         <ul class="navbar-nav  justify-content-end">
         <li class="nav-item d-flex align-items-center">
-        <a href="../../pages/authentication/signin/illustration.html" class="nav-link text-body font-weight-bold px-0" target="_blank">
-        <i class="fa fa-user me-sm-1"></i>
-        <span class="d-sm-inline d-none">Sign In</span>
+        <a href="/account" class="nav-link text-body font-weight-bold px-0" target="_blank">
+          {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" class="avatar avatar-sm me-2" alt="user image">
+          {% else %}
+            <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true" class="avatar avatar-sm me-2" alt="user image">
+          {% endif %}
         </a>
         </li>
         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
@@ -1321,6 +1326,31 @@
   </script>
 
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<script src="{% static 'soft-ui-pro/js/core/popper.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/chartjs.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/choices.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/countup.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/datatables.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/dragula.min.js' %}"></script>  
+<script src="{% static 'soft-ui-pro/js/plugins/dropzone.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/flatpickr.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/moment.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/multistep-form.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/nouislider.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/orbit-controls.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/perfect-scrollbar.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/photoswipe-ui-defualt.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/photoswipe.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/quill.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/round-slider.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/smooth-scrollbar.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/sweetalert.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/threejs.js' %}"></script>
 
 <script src="{% static 'soft-ui-pro/js/soft-ui-dashboard.min.js' %}"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"87203683cfeaa870","version":"2024.3.0","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>

@@ -1,0 +1,240 @@
+{% extends 'atc_site/template/main-template.html' %}
+{% load static %}
+{% load date_extras %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'soft-ui-pro/css/nucleo-icons.css' %}">
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'soft-ui-pro/css/nucleo-svg.css' %}">
+
+    <link rel="stylesheet" id="pagestyle" href="{% static 'soft-ui-pro/css/soft-ui-dashboard.min.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Edmund Rice Education Australia</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+                            <li class="breadcrumb-item"><a class="text-white" href="/atc/">Home</a></li>
+                            <li class="breadcrumb-item text-white active" aria-current="page">EREA</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="{% static '//atc_site//images/homepage//hero-img-2.png' %}" alt="" style="max-height: 465px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <div class="card" style="border-radius:0px">
+        <div class="card-header p-3 pb-0">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6>Booking Details</h6>
+                    <p class="text-sm mb-0">
+                        Booking no. <b>{{ booking.id }}</b> from <b>{{ booking.creation_time|date:"d M, Y" }}</b>
+                    </p>
+                    <p class="text-sm">
+                        Last Modified: <b>{{ booking.last_modified|date:"d M, Y" }}</b>
+                    </p>
+                </div>
+                <a href="{{invoice.hosted_invoice_url}}" target="_blank" class="btn text-white bg-primary ms-auto mb-0"><b>Invoice</b> <i class="fa fa-arrow-right ms-1"></i></a>
+            </div>
+        </div>
+        <div class="card-body p-3 pt-0 px-5">
+            <hr class="horizontal dark mt-0 mb-4">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <div class="d-flex">
+                        <div>
+                            <img src="{{ booking.event.image.url }}" style="object-fit:cover" class="avatar avatar-xxl me-3 img-cover" alt="product image">
+                        </div>
+                        <div>
+                            <h6 class="text-lg mb-0 mt-2">{{booking.event.name}}</h6>
+                            <p class="text-sm mb-3">{{booking.event.description}}</p>
+                            <span class="badge badge-sm bg-gradient-success">{{booking.status.status}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12 my-auto text-end">
+                    <a href="/#contact" class="btn text-white bg-dark mb-0"><b>Contact Us</b></a>
+                    <p class="text-sm mt-2 mb-0">Feel free to contact us if you have any issues!</p>
+                </div>
+            </div>
+            <hr class="horizontal dark mt-4 mb-4">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-12">
+                    <h6 class="mb-3">Track Booking</h6>
+                    <div class="timeline timeline-one-side">
+                        <div class="timeline-block mb-3">
+                            <span class="timeline-step">
+                            <i class="ni ni-bell-55 text-secondary"></i>
+                            </span>
+                            <div class="timeline-content">
+                                <h6 class="text-dark text-sm font-weight-bold mb-0">Booking received</h6>
+                                <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{booking.creation_time}}</p>
+                            </div>
+                        </div>
+                        
+                        {% if invoice.paid %}
+                            <div class="timeline-block mb-3">
+                                <span class="timeline-step">
+                                <i class="ni ni-cart text-secondary"></i>
+                                </span>
+                                <div class="timeline-content">
+                                    <h6 class="text-dark text-sm font-weight-bold mb-0">Payment Confirmed</h6>
+                                    <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{  invoice.created|add_date|date:"F j, Y" }}</p>
+                                </div>
+                            </div>
+                            <div class="timeline-block mb-3">
+                                <span class="timeline-step">
+                                <i class="ni ni-html5 text-secondary"></i>
+                                </span>
+                                <div class="timeline-content">
+                                    <h6 class="text-dark text-sm font-weight-bold mb-0">Booking Confirmed</h6>
+                                    <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{booking.creation_time|date:"F j, Y"}}</p>
+                                </div>
+                            </div>
+                            <div class="timeline-block mb-3">
+                                <span class="timeline-step">
+                                    <i class="ni ni-check-bold text-success text-gradient"></i>
+                                </span>
+                                <div class="timeline-content">
+                                    <h6 class="text-dark text-sm font-weight-bold mb-0">Ticket Sent</h6>
+                                    <p class="text-secondary font-weight-bold text-xs mt-1 mb-2">{{  invoice.created|add_date|date:"F j, Y" }}</p>
+                                    <p class="text-sm mb-2">Didn't recieve your ticket? <a href="{{ invoice.hosted_invoice_url }}" target="_blank" class="text-secondary font-weight-bold text-xs mt-1 mb-0">Download Ticket</a></p>
+                                    <p class="text-sm">Note: Your event ticket is your recipt. Please bring it with you to the event.</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="timeline-block mb-3">
+                                <span class="timeline-step">
+                                <i class="ni ni-cart text-danger"></i>
+                                </span>
+                                <div class="timeline-content">
+                                    <h6 class="text-dark text-sm font-weight-bold mb-0">Awaiting Payment</h6>
+                                    <p class="text-danger font-weight-bold text-xs mt-1 mb-0">{{ invoice.created|date:"F j, Y" }}</p>
+                                    <p class="text-sm mb-2">We have not recieved your payment yet. If you beleive this is an issue, please <a href="/#contact" class="text-primary  font-weight-bold text-xs mt-1 mb-0">Contact Us</a>.</p>
+                                    <a href="{{invoice.hosted_invoice_url}}" target="_blank" class="text-white btn btn-danger font-weight-bold text-xs mt-1 mb-0">Pay Now <i class="fa fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                       
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6 col-12">
+                    {% if invoice.paid %}
+                        <h6 class="mb-3">Payment details</h6>
+                        <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                            <img class="w-10 me-3 mb-0" src="../../../assets/img/logos/mastercard.png" alt="logo">
+                            <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852</h6>
+                            <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="We do not store card details">
+                                <i class="fas fa-info" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <h6 class="mb-3 mt-4">Billing Information</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                <div class="d-flex flex-column">
+                                    <h6 class="mb-3 text-sm">{{ booking.user.first_name }} {{ booking.user.last_name }}</h6>
+                                    <span class="mb-2 text-xs">Address: <span class="text-dark font-weight-bold ms-2">{{customer.address.line1}}, {{customer.address.city}}, {{customer.address.postal_code}}</span></span>
+                                    <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-2 font-weight-bold">{{booking.user.email}}</span></span>
+                                    {% if customer.phone %}
+                                        <span class="text-xs">Phone Number: <span class="text-dark ms-2 font-weight-bold">{{customer.phone}}</span></span>
+                                    {% else %}
+                                        <span class="text-xs">Currency: <span class="text-dark ms-2 font-weight-bold">{{customer.currency|title }}</span></span>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <!-- order -->
+                    {% endif %}
+                </div>
+                <div class="col-lg-3 col-12 ms-auto">
+                    <h6 class="mb-3">Order Summary</h6>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-sm">
+                            1x {{ booking.event.name }} Ticket
+                        </span>
+                        <span class="text-dark font-weight-bold ms-2">${{ booking.event.ticket_price }}</span>
+                    </div>
+                    {% for item in invoice.lines.data %}
+                        {% if forloop.first %}
+                            <p class="text-sm mb-1"><b>Extras:</b></p>
+                        {% endif %}
+                        {% if item.description != booking.event.name %}
+                            <div class="d-flex ms-3 justify-content-between">
+                                <span class="mb-2 text-sm">
+                                    {{ item.quantity }}x {{ item.description }}
+                                </span>
+                                <span class="text-dark font-weight-bold ms-2">{{ item.amount|div:100 }}</span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <div class="d-flex justify-content-between">
+                        <span class="text-sm">
+                            Taxes:
+                        </span>
+                        <span class="text-dark ms-2 font-weight-bold">${% if invoice.tax %}{{ invoice.tax }}{% else %}0.00{%endif%}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3 " style="border-top: 1px solid var(--dark);">
+                        <span class="mb-2 text-lg">
+                            Total:
+                        </span>
+                        <span class="text-dark text-lg ms-2 font-weight-bold">${{ invoice.total|div:100 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var win = navigator.platform.indexOf('Win') > -1;
+        if (win && document.querySelector('#sidenav-scrollbar')) {
+          var options = {
+            damping: '0.5'
+          }
+          Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+    </script>
+    
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    
+    <script src="{% static 'soft-ui-pro/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/chartjs.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/choices.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/countup.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/datatables.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/dragula.min.js' %}"></script>  
+    <script src="{% static 'soft-ui-pro/js/plugins/dropzone.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/flatpickr.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/moment.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/multistep-form.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/nouislider.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/orbit-controls.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/perfect-scrollbar.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/photoswipe-ui-defualt.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/photoswipe.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/quill.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/round-slider.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/smooth-scrollbar.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/sweetalert.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/threejs.js' %}"></script>
+    
+    <script src="{% static 'soft-ui-pro/js/soft-ui-dashboard.min.js' %}"></script>
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"87203683cfeaa870","version":"2024.3.0","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>
+{% endblock %}

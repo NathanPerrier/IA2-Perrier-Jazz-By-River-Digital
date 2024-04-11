@@ -3,6 +3,7 @@
   <head>
     
     {% load static %}
+    {% load user_filters %}
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +19,8 @@
 
     <title>Ambrose Treacy College</title>
 
+    {% block styles %}{% endblock %}
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -27,6 +30,7 @@
     <link rel="stylesheet" href="{% static '//atc_site//css//homepage//bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '//atc_site//css//homepage//style.css' %}"> 
     <link rel="stylesheet" href="{% static '//atc_site//css//homepage//stories//stories.css' %}">
+
   </head>
   <body>
 
@@ -98,8 +102,13 @@
                                     {% if user.is_superuser %}
                                         <a href="/admin" class="dropdown-item">Admin Pannel</a>
                                         <a href="/admin/events/" class="dropdown-item">Manage Events</a>
-                                        <a href="/admin/dashboard/" class="dropdown-item">Dashboard</a>
+                                        <a href="/admin/dashboard/" class="dropdown-item">Admin Dashboard</a>
                                         <a href="/events/create/" class="dropdown-item">Create An Event</a>
+                                    {% endif %}
+                                    {% if user|is_vendor %}
+                                        <a href="/vendor/dashboard/" class="dropdown-item">Vendor Dashboard</a>
+                                        <a href="/vendor/events/" class="dropdown-item">Manage Items</a>
+                                        <a href="/vendor/create/" class="dropdown-item">Add an Item</a>
                                     {% endif %}
                                     <a href="/booking/edit" class="dropdown-item">Manage Booking</a>  <!-- IF BOOKING EXISTS -->
                                     <a href="/logout/" class="dropdown-item">Logout</a>
