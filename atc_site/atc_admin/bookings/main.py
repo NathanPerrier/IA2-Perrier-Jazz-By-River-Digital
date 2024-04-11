@@ -63,25 +63,28 @@ class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     def delete_view(self, request, object_id, extra_context=None):
         print('deleting booking ')
         obj = self.get_object(request, object_id)
-        
-        stripe.PaymentIntent.cancel(obj.payment.stripe_payment_id)
-        stripe.Invoice.delete(obj.payment.stripe_invoice_id)
-        
-        print(' delete stripe items')
-        
-        food_and_drink_items = BookingFoodAndDrinks.objects.filter(booking=obj)
-        for item in food_and_drink_items:
-            item.food_and_drinks.item.stock += item.food_and_drinks.quantity
-            item.food_and_drinks.item.quantity_sold -= item.food_and_drinks.quantity
-            item.food_and_drinks.item.save()
-        
-        BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
-        BookingVouchers.objects.filter(booking=obj).delete()
-        
-        Tickets.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
-        Payment.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
-        BookingStatus.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
-        
+        try:
+            stripe.PaymentIntent.cancel(obj.payment.stripe_payment_id)
+            stripe.Invoice.delete(obj.payment.stripe_invoice_id)
+            
+            print(' delete stripe items')
+            
+            food_and_drink_items = BookingFoodAndDrinks.objects.filter(booking=obj)
+            for item in food_and_drink_items:
+                item.food_and_drinks.item.stock += item.food_and_drinks.quantity
+                item.food_and_drinks.item.quantity_sold -= item.food_and_drinks.quantity
+                item.food_and_drinks.item.save()
+            
+            BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
+            BookingVouchers.objects.filter(booking=obj).delete()
+            
+            Tickets.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
+            Payment.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
+            BookingStatus.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
+            
+        except Exception as e:
+            print(e)
+            
         event = obj.event
         event.available_tickets += 1
         event.sold -= 1

@@ -174,7 +174,7 @@ def checkout_success(request, event_id):
             
                 print('INVOICE')  
                 stripe.InvoiceItem.create(
-                    id=f'invoice-{booking.id}',
+                    # id=f'invoice-{booking.id}',
                     customer=checkout_session.customer,
                     quantity=product.quantity,
                     currency='aud',
