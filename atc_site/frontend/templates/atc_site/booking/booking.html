@@ -7,7 +7,7 @@
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{% static 'soft-ui-pro/css/nucleo-svg.css' %}">
 
-    <link rel="stylesheet" id="pagestyle" href="{% static 'soft-ui-pro/css/soft-ui-dashboard.min.css' %}">
+    <link rel="stylesheet" id="pagestyle" href="{% static 'soft-ui-pro/css/soft-ui-dashboard-lite.min.css' %}">
 
 {% endblock %}
 
@@ -111,7 +111,7 @@
                                     <h6 class="text-dark text-sm font-weight-bold mb-0">Ticket Sent</h6>
                                     <p class="text-secondary font-weight-bold text-xs mt-1 mb-2">{{  invoice.created|add_date|date:"F j, Y" }}</p>
                                     <p class="text-sm mb-2">Didn't recieve your ticket? <a href="{{ invoice.hosted_invoice_url }}" target="_blank" class="text-secondary font-weight-bold text-xs mt-1 mb-0">Download Ticket</a></p>
-                                    <p class="text-sm">Note: Your event ticket is your recipt. Please bring it with you to the event.</p>
+                                    <p class="text-sm">Note: Your event ticket is your receipt. Please bring it with you to the event.</p>
                                 </div>
                             </div>
                         {% else %}
@@ -134,13 +134,26 @@
                 {% if invoice.paid %}
                     <div class="col-lg-5 col-md-6 col-12">
                         <h6 class="mb-3">Payment details</h6>
-                        <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-                            <img class="w-10 me-3 mb-0" src="../../../assets/img/logos/mastercard.png" alt="logo">
-                            <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852</h6>
-                            <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="We do not store card details">
-                                <i class="fas fa-info" aria-hidden="true"></i>
-                            </button>
-                        </div>
+                        {% if payment_method.type == 'card' %}
+                            <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                                <img class="w-10 me-3 mb-0" src="https://demos.creative-tim.com/marketplace/soft-ui-dashboard-pro/assets/img/logos/{{payment_method.card.brand}}.png" alt="logo">
+                                <h6 class="mb-0 ms-2">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;{{payment_method.card.last4}}</h6>
+                                <span class="ms-auto"><h6 class="mb-0">{{ payment_method.card.exp_month }}/{{ payment_method.card.exp_year }}</h6></span>
+                                {% if payment_method.card.checks.cvc_check == 'pass' %}<span class="badge bg-gradient-success ms-auto">Valid</span>{% else %}<span class="badge bg-gradient-danger ms-auto">Invalid</span>{% endif %}
+                                <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="We do not store card details">
+                                    <i class="fas fa-info" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        {% else %} 
+                            <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                                <img class="w-10 me-3 mb-0" src="../../../assets/img/logos/{{payment_method.type}}.png" alt="logo">
+                                <h6 class="mb-0">{{ payment_method.type|title }}</h6>
+                                <span class="ms-auto"><h6 class="mb-0">{{ payment_method.email }}</h6></span>
+                                <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="We do not store card details">
+                                    <i class="fas fa-info" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        {% endif %}
                         <h6 class="mb-3 mt-4">Billing Information</h6>
                         <ul class="list-group">
                             <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
@@ -204,6 +217,8 @@
           }
           Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
+
+        $(function () { $('[data-bs-toggle="tooltip"]').tooltip() }).
     </script>
     
     <script async defer src="https://buttons.github.io/buttons.js"></script>
