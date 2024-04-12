@@ -96,8 +96,6 @@ class EventsForm(forms.ModelForm):
         sale_end_date = self.cleaned_data.get('sale_end_date')
         if not sale_end_date:
             raise ValidationError('Sale end date is required')
-        if sale_end_date < timezone.now():
-            raise ValidationError('Sale end date cannot be in the past')
         if self.cleaned_data.get('sale_release_date'):
             if sale_end_date < self.cleaned_data.get('sale_release_date'):
                 raise ValidationError('Sale end date cannot be before the sale release date')
