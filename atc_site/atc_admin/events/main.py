@@ -1,11 +1,104 @@
 from ..config import *
 from urllib.parse import quote_from_bytes
+from django.utils import timezone
 
 class EventsForm(forms.ModelForm):
     class Meta:
         model = Events
         fields = '__all__'
+        
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if not image:
+            raise ValidationError('Image is required')
+        return image
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name:
+            raise ValidationError('Name is required')
+        return name
     
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        if not description:
+            raise ValidationError('Description is required')
+        return description
+    
+    def clean_location(self):
+        location = self.cleaned_data.get('location')
+        if not location:
+            raise ValidationError('Location is required')
+        return location
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if not date:
+            raise ValidationError('Date is required')
+        
+        if date < timezone.now():
+            raise ValidationError('Date cannot be in the past')
+        return date
+    
+    def clean_time(self):
+        time = self.cleaned_data.get('time')
+        if not time:
+            raise ValidationError('Time is required')
+        return time
+    
+    def clean_available_tickets(self):
+        available_tickets = self.cleaned_data.get('available_tickets')
+        if not available_tickets:
+            raise ValidationError('Available tickets is required')
+        if available_tickets < 0:
+            raise ValidationError('Available tickets cannot be negative')
+        return available_tickets
+    
+    def clean_sold(self):
+        sold = self.cleaned_data.get('sold')
+        if not sold and sold != 0:
+            raise ValidationError('Sold is required')
+        if sold < 0:
+            raise ValidationError('Sold cannot be negative')
+        return sold
+    
+    def clean_organizer(self):
+        organizer = self.cleaned_data.get('organizer')
+        if not organizer:
+            raise ValidationError('Organizer is required')
+        admin_group = Group.objects.get(name='Admin')
+        if organizer not in CustomUser.objects.filter(groups=admin_group):
+            raise ValidationError('Organizer must be an admin')
+        return organizer
+    
+    def clean_ticket_price(self):
+        ticket_price = self.cleaned_data.get('ticket_price')
+        if not ticket_price:
+            raise ValidationError('Ticket price is required')
+        if ticket_price < 0:
+            raise ValidationError('Ticket price cannot be negative')
+        return ticket_price
+    
+    def clean_sale_release_date(self):
+        sale_release_date = self.cleaned_data.get('sale_release_date')
+        if not sale_release_date:
+            raise ValidationError('Sale release date is required')
+        if sale_release_date < timezone.now():
+            raise ValidationError('Sale release date cannot be in the past')
+        if sale_release_date > self.cleaned_data.get('date'):
+            raise ValidationError('Sale release date cannot be after the event date')
+        return sale_release_date
+    
+    def clean_sale_end_date(self):
+        sale_end_date = self.cleaned_data.get('sale_end_date')
+        if not sale_end_date:
+            raise ValidationError('Sale end date is required')
+        if sale_end_date < timezone.now():
+            raise ValidationError('Sale end date cannot be in the past')
+        if sale_end_date < self.cleaned_data.get('sale_release_date'):
+            raise ValidationError('Sale end date cannot be before the sale release date')
+        return sale_end_date
+
     
 
 class EventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
