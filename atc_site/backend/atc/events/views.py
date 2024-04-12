@@ -67,45 +67,46 @@ def checkout_success(request, event_id):
                 payment_method=request.POST.get('payment_method_id'),
                 description=request.POST.get('description'),
                 currency='aud',
-                payment_intent=request.POST.get('payment_intent_id'),
+                payment_intent=checkout_session.payment_intent,
                 payment_settings={'payment_method_options': {'card': {'request_three_d_secure': 'automatic'}}},    
             )
-            
+
             event = Events.get_event(event_id)
             event.available_tickets -= 1
             event.sold += 1
             event.save()
             
-            BookingStatus.objects.create(
+            booking_status = BookingStatus.objects.create(
                 status='Confirmed',
                 user=request.user,
                 payment_status=PaymentStatus.objects.get(status='PAID'),
                 stripe_invoice_id=invoice.id,
             )
             
-            Tickets.objects.create(
+            ticket = Tickets.objects.create(
                 user=request.user,
                 event=event,
                 sent=True,
                 stripe_invoice_id=invoice.id,
             )
-
-            Payment.objects.create(  #issue here
+            
+            payment = Payment.objects.create(  #issue here
                 user=request.user,
-                amount=(checkout_session.amount_total/100),
+                amount=(invoice.total/100),
                 stripe_invoice_id=invoice.id,
                 method=checkout_session.payment_method_types[0],
                 currency=checkout_session.currency,
                 stripe_payment_id=stripe.checkout.Session.retrieve(checkout_session.id).payment_intent,
                 status=PaymentStatus.objects.get(status='PAID'),
             )
+
             
             booking = Booking.objects.create(
                 user=request.user,
                 event=event,
-                ticket=Tickets.objects.get(stripe_invoice_id=invoice.id),
-                payment=Payment.objects.get(stripe_invoice_id=invoice.id),
-                status=BookingStatus.objects.get(stripe_invoice_id=invoice.id),
+                ticket=ticket,
+                payment=payment,
+                status=booking_status,
                 stripe_invoice_id=invoice.id,
             )
             
@@ -184,6 +185,10 @@ def checkout_success(request, event_id):
                 )
             
             paid_invoice = stripe.Invoice.pay(invoice.id, paid_out_of_band=True)
+            
+            payment.amount = paid_invoice.total/100
+            payment.save()
+             
             return redirect(paid_invoice.hosted_invoice_url, code=303)
         else:
             return redirect(f'/events/{str(event_id)}/checkout/', code=303)

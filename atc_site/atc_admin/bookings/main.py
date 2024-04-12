@@ -64,8 +64,12 @@ class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         print('deleting booking ')
         obj = self.get_object(request, object_id)
         try:
-            stripe.PaymentIntent.cancel(obj.payment.stripe_payment_id)
-            stripe.Invoice.delete(obj.payment.stripe_invoice_id)
+            refund = stripe.Refund.create(
+                payment_intent=obj.payment.stripe_payment_id,
+                #amount=int(obj.payment.amount*100),
+            )
+            # stripe.PaymentIntent.cancel(obj.payment.stripe_payment_id)
+            stripe.Invoice.modify(id=obj.stripe_invoice_id, payment_intent=refund.payment_intent)
             
             print(' delete stripe items')
             
