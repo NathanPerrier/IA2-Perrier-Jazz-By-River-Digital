@@ -204,7 +204,6 @@
                         </span>
                         <span class="text-dark text-lg ms-2 font-weight-bold">${{ invoice.total|div:100 }}</span>
                     </div>
-                    <button class="btn bg-gradient-primary mb-0" onclick="soft.showSwal('basic')">Try me!</button>
                     <button class="btn bg-danger text-white text-bold mb-0" onclick="soft.showSwal('warning-message-and-cancel')">Cancel Booking</button>
                 </div>
             </div>
@@ -244,27 +243,6 @@
         }
 
         $(function () { $('[data-bs-toggle="tooltip"]').tooltip() }).
-        console.log('Swal available:', typeof Swal);
-
-        var soft = {
-            showSwal: function(type) {
-                if (type == 'warning-message-and-cancel') {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'You will not be able to recover this Booking!',
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'No, keep it'
-                    }).then((result) => {
-                        if (result.value) {
-                            window.location.href = '/booking/{{ booking.id }}/delete/';
-                        }
-                    });
-                }
-            }
-        }
-
 
         console.log('Swal available:', typeof Swal);
         
