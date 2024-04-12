@@ -35,10 +35,14 @@
                                                 {% if event.available_tickets > 0 %}
                                                     <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
                                                 {% else %}
-                                                    <a class="btn btn-danger py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sold Out!</a>
+                                                    <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sold Out!</a>
                                                 {% endif %}
                                             {% else %}
-                                                <a class="btn btn-danger py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sale Has Ended</a>
+                                                {% if event.sale_release_date > now %}
+                                                    <a id="countdown-{{event.id}}" class="btn btn-light disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Available Soon!</a>
+                                                {% else %}
+                                                    <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sale Has Ended</a>
+                                                {% endif %}
                                             {% endif %}
                                         {% else %}
                                             <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
@@ -58,30 +62,46 @@
             <div class="col-md-12 text-white text-center">
                 <h1 class="text-white text-center underline-primary mb-5" style="z-index:-10">Recommended Events</h1>
                 <div class="owl-carousel recommended-carousel" style="overflow-x:hidden">
-                    {% for blog in recommended_blogs %}  <!--have device and user tracking so it doesn't matter if user is signed in or not-->
+                    {% for event in recommended_events %}  <!--have device and user tracking so it doesn't matter if user is signed in or not-->
                         <div class="row blog-row mb-2">
                             <div class=" col-sm-12 flex ps-4" style="height:500px">
                                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white" style="min-width:100%">
                                     <div class="col p-4 d-flex flex-column position-static" style="min-height: 250px">
                                         <strong class="d-inline-block mb-2 text-primary">Reccomended</strong> <!-- tags and categories -->
-                                        <h3 class="mb-0">{{blog.title}}</h3>
-                                        <div class="my-1 text-muted"><small>date</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{author.value.username}}</small></div>
-                                        <p class="card-text mb-auto my-1">{{blog.description}}</p>
+                                        <h3 class="mb-0">{{event.name}}</h3>
+                                        <div class="my-1 text-muted"><small>{{event.location}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ event.date|date:"d F, Y" }}</small></div>
+                                        <p class="card-text mb-auto my-1">{{event.description}}</p>
                                         <div class="button-container" style="display: flex; justify-content: space-between;">                          
-                                            <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
+                                            <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
                                             <div class="LD-area text-dark">
-                                                <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                                    <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.values }}</span>
-                                                </div>
-                                                <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
-                                                <div class="LD-area-sub">
-                                                    <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
-                                                </div>
+                                                <a href="/events/{{ event.id }}/checkout/" style="z-index:5">
+                                                    {% if event.sale_release_date < now and event.sale_end_date > now %}
+                                                        {% if event.available_tickets > 0 %}
+                                                            <div class="p-2 rounded bg-secondary text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="p-2 rounded bg-danger text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if event.sale_release_date > now %}
+                                                            <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Available Soon!</h6>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="p-2 rounded bg-danger text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-auto d-none d-lg-block" style="max-height:250px;width:100%;">
-                                        <img class="img-fluid img-cover blog-small-image" src="{% static image %}" alt="">
+                                        <img class="img-fluid img-cover blog-small-image" src="{{ event.image.url }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -150,9 +170,15 @@
                                                         </div>
                                                     {% endif %}
                                                 {% else %}
-                                                    <div class="p-2 rounded bg-danger text-center">
-                                                        <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
-                                                    </div>
+                                                    {% if event.sale_release_date > now %}
+                                                        <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
+                                                            <h6 class="m-0 p-0 text-center text-white">Available Soon!</h6>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="p-2 rounded bg-danger text-center">
+                                                            <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
+                                                        </div>
+                                                    {% endif %}
                                                 {% endif %}
                                             </a>
                                         </div>
@@ -171,6 +197,43 @@
     {% endif %}
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            {% for event in events %}
+                {% if event.sale_release_date > now %}
+                    createCountdown('{{ event.sale_release_date.isoformat }}', '{{ event.id }}');
+                {% endif %}
+            {% endfor %}
+        });
+
+        function createCountdown(sale_release_date, id) {
+            var countDownDate = new Date(sale_release_date).getTime();
+    
+            var countdownFunction = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+                var countdownElement = document.getElementById("countdown-" + id);
+                if (countdownElement) {
+                    countdownElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+                } else {
+
+                    clearInterval(countdownFunction); // Stop interval if element is not found
+                }
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    if (countdownElement) {
+                        window.location.reload();
+                    }
+                }
+            }, 1000);
+        }
+    
+
         const blogs = document.querySelectorAll('.blog');
         const blogsPerPage = 4;
         let currentPage = 1;
@@ -223,7 +286,7 @@
                 window.location.href = "/login";
             }
         }
-        
+
         
     </script>
 {% endblock %}

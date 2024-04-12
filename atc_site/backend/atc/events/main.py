@@ -9,12 +9,13 @@ from .models import Events, EventSchedule, EventScheduleItem
 from .food_and_drinks.models import FoodAndDrinks, FoodAndDrinksItem, EventFoodAndDrinks
 from decouple import config
 import datetime
+from django.db.models import Count
 from django.utils import timezone
 
 from ....handles import login_required
 
 def events(request):
-    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : active_events(), 'now': timezone.now()})
+    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : active_events(), 'now': timezone.now(), 'recommended_events': recommended_events()})
 
 @staff_member_required  
 def create_event(request):
@@ -85,3 +86,11 @@ def active_events():
         if event.date > timezone.now():
             eventsList.append(event)
     return eventsList
+
+def recommended_events():
+    return Events.objects.filter(
+        date__gt=timezone.now(),
+        sale_release_date__lt=timezone.now(),
+        sale_end_date__gt=timezone.now()
+    ).annotate(tickets_sold=Count('tickets')).order_by('-tickets_sold')[:3]
+                
