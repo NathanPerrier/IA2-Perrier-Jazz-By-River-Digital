@@ -67,13 +67,14 @@ class EventsForm(forms.ModelForm):
         if not organizer:
             raise ValidationError('Organizer is required')
         admin_group = Group.objects.get(name='Admin')
-        if organizer not in CustomUser.objects.filter(groups=admin_group):
-            raise ValidationError('Organizer must be an admin')
+        organizer_group = Group.objects.get(name='Organizer')
+        if organizer not in CustomUser.objects.filter(groups=admin_group) or organizer not in CustomUser.objects.filter(groups=organizer_group):
+            raise ValidationError('Organizer must be an admin or organizer')
         return organizer
     
     def clean_ticket_price(self):
         ticket_price = self.cleaned_data.get('ticket_price')
-        if not ticket_price:
+        if not ticket_price and (int(ticket_price) != 0):
             raise ValidationError('Ticket price is required')
         if ticket_price < 0:
             raise ValidationError('Ticket price cannot be negative')
@@ -83,10 +84,12 @@ class EventsForm(forms.ModelForm):
         sale_release_date = self.cleaned_data.get('sale_release_date')
         if not sale_release_date:
             raise ValidationError('Sale release date is required')
-        if sale_release_date < timezone.now():
-            raise ValidationError('Sale release date cannot be in the past')
-        if sale_release_date > self.cleaned_data.get('date'):
-            raise ValidationError('Sale release date cannot be after the event date')
+        if self.cleaned_data.get('sale_end_date'):
+            if sale_release_date > self.cleaned_data.get('sale_end_date'):
+                raise ValidationError('Sale end date cannot be before the sale release date')
+        if self.cleaned_data.get('date'):
+            if sale_release_date > self.cleaned_data.get('date'):
+                raise ValidationError('Sale release date cannot be after the event date')
         return sale_release_date
     
     def clean_sale_end_date(self):
@@ -95,9 +98,18 @@ class EventsForm(forms.ModelForm):
             raise ValidationError('Sale end date is required')
         if sale_end_date < timezone.now():
             raise ValidationError('Sale end date cannot be in the past')
-        if sale_end_date < self.cleaned_data.get('sale_release_date'):
-            raise ValidationError('Sale end date cannot be before the sale release date')
+        if self.cleaned_data.get('sale_release_date'):
+            if sale_end_date < self.cleaned_data.get('sale_release_date'):
+                raise ValidationError('Sale end date cannot be before the sale release date')
         return sale_end_date
+    
+    def clean_target_groups(self):
+        target_groups = self.cleaned_data.get('target_groups')
+        print(target_groups)
+        for group in target_groups:
+            if group not in Group.objects.all():
+                raise ValidationError('Target groups must be a valid group')
+        return target_groups
 
     
 

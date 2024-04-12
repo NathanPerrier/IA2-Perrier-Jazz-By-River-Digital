@@ -1,5 +1,6 @@
 {% extends 'atc_site/template/main-template.html' %}
 {% load static %}
+{% load user_filters %}
 {% block content %}
 
     <link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
@@ -30,22 +31,34 @@
                                     <h4 class="text-white mb-2 animated slideInRight">{{event.location}} | {{ event.date|date:"d F, Y"  }}</h4>
                                     <p class="text-white animated slideInRight">{{event.description}}</p>
                                     <div class="wow fadeInUp" data-wow-delay="0.5s">
-                                        {% if event.stripe_price_id %}
+                                        {% if event.available_tickets < 0 %}
+                                            <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sold Out!</a>
+                                        {% else %}
                                             {% if event.sale_release_date < now and event.sale_end_date > now %}
-                                                {% if event.available_tickets > 0 %}
-                                                    <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                {% if event.target_groups.all|length >= 1 %}
+                                                    {% if user|in_target_groups:event %}
+                                                        {% if event.stripe_price_id %}
+                                                            <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                        {% else %}
+                                                            <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Not Available</a>
+                                                    {% endif %}
                                                 {% else %}
-                                                    <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sold Out!</a>
+                                                    {% if event.stripe_price_id %}
+                                                        <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                    {% else %}
+                                                        <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                    {% endif %}
                                                 {% endif %}
                                             {% else %}
                                                 {% if event.sale_release_date > now %}
-                                                    <a id="countdown-{{event.id}}" class="btn btn-light disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Available Soon!</a>
+                                                    <a id="countdown-{{event.id}}" class="btn btn-light disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Coming Soon!</a>
                                                 {% else %}
                                                     <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sale Has Ended</a>
                                                 {% endif %}
                                             {% endif %}
-                                        {% else %}
-                                            <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
                                         {% endif %}
                                         <a href="/events/{{event.id}}/" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
                                     </div>
@@ -74,29 +87,43 @@
                                         <div class="button-container" style="display: flex; justify-content: space-between;">                          
                                             <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
                                             <div class="LD-area text-dark">
-                                                <a href="/events/{{ event.id }}/checkout/" style="z-index:5">
+                                                {% if event.available_tickets < 0 %}
+                                                    <div class="p-2 rounded bg-danger text-center">
+                                                        <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
+                                                    </div>
+                                                {% else %}
                                                     {% if event.sale_release_date < now and event.sale_end_date > now %}
-                                                        {% if event.available_tickets > 0 %}
-                                                            <div class="p-2 rounded bg-secondary text-center">
-                                                                <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
-                                                            </div>
+                                                        {% if event.target_groups.all|length >= 1 %}
+                                                            {% if user|in_target_groups:event %}
+                                                                {% if event.stripe_price_id %}
+                                                                    <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                        <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                    </div></a>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <div class="p-2 rounded bg-danger text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Not Available</h6>
+                                                                </div>
+                                                            {% endif %} 
                                                         {% else %}
-                                                            <div class="p-2 rounded bg-danger text-center">
-                                                                <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
-                                                            </div>
+                                                            {% if event.stripe_price_id %}
+                                                                <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                </div></a>
+                                                            {% endif %}
                                                         {% endif %}
                                                     {% else %}
                                                         {% if event.sale_release_date > now %}
                                                             <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
-                                                                <h6 class="m-0 p-0 text-center text-white">Available Soon!</h6>
+                                                                <h6 class="m-0 p-0 text-center text-white">Coming Soon!</h6>
                                                             </div>
                                                         {% else %}
                                                             <div class="p-2 rounded bg-danger text-center">
                                                                 <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
                                                             </div>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </a>
+                                                        {% endif %}   
+                                                    {% endif %}       
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -158,29 +185,43 @@
                                     <div class="button-container mt-2" style="display: flex; justify-content: space-between;">                          
                                         <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
                                         <div class="LD-area text-dark">
-                                            <a href="/events/{{ event.id }}/checkout/" style="z-index:5">
-                                                {% if event.sale_release_date < now and event.sale_end_date > now %}
-                                                    {% if event.available_tickets > 0 %}
-                                                        <div class="p-2 rounded bg-secondary text-center">
-                                                            <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
-                                                        </div>
-                                                    {% else %}
-                                                        <div class="p-2 rounded bg-danger text-center">
-                                                            <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
-                                                        </div>
-                                                    {% endif %}
+                                            {% if event.available_tickets < 0 %}
+                                                    <div class="p-2 rounded bg-danger text-center">
+                                                        <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
+                                                    </div>
                                                 {% else %}
-                                                    {% if event.sale_release_date > now %}
-                                                        <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
-                                                            <h6 class="m-0 p-0 text-center text-white">Available Soon!</h6>
-                                                        </div>
+                                                    {% if event.sale_release_date < now and event.sale_end_date > now %}
+                                                        {% if event.target_groups.all|length >= 1 %}
+                                                            {% if user|in_target_groups:event %}
+                                                                {% if event.stripe_price_id %}
+                                                                    <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                        <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                    </div></a>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <div class="p-2 rounded bg-danger text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Not Available</h6>
+                                                                </div>
+                                                            {% endif %} 
+                                                        {% else %}
+                                                            {% if event.stripe_price_id %}
+                                                                <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                </div></a>
+                                                            {% endif %}
+                                                        {% endif %}
                                                     {% else %}
-                                                        <div class="p-2 rounded bg-danger text-center">
-                                                            <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
-                                                        </div>
-                                                    {% endif %}
+                                                        {% if event.sale_release_date > now %}
+                                                            <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Coming Soon!</h6>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="p-2 rounded bg-danger text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
+                                                            </div>
+                                                        {% endif %}   
+                                                    {% endif %}       
                                                 {% endif %}
-                                            </a>
                                         </div>
                                     </div>
                                 </div>

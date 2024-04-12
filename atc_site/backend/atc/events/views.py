@@ -21,40 +21,43 @@ checkout_session = None
 @login_required
 def create_ticket_checkout_session(request, event_id):
     global checkout_session
-    # Assuming you have a function to get an event by ID
+  
     event = Events.get_event(event_id)
+    allowed_groups = event.target_groups.all()
     if event.available_tickets > 0:
         if event.sale_release_date < timezone.now() and event.sale_end_date > timezone.now():
-            additional_items = []
-            for item in EventFoodAndDrinks.objects.filter(event=event):
-                additional_items.append(FoodAndDrinksItem.objects.get(id=item.food_and_drinks_item.id))
+            if (request.user.is_superuser or request.user in event.organizer) or (event.target_groups and request.user.groups.filter(id__in=[group.id for group in allowed_groups]).exists()) or not event.target_groups:
+                additional_items = []
                 
-            for voucher in EventVoucher.objects.filter(event=event):    
-                additional_items.append(voucher)
+                for item in EventFoodAndDrinks.objects.filter(event=event):
+                    additional_items.append(FoodAndDrinksItem.objects.get(id=item.food_and_drinks_item.id))
+                    
+                for voucher in EventVoucher.objects.filter(event=event):    
+                    additional_items.append(voucher)
 
-            try:
-                checkout_session = stripe.checkout.Session.create(
-                    customer=f'customuser-{str(request.user.id)}',
-                    payment_method_types=['card'],
-                    line_items=([   #! fix
-                        {
-                            'price': event.stripe_price_id,  
-                            'quantity': 1,
-                        }
-                    ]) + ([{'price': str(item.stripe_price_id), 'quantity': 1, "adjustable_quantity": {"enabled": True, "minimum": 0, "maximum": get_stock(item)}} for item in additional_items]),
-                    mode='payment',
-                    success_url=request.build_absolute_uri(f'/events/{str(event.id)}/checkout/success/'),
-                    cancel_url=request.build_absolute_uri(f'/events/{str(event.id)}/'),
-                    customer_update={
-                        'address': 'auto',
-                    },
-                    automatic_tax={'enabled': True},
-                    billing_address_collection='required',
-                    # cross_sell={'products': [[str(item.stripe_price_id) for item in food_and_drink_items]]} # [voucher.stripe_price_id for voucher in Voucher.objects.filter(id=[eventVoucher.id for eventVoucher in EventVoucher.objects.filter(event=event.id)])]]},
-                )
-                return redirect(checkout_session.url)
-            except Exception as e:
-                return JsonResponse({'error': str(e)})
+                try:
+                    checkout_session = stripe.checkout.Session.create(
+                        customer=f'customuser-{str(request.user.id)}',
+                        payment_method_types=['card'],
+                        line_items=([   #! fix
+                            {
+                                'price': event.stripe_price_id,  
+                                'quantity': 1,
+                            }
+                        ]) + ([{'price': str(item.stripe_price_id), 'quantity': 1, "adjustable_quantity": {"enabled": True, "minimum": 0, "maximum": get_stock(item)}} for item in additional_items]),
+                        mode='payment',
+                        success_url=request.build_absolute_uri(f'/events/{str(event.id)}/checkout/success/'),
+                        cancel_url=request.build_absolute_uri(f'/events/{str(event.id)}/'),
+                        customer_update={
+                            'address': 'auto',
+                        },
+                        automatic_tax={'enabled': True},
+                        billing_address_collection='required',
+                    )
+                    return redirect(checkout_session.url)
+                except Exception as e:
+                    return JsonResponse({'error': str(e)})
+            return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this event.'})
         return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'This event is no longer available. Please contact the administrator if you believe this is an error.'})
     return render(request, 'atc_site//sold_out.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': event})
     

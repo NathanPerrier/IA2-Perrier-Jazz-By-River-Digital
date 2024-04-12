@@ -15,26 +15,28 @@ from django.utils import timezone
 from ....handles import login_required
 
 def events(request):
-    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : active_events(), 'now': timezone.now(), 'recommended_events': recommended_events()})
+    return render(request, 'atc_site//events//events.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events' : active_events(), 'now': timezone.now(), 'recommended_events': recommended_events(request.user), 'groups': Group.objects.all(), 'user_groups': request.user.groups.all()})
 
 @staff_member_required  
 def create_event(request):
     if request.user.is_superuser:
-        return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY'), 'vendors' : CustomUser.objects.filter(groups__name='Vendor')}) #, 'vendors': Group.objects.get(name='Vendors').user_set.all()
+        return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY'), 'vendors' : CustomUser.objects.filter(groups__name='Vendor'), 'groups': Group.objects.all()}) #, 'vendors': Group.objects.get(name='Vendors').user_set.all()
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
 
 
 def view_event(request, event_id):
     event = Events.objects.get(id=event_id)
+    # if request.user.is_superuser or (request.user is event.organizer) or (request.user.groups.filter(id__in=[group.id for group in event.target_groups.all()]).exists()):
     if event.date > timezone.now():
-        return render(request, 'atc_site//events//event.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event' : event, 'days_to_go': days_to_go(Events.objects.get(id=event_id).date, datetime.datetime.now()), 'schedule': get_event_schedule(event_id), 'food_and_drinks': get_event_food_and_drinks(event_id), 'now': timezone.now()})
+        return render(request, 'atc_site//events//event.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event' : event, 'days_to_go': days_to_go(Events.objects.get(id=event_id).date, datetime.datetime.now()), 'schedule': get_event_schedule(event_id), 'food_and_drinks': get_event_food_and_drinks(event_id), 'now': timezone.now(), 'event_target_groups': event.target_groups.all(), 'user_groups': request.user.groups.all()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'This event is no longer available. Please contact the administrator if you believe this is an error.'})
+    # return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
 
 @staff_member_required
 def edit_event(request, event_id):
     if request.user.is_superuser:
         return render(request, 'atc_site//events//edit.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY')})
-    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.', 'groups': Group.objects.all()})
 
 # def checkout_success(request, event_id):
 #     stripe.Invoice.create("in_1MtHbELkdIwHu7ixl4OzzPMv")
@@ -87,10 +89,10 @@ def active_events():
             eventsList.append(event)
     return eventsList
 
-def recommended_events():
+def recommended_events(user):
     return Events.objects.filter(
         date__gt=timezone.now(),
         sale_release_date__lt=timezone.now(),
         sale_end_date__gt=timezone.now()
     ).annotate(tickets_sold=Count('tickets')).order_by('-tickets_sold')[:3]
-                
+    

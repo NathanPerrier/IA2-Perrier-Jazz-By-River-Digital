@@ -64,15 +64,26 @@
                                 <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?"></textarea>
                                 <label class="fieldlabels">Location <span style="color:red">*</span></label>
                                 <input type="text" name="name" maxlength="200" minlength="5" id="location-input" placeholder="Where will the event be held?"/>
-                                <div class="d-flex justify-content-between form-group">
-                                    <div class="form-field justify-content-between" style="flex: 0 1 49%;">
-                                        <label class="fieldlabels">Date of Event <span style="color:red">*</span></label>
-                                        <input type="date" name="date" id="date"/>
+                                <div class="row">
+                                    <div class="d-flex col-md-12">
+                                        <div class="form-field col-sm-6">
+                                            <label class="fieldlabels">Date of Event <span style="color:red">*</span></label>
+                                            <input type="date" name="date" id="date"/>
+                                        </div>
+                                        <div class="form-field col-sm-6 ms-auto ps-2">
+                                            <label class="fieldlabels">Start Time of Event <span style="color:red">*</span></label>
+                                            <input type="time" name="time" id="time"/>
+                                        </div>
                                     </div>
-                                    <div class="form-field" style="flex: 0 1 49%;">
-                                        <label class="fieldlabels">Start Time of Event <span style="color:red">*</span></label>
-                                        <input type="time" name="time" id="time"/>
-                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="fieldlabels">Target Groups</label>
+                                    <select class="form-select" multiple aria-label="multiple select">
+                                        {% for group in groups %}
+                                            <option value="{{ group.id }}">{{ group.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                                 </div>
                                 <label class="fieldlabels">Extras:</label> <!-- dynamically add additional fields based on selected extras -->
                                 <div class="d-flex justify-content-between form-group mb-3">
@@ -551,8 +562,7 @@
                 scheduleIndex--;
             });
         });
-        
-
+    
 
     </script>
 {% endblock %}

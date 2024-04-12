@@ -1,5 +1,6 @@
 {% extends "atc_site/template/main-template.html" %}
 {% load static %}
+{% load user_filters %}
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'atc_site/css/account/style.css' %}">
 <div class="container-fluid pt-5 bg-primary hero-header">
@@ -85,7 +86,7 @@
 					
 					<div class="col-md-6">
 						<div class="form-group row">
-							<label for="address" class="mr-2">Address*</label>
+							<label for="address" class="mr-2">Address</label>
 							<div class="col-sm-2 py-1">
 								<input type="text" class="form-control" id="street_number" name="street_number" placeholder="Number" value="{{address.street_number}}">
 								<input type="hidden" id="current_street_number" value="{{ address.street_number }}">
@@ -104,7 +105,24 @@
 							</div>
 						</div>
 					</div>
-					
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Phone Number</label>
+							<input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{user.phone_number}}">
+						</div>
+					</div>
+					{% if user|is_student %}
+						<div class="col-md-6">
+							<div class="form-group">
+								<label>Year Group</label>
+								<select class="form-control" id="year_group" name="year_group">
+									{% for i in 12|rangefilter %}
+										<option value="{{i}}" {% if user|is_year:i %} selected {% endif %}>Year {{i}}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					{% endif %}
 				</div>
 				<div class="row mt-3">
 					<div class="col-md-11">
