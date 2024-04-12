@@ -202,7 +202,14 @@
 
     var countdownFunction = setInterval(function() {
         var now = new Date().getTime();
+
+        if (now > countDownDate) {
+            clearInterval(countdownFunction);
+            window.location.reload();
+        }
+
         var distance = countDownDate - now;
+        
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -213,14 +220,6 @@
             countdownElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
         } else {
             clearInterval(countdownFunction); // Stop interval if element is not found
-        }
-
-        
-        if (distance < 0) {
-            clearInterval(countdownFunction);
-            if (countdownElement) {
-                window.location.reload();
-            }
         }
     }, 1000);
   }
@@ -234,222 +233,6 @@
     };
     link();
 
-    function followBtn(blog_id) {
-      if ("{{user.is_authenticated}}" == 'True') {
-          fetch('/blog/'+blog_id+'/follow', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function likeBtn() {
-      if ("{{user.is_authenticated}}" == 'True') {
-          fetch('/blog/{{blog.id}}/like', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function dislikeBtn() {
-      if ("{{user.is_authenticated}}" == 'True') {
-          fetch('/blog/{{blog.id}}/dislike', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function postComment() {
-      if ("{{user.is_authenticated}}" == 'True') {
-        if (document.getElementById("comment").value == "") {
-          alert("Please enter a comment");
-          return;
-        } else {
-          var data = {
-            comment: document.getElementById("comment").value
-          }
-          fetch('/blog/{{blog.id}}/comment', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-        }
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function editComment(comment_id) {
-      if ("{{user.is_authenticated}}" == 'True') {
-        if (document.getElementById("comment-edit-input-"+comment_id).value == "") {
-          alert("Please enter a comment");
-          return;
-        } else {
-          var data = {
-            comment: document.getElementById("comment-edit-input-"+comment_id).value
-          }
-          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/edit', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-        }
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function editRelatedComment(comment_id) {
-      if ("{{user.is_authenticated}}" == 'True') {
-        if (document.getElementById("comment-related-edit-input-"+comment_id).value == "") {
-          alert("Please enter a comment");
-          return;
-        } else {
-          var data = {
-            comment: document.getElementById("comment-related-edit-input-"+comment_id).value
-          }
-          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/edit', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-        }
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function relpyToComment(comment_id) {
-      if ("{{user.is_authenticated}}" == 'True') {
-        if (document.getElementById("comment-reply-input-"+comment_id).value == "") {
-          alert("Please enter a comment");
-          return;
-        } else {
-          var data = {
-            comment: document.getElementById("comment-reply-input-"+comment_id).value
-          }
-          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/reply', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-        }
-      } else {
-          window.location.href = "/login";
-      }
-    }
-
-    function deleteComment(comment_id) {
-      if ("{{user.is_authenticated}}" == 'True') {
-        var result = confirm("Are you sure you want to delete your comment?");
-        if (result) {
-          fetch('/blog/{{blog.id}}/comment/'+comment_id+'/delete', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .catch(error => console.error(error));
-            window.location.href = "/blog/{{blog.id}}";
-        }
-      } else {
-        window.location.href = "/login";
-      }
-    }
-
-    function toggleReplyInput(comment_id) {
-      var inputDiv = document.getElementById("reply-section-"+comment_id);
-      
-      resetVariableDisplays();
-
-      if (inputDiv.style.display === "none") {
-        inputDiv.style.display = "block";
-      } else {
-        inputDiv.style.display = "none";
-      }
-    }
-
-    function toggleEditInput(comment_id) {
-      var inputDiv = document.getElementById("comment-edit-"+comment_id);
-      var commentDiv = document.getElementById("comment-"+comment_id);
-
-      resetVariableDisplays();
-
-      if (inputDiv.style.display === "none") {
-        inputDiv.style.display = "block";
-        commentDiv.style.display = "none";
-      } else {
-        inputDiv.style.display = "none";
-        commentDiv.style.display = "block";
-      }
-    }
-
-    function resetVariableDisplays() {
-      var variableInputs = document.getElementsByClassName("variable-input");
-      var variableContents = document.getElementsByClassName("variable-content");
-      for (var i = 0; i < variableInputs.length; i++) {
-        variableInputs[i].style.display = "none";
-      }
-      for (var i = 0; i < variableContents.length; i++) {
-        variableContents[i].style.display = "block";
-      }
-    }
-
-    function closeEditDiv(comment_id) {
-      var inputDiv = document.getElementById("comment-edit-"+comment_id);
-      var commentDiv = document.getElementById("comment-"+comment_id);
-      inputDiv.style.display = "none";
-      commentDiv.style.display = "block";
-      
-    }
-
-    function closeReplyDiv(comment_id) {
-      var inputDiv = document.getElementById("reply-section-"+comment_id);    
-      inputDiv.style.display = "none"; 
-    }
+    
 </script>
 {% endblock %}
