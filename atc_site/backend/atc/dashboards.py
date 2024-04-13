@@ -1,11 +1,8 @@
-import os
-from django.http import StreamingHttpResponse, JsonResponse
-from django.conf import settings
-from .models import Newsletter
 import stripe
 from decouple import config
 from django.contrib.auth.decorators import login_required
 from .main import *
+from django.db.models import Count
 from django.utils import timezone
 import time, datetime
 
@@ -18,6 +15,7 @@ from .email import send_contact_emails, send_newsletter_emails
 def admin_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
         return render(request, 'atc_site//admin_dashboard.html', {'title': 'Overview', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 
+                                                                'top_selling_event': get_top_selling_event(),
                                                                 'customers': stripe.Customer.list(), 
                                                                 'income': (stripe.Balance.retrieve()['available'][0]['amount']+stripe.Balance.retrieve()['pending'][0]['amount']) / 100,
                                                                 'bookings': Booking.objects.all(), 
@@ -110,3 +108,10 @@ def get_booking_for_each_month(option=False):
         
     print(bookings_for_each_month)
     return bookings_for_each_month[::-1]
+
+def get_top_selling_event():
+    return Events.objects.filter(
+        date__gt=timezone.now(),
+        sale_release_date__lt=timezone.now(),
+        sale_end_date__gt=timezone.now()
+    ).annotate(tickets_sold=Count('tickets')).order_by('-tickets_sold').first()

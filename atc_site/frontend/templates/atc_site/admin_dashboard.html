@@ -82,16 +82,23 @@
     <div class="row">
     <div class="col-lg-12">
     <div class="card p-3">
-    <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100" style="background-image: url('./img/ivancik.jpg');">
-    <span class="mask bg-gradient-dark"></span>
-    <div class="card-body position-relative z-index-1 h-100 p-3">
-    <h6 class="text-white font-weight-bolder mb-3">Hey {{user.first_name}}!</h6>
-    <p class="text-white mb-3">Wealth creation is an evolutionarily recent positive-sum game. It is all about who take the opportunity first.</p>
-    <a class="btn btn-round btn-outline-white mb-0" href="javascript:;">
-    Read More
-    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
-    </a>
-    </div>
+    <div class="overflow-hidden position-relative border-radius-lg bg-cover h-100 bg-overlay-55" style="background-image: url('{{top_selling_event.image.url}}');">
+        <span class="mask bg-gradient-dark"></span>
+        <div class="card-body position-relative z-index-1 h-100 p-3">
+            <h6 class="text-white font-weight-bolder mb-3">Current Best Selling Event</h6>
+            <p class="text-white mb-3">{{ top_selling_event.description }}</p>
+            <div class="d-flex">
+                <a class="btn btn-round btn-outline-white mb-0" href="/events/{{ top_selling_event.id }}/">
+                    Read More
+                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                </a>
+                <div class="ms-auto">
+                    <div class="btn disabled btn-round btn-outline-white mb-0">
+                        {{ top_selling_event.sold }} Sold
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     </div>
     </div>
