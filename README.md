@@ -70,6 +70,8 @@ The application's design is user-friendly and intuitive, making it easy for user
     
     - If you do not wish to use real money, ensure to use `test mode` on your stripe account (use test mode API key instead).
 
+    - If using test mode you can use [these cards](https://docs.stripe.com/testing?testing-method=card-numbers) for payments
+
 4.  create a virtual environment using `control + shift + p` then search create an environment. After you have created the venv then restart vs code. Might need:
 
     ```sh
@@ -170,6 +172,8 @@ The application's design is user-friendly and intuitive, making it easy for user
     - To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
 
     - If you do not wish to use real money, ensure to use `test mode` on your stripe account (use test mode API key instead).
+
+    - If using test mode you can use [these cards](https://docs.stripe.com/testing?testing-method=card-numbers) for payments
 
 5. You will need to mirgrate the app using:
 
