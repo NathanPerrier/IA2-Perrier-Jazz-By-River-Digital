@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from .views import stream_video_atc_site, contact_ajax, newsletter_ajax
 from atc_site.backend import views as atc_views
-from . import main, views, errors
+from . import main, views, errors, dashboards
 
 urlpatterns = [
     path("", main.index, name="atc_index"),
@@ -51,7 +51,7 @@ urlpatterns = [
     path('account/manage', main.manage_account_page, name='manage_account'),
     
     path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
-    path('admin/dashboard/', views.admin_dashboard, name='dashboard_admin'),
+    path('admin/dashboard/', dashboards.admin_dashboard, name='dashboard_admin'),
     
     path('logout/', views.logout_view, name='logout'),
     
