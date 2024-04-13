@@ -65,7 +65,10 @@ The application's design is user-friendly and intuitive, making it easy for user
     DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
 
-    NOTE: To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
+    NOTE: 
+    - To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
+    
+    - If you do not wish to use real money, ensure to use `test mode` on your stripe account (use test mode API key instead).
 
 4.  create a virtual environment using `control + shift + p` then search create environment. After you have created the venv then restart vs code. Might need:
 
@@ -163,7 +166,10 @@ The application's design is user-friendly and intuitive, making it easy for user
     DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
 
-    NOTE: To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
+    NOTE: 
+    - To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
+
+    - If you do not wish to use real money, ensure to use `test mode` on your stripe account (use test mode API key instead).
 
 5. You will need to mirgrate the app using:
 
