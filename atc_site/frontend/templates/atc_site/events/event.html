@@ -3,16 +3,6 @@
 {% load user_filters %}
 {% block content %}
 <link type="text/css" href="{% static 'css/blog/blog.css' %}" rel="stylesheet">
-<style>
-  .row > #child-element, .row > #big-child-element {
-    display: flex;
-    flex-direction: column;
-}
-
-.row > #child-element > .d-flex, .row > #big-child-element > .d-flex {
-    flex-grow: 1;
-}
-</style>
 
 <!-- Hero Start -->
 <div class="container-fluid p-0 m-0 hero bg-overlay-50">  <!--bg-overlay-40?-->
