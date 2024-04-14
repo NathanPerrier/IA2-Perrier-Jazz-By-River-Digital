@@ -207,7 +207,7 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up text-white text-bold"></i></a>
+    <a href="#" {% if is_authenticated %}style="right: 70px;"{% else %}style="right:15px"{% endif %} class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up text-white text-bold"></i></a>
 
       
     <script src="https://kit.fontawesome.com/02870e7611.js" crossorigin="anonymous"></script>
