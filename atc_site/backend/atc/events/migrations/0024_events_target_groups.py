@@ -6,7 +6,6 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0013_auto_20240229_1756'),
         ('events', '0023_alter_events_description_alter_events_name'),
     ]
 
