@@ -31,7 +31,7 @@ def reset_messages(request):
 def chat(request):
     print(request.user.first_name)
 
-    user_message = request.POST.get('MessageATC')
+    user_message = request.POST.get('message')
     Message.objects.create(role='user', content=user_message, model=Message.objects.filter(user=request.user).all().order_by('timestamp').last().model, user=request.user)
     
     previous_MessageATCs = Message.objects.filter(user=request.user).all().order_by('timestamp')
