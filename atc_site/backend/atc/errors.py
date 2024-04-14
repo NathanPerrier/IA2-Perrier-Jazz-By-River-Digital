@@ -6,7 +6,7 @@ def handler400(request):
     return HttpResponseBadRequest(request, 'atc_site//error.html', context, status=400)
 
 def handler404(request):
-    context = {'title': 'Page Not Found', 'error': '404', 'desc': 'We’re sorry, the page you have looked for does not exist in our website! Maybe go back to our home page or user the navigation bar?'}
+    context = {'title': 'Page Not Found', 'error': '404', 'desc': 'We’re sorry, the page you have looked for does not exist in our website! Maybe go back to our home page or user the navigation bar?', 'user': request.user, 'is_authenticated': request.user.is_authenticated}
     response =  render(request, 'atc_site//error.html', context, status=404)
     response.status_code = 404
     return response

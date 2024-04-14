@@ -2,7 +2,7 @@
 
 Created by [Nathan Perrier](https://github.com/nathan-perrier23) of [Ambrose Treacy College](https://www.atc.qld.edu.au/)
 
-IA2 - Digital Solutions - Year 12
+IA2 - Digital Solutions - Year 12 - QCAA
 
 ## Description
 
@@ -10,7 +10,7 @@ This is an event booking and ticketing website for Ambrose Treacy College, a Bri
 
 The application uses various APIs and AI technologies to provide users with accurate and up-to-date data.
 
-This website was built upon the previous repos:
+This website was built upon the previous repositories:
 
 - [IA1-Weather-App-Django](https://github.com/nathan-perrier23/IA1-Weather-App-Django)
 - [Y11-T4-ATC-Blogging-Website](https://github.com/nathan-perrier23/Y11-T4-ATC-Blogging-Website)
@@ -58,12 +58,21 @@ The application's design is user-friendly and intuitive, making it easy for user
 
     GOOGLE_PLACES_API_KEY = 'your-google-places-api-key'
 
+    STRIPE_API_KEY = 'your-stripe-api-key'
+    
+    STRIPE_WEBHOOK_SECRET = 'your-stripe-webhook-secret'
+
     DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
 
-    NOTE: To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
+    NOTE: 
+    - To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your Google account.
+    
+    - If you do not wish to use real money, ensure to use `test mode` on your stripe account (use test mode API key instead).
 
-4.  create a virtual environment using `control + shift + p` then search create environment. After you have created the venv then restart vs code. Might need:
+    - If using test mode you can use [these cards](https://docs.stripe.com/testing?testing-method=card-numbers) for payments
+
+4.  create a virtual environment using `control + shift + p` then search create an environment. After you have created the venv then restart vs code. Might need:
 
     ```sh
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted -Force;
@@ -152,10 +161,19 @@ The application's design is user-friendly and intuitive, making it easy for user
 
     GOOGLE_PLACES_API_KEY = 'your-google-places-api-key'
 
+    STRIPE_API_KEY = 'your-stripe-api-key'
+
+    STRIPE_WEBHOOK_SECRET = 'your-stripe-webhook-secret'
+
     DJANGO_SETTINGS_MODULE= atc_site.settings
     ```
 
-    NOTE: To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your google account.
+    NOTE: 
+    - To use a Gmail account to send emails, you must set up an app password - but to do this you first need to enable 2-Step Verification, then select ‘App passwords’ under ‘2-Step Verification’. You must also turn on the ‘Less Secure App Access’ option in your Google account.
+
+    - If you do not wish to use real money, ensure to use `test mode` on your stripe account (use test mode API key instead).
+
+    - If using test mode you can use [these cards](https://docs.stripe.com/testing?testing-method=card-numbers) for payments
 
 5. You will need to mirgrate the app using:
 
@@ -211,7 +229,7 @@ The application's design is user-friendly and intuitive, making it easy for user
 
 ### NOTE
 
-If you are using Docker Toolbox, you will need to visit the IP address of the Docker Machine instead of `localhost`. You can find the IP address by running `docker-machine ip` in the terminal.
+If you are using the Docker Toolbox, you will need to visit the IP address of the Docker Machine instead of `localhost`. You can find the IP address by running `docker-machine ip` in the terminal.
 
  Use `docker system prune -a` to remove all unused containers, networks, images (both dangling and unreferenced), and optionally, volumes.
 

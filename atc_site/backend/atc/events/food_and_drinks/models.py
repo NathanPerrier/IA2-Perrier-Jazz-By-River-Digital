@@ -1,17 +1,35 @@
 from django.db import models
 from ..models import Events
 from .....models import CustomUser
+from ..booking.models import Booking
+from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
+
+
     
 class FoodAndDrinksItem(models.Model):
     name = models.CharField(max_length=200, blank=False)
     description = models.TextField(blank=False)
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=False)
-    stock = models.IntegerField(default=0, blank=False) #? min
-    quantity_sold = models.IntegerField(default=0, blank=False) #? min
-    discount = models.FloatField(blank=True) #? min
+    stock = models.IntegerField(default=0, blank=False, validators=[MinValueValidator(0)]) #? min
+    quantity_sold = models.IntegerField(default=0, blank=False, validators=[MinValueValidator(0)])
+    image = models.ImageField(upload_to='food_and_drinks/', blank=True)
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
-    last_modification = models.DateTimeField(auto_now=True, blank=False)
+    last_modified = models.DateTimeField(auto_now=True, blank=False)
     vendor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=False)
+    event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    stripe_price_id = models.CharField(max_length=256, blank=True, null=True)
+    stripe_product_id = models.CharField(max_length=256, blank=True, null=True)
+
+    
+    def save(self, *args, **kwargs):
+        vendor_group = Group.objects.get(name='Vendor')
+        if self.quantity_sold > self.stock:
+            raise ValueError("Sold quantity cannot be more than available quantity")
+        if self.vendor not in CustomUser.objects.filter(groups=vendor_group):
+            raise ValidationError("CustomUser must be in the Vendor group")
+        super().save(*args, **kwargs)
     
 class EventFoodAndDrinks(models.Model):
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
@@ -19,9 +37,14 @@ class EventFoodAndDrinks(models.Model):
     
     
 class FoodAndDrinks(models.Model):
-    item = models.ManyToManyField(FoodAndDrinksItem, blank=False)
-    quantity = models.IntegerField(default=0, blank=False)
+    item = models.ForeignKey(EventFoodAndDrinks, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1, blank=False, validators=[MinValueValidator(1)])
     creation_date = models.DateTimeField(auto_now_add=True, blank=False)
     last_modification = models.DateTimeField(auto_now=True, blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    
+class BookingFoodAndDrinks(models.Model):
+    food_and_drinks = models.ForeignKey(FoodAndDrinks, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)

@@ -1,0 +1,1 @@
+#* stripe checkout. use must select booking at checkout

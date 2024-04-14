@@ -1,5 +1,6 @@
 {% extends 'atc_site/template/main-template.html' %}
 {% load static %}
+{% load user_filters %}
 {% block content %}
 
     <link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
@@ -17,44 +18,49 @@
         </div>
     {% else %}
         <div class="owl-carousel testimonial-carousel" style="margin-top:-75px;height:100vh">
-            {% for blog in featured_blogs %}
+            {% for event in events %}
                 <div class="testimonial-item container-fluid px-0 m-0 pt-5 hero bg-overlay-50" style="height:100vh">
                     <div class="pb-5">
-                        <img class="bg-video" src="{% static image %}"> <!-- change to bg-video-2 to remove fixed position -->
+                        <img class="bg-video-2" src="{{ event.image.url }}" id="parallaxVideo"> <!-- change to bg-video-2 to remove fixed position -->
                         <div class="container px-3 py-5 bg-img">
-                            <div class="row g-5 mb-5">
+                            <div class="row g-5 mb-5 mt-5 pb-5">
                                 <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
                                     <div class="pb-5">
-                                    <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{blog.title}}</h1>
+                                    <h1 class="display-4 text-white mb-3 animated slideInRight pt-lg-5" style="font-size:3rem">{{event.name}}</h1>
                                     
-                                    <h4 class="text-white mb-2 animated slideInRight">Written By <a class="text-white" href="/account/{{ author.value.username }}">@{{ author.value.username }}</a></h4>
-                                    <p class="text-white animated slideInRight">{{blog.description}}</p>
-                                    <div class="my-3 animated slideInRight">
-                                        <div class="LD-area text-white">
-                                            <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                                <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
-                                            </div>
-                                            <div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>
-                                            <div class="LD-area-sub">
-                                                <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <h4 class="text-white mb-2 animated slideInRight">{{event.location}} | {{ event.date|date:"d F, Y"  }}</h4>
+                                    <p class="text-white animated slideInRight">{{event.description}}</p>
                                     <div class="wow fadeInUp" data-wow-delay="0.5s">
-                                        <a href="/blog/{{blog.id}}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
-                                        {% if blog.user_id == user.id or user.admin %}
-                                        <a href="/blog/{{blog.id}}/edit" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Edit</a>
+                                        {% if event.available_tickets < 0 %}
+                                            <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sold Out!</a>
                                         {% else %}
-                                            {% if social|length == 0 %}
-                                                <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Follow</a>
-                                            {% else %}                       
-                                                {% if is_following == true %} 
-                                                    <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Unfollow</a>
+                                            {% if event.sale_release_date < now and event.sale_end_date > now %}
+                                                {% if event.target_groups.all|length >= 1 %}
+                                                    {% if user|in_target_groups:event %}
+                                                        {% if event.stripe_price_id %}
+                                                            <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                        {% else %}
+                                                            <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Not Available</a>
+                                                    {% endif %}
                                                 {% else %}
-                                                    <a onclick="followBtn({{blog.id}})" id="follow-btn-{{ blog.author_id }}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Follow</a>
+                                                    {% if event.stripe_price_id %}
+                                                        <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                    {% else %}
+                                                        <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% else %}
+                                                {% if event.sale_release_date > now %}
+                                                    <a id="countdown-{{event.id}}" class="btn btn-light disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Coming Soon!</a>
+                                                {% else %}
+                                                    <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sale Has Ended</a>
                                                 {% endif %}
                                             {% endif %}
                                         {% endif %}
+                                        <a href="/events/{{event.id}}/" class="btn btn-outline-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Read More</a>
                                     </div>
                                     </div>
                                 </div>
@@ -67,32 +73,62 @@
 
         <div class="container-fluid py-5 px-5 bg-secondary" id="recommended">
             <div class="col-md-12 text-white text-center">
-                <h1 class="text-white text-center underline-primary mb-5" style="z-index:-10">Recommended Blogs</h1>
+                <h1 class="text-white text-center underline-primary mb-5" style="z-index:-10">Recommended Events</h1>
                 <div class="owl-carousel recommended-carousel" style="overflow-x:hidden">
-                    {% for blog in recommended_blogs %}  <!--have device and user tracking so it doesn't matter if user is signed in or not-->
+                    {% for event in recommended_events %}  <!--have device and user tracking so it doesn't matter if user is signed in or not-->
                         <div class="row blog-row mb-2">
                             <div class=" col-sm-12 flex ps-4" style="height:500px">
                                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white" style="min-width:100%">
                                     <div class="col p-4 d-flex flex-column position-static" style="min-height: 250px">
                                         <strong class="d-inline-block mb-2 text-primary">Reccomended</strong> <!-- tags and categories -->
-                                        <h3 class="mb-0">{{blog.title}}</h3>
-                                        <div class="my-1 text-muted"><small>date</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{author.value.username}}</small></div>
-                                        <p class="card-text mb-auto my-1">{{blog.description}}</p>
+                                        <h3 class="mb-0">{{event.name}}</h3>
+                                        <div class="my-1 text-muted"><small>{{event.location}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ event.date|date:"d F, Y" }}</small></div>
+                                        <p class="card-text mb-auto my-1">{{event.description}}</p>
                                         <div class="button-container" style="display: flex; justify-content: space-between;">                          
-                                            <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
+                                            <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
                                             <div class="LD-area text-dark">
-                                                <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                                    <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.values }}</span>
-                                                </div>
-                                                <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
-                                                <div class="LD-area-sub">
-                                                    <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
-                                                </div>
+                                                {% if event.available_tickets < 0 %}
+                                                    <div class="p-2 rounded bg-danger text-center">
+                                                        <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
+                                                    </div>
+                                                {% else %}
+                                                    {% if event.sale_release_date < now and event.sale_end_date > now %}
+                                                        {% if event.target_groups.all|length >= 1 %}
+                                                            {% if user|in_target_groups:event %}
+                                                                {% if event.stripe_price_id %}
+                                                                    <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                        <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                    </div></a>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <div class="p-2 rounded bg-danger text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Not Available</h6>
+                                                                </div>
+                                                            {% endif %} 
+                                                        {% else %}
+                                                            {% if event.stripe_price_id %}
+                                                                <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                </div></a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if event.sale_release_date > now %}
+                                                            <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Coming Soon!</h6>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="p-2 rounded bg-danger text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
+                                                            </div>
+                                                        {% endif %}   
+                                                    {% endif %}       
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-auto d-none d-lg-block" style="max-height:250px;width:100%;">
-                                        <img class="img-fluid img-cover blog-small-image" src="{% static image %}" alt="">
+                                        <img class="img-fluid img-cover blog-small-image" src="{{ event.image.url }}" alt="">
                                     </div>
                                 </div>
                             </div>
@@ -102,76 +138,143 @@
             </div>
         </div>
         <div class="container-fluid p-0 bg-light">
-            <img class="img-fluid" src="{% static 'images/homepage/peaks-4.svg' %}">
+            <img class="img-fluid" src="{% static 'atc_site/images/homepage/peaks-4.svg' %}">
         </div>
 
         <div class="container-fluid pb-4 px-5 bg-light" id="blog">
-            <h1 class="text-center mb-4">All Blogs</h1>
-            <div class="mb-5 mx-5 px-1 py-2 rounded-pill bg-white" style="display:flex;justify-content:space-between">
-                <div class="d-flex px-1">
-                    <select name="categories" id="categories" class="btn btn-outline-primary rounded-pill me-2">
-                        <option value="">Categories</option>
-                        <option value="category1">Category 1</option>
-                        <option value="category2">Category 2</option>
-                        <option value="category3">Category 3</option>
-                    </select>
-                    <select name="tags" id="tags" class="btn btn-outline-primary rounded-pill me-2">
-                        <option value="">Tags</option>
-                        <option value="tag1">Tag 1</option>
-                        <option value="tag2">Tag 2</option>
-                        <option value="tag3">Tag 3</option>
-                    </select>
-                </div>
-                <div class="d-flex">
-                    <select name="sort" id="sort" class="btn btn-outline-primary rounded-pill me-2">
-                        <option value="">Sort By</option>
-                        <option value="date">Date</option>
-                        <option value="title">Title</option>
-                        <option value="author">Author</option>
-                    </select>
-                    <input type="text" name="search" id="search-input" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search">
-                    <div id="search-results" class="position-absolute w-100 bg-white border rounded-top" style="display: none;"></div>
+            <h1 class="text-center mb-4">All Our Events</h1>
+            <div class="row px-5 mr-3 event-search-bar" id="search-bar">
+                <div class="mb-5 px-1 py-2 rounded-pill bg-white" style="display:flex;justify-content:space-between">
+                    <div class="d-flex px-1">
+                        <select name="categories" id="categories" class="btn btn-outline-primary rounded-pill me-2">
+                            <option value="">Categories</option>
+                            <option value="category1">Music</option>
+                            <option value="category2">Sport</option>
+                            <option value="category3">Academics</option>
+                            <option value="category4">Social</option>
+                        </select>
+                        <select name="tags" id="tags" class="btn btn-outline-primary rounded-pill me-2">
+                            <option value="">Tags</option>
+                            <option value="tag1">Year 10</option>
+                            <option value="tag2">Year 11</option>
+                            <option value="tag3">Year 12</option>
+                            <option value="tag4">Parents and Friends</option>
+                        </select>
+                    </div>
+                    <div class="d-flex">
+                        <select name="sort" id="sort" class="btn btn-outline-primary rounded-pill me-2">
+                            <option value="">Sort By</option>
+                            <option value="date">Date</option>
+                            <option value="title">Title</option>
+                            <option value="author">Author</option>
+                        </select>
+                        <input type="text" name="search" id="search-input" class="btn btn-outline-primary rounded-pill me-2" placeholder="Search">
+                        <div id="search-results" class="position-absolute w-100 bg-white border rounded-top" style="display: none;"></div>
+                    </div>
                 </div>
             </div>
             <div class="row blog-row" id="blog-container">
-                {% for blog in blogs %}
+                {% for event in events %}
                     <div class="col-md-6 flex">
                         <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
-                            <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
-                            <h3 class="mb-0" style="font-size:1.5rem">{{blog.title}}</h3>
-                            <div class="my-1 text-muted"><small>date2</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">&nbsp@{{author.value.username}}</small></div>
-                                <p class="card-text mb-auto my-1">{{blog.description}}</p>
-                                <div class="button-container" style="display: flex; justify-content: space-between;">                          
-                                    <a href="/blog/{{blog.id}}" class="stretched-link mt-2">Read More &#8594;</a>
-                                    <div class="LD-area text-dark">
-                                       
-                                        <div class="LD-area-sub"> <!-- if the current user has like or disliked then change the colour of their choice (e.g. change the colour of the displaike icon to red if the user disliked it)-->
-                                            <i class="fas fa-thumbs-up"></i> <span class="ms-1"> {{ likes.value }}</span>
-                                        </div>
-                                        <!--<div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #ffffff;"></div>-->
-                                        <div class="LD-area-sub">
-                                            <i class="fas fa-thumbs-down ms-2"></i> <span class="ms-1"> {{ dislikes.value }}</span>
+                            <div style="min-height: 40%">
+                                <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
+                                <h3 class="mb-0" style="font-size:1.5rem">{{event.name}}</h3>
+                                <div class="my-1 text-muted"><small>{{event.location}}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ event.date|date:"d F, Y" }}</small></div>
+                                    <p class="card-text mb-auto my-1">{{event.description}}</p>
+                                    <div class="button-container mt-2" style="display: flex; justify-content: space-between;">                          
+                                        <a href="/events/{{event.id}}/" class="stretched-link mt-2">Read More &#8594;</a>
+                                        <div class="LD-area text-dark">
+                                            {% if event.available_tickets < 0 %}
+                                                    <div class="p-2 rounded bg-danger text-center">
+                                                        <h6 class="m-0 p-0 text-center text-white">Sold Out</h6>
+                                                    </div>
+                                                {% else %}
+                                                    {% if event.sale_release_date < now and event.sale_end_date > now %}
+                                                        {% if event.target_groups.all|length >= 1 %}
+                                                            {% if user|in_target_groups:event %}
+                                                                {% if event.stripe_price_id %}
+                                                                    <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                        <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                    </div></a>
+                                                                {% endif %}
+                                                            {% else %}
+                                                                <div class="p-2 rounded bg-danger text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Not Available</h6>
+                                                                </div>
+                                                            {% endif %} 
+                                                        {% else %}
+                                                            {% if event.stripe_price_id %}
+                                                                <a href="{% if event.stripe_price_id %}/events/{{ event.id }}/checkout/{%else%}{% url 'error_404' %}{%endif%}" style="z-index:5"><div class="p-2 rounded bg-secondary text-center">
+                                                                    <h6 class="m-0 p-0 text-center text-white">Tickets: ${{ event.ticket_price }}</h6>
+                                                                </div></a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if event.sale_release_date > now %}
+                                                            <div id="countdown-{{event.id}}" class="p-2 rounded bg-primary text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Coming Soon!</h6>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="p-2 rounded bg-danger text-center">
+                                                                <h6 class="m-0 p-0 text-center text-white">Sale Ended</h6>
+                                                            </div>
+                                                        {% endif %}   
+                                                    {% endif %}       
+                                                {% endif %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-auto d-none d-lg-block">
-                            
-                            <img class="img-fluid img-cover blog-small-image" src="{% static image %}" alt="">
+                            <div class="col-auto d-none d-lg-block" style="max-height:60%;">  <!-- remove max-height? -->                   
+                                <img class="img-fluid img-cover blog-small-image" style="width:100%;object-fit:cover;" src="{{ event.image.url }}" alt="">
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-
-
-           
-
             </div>
         <div>
     {% endif %}
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            {% for event in events %}
+                {% if event.sale_release_date > now %}
+                    createCountdown('{{ event.sale_release_date.isoformat }}', '{{ event.id }}');
+                {% endif %}
+            {% endfor %}
+        });
+
+        function createCountdown(sale_release_date, id) {
+            var countDownDate = new Date(sale_release_date).getTime();
+    
+            var countdownFunction = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = countDownDate - now;
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+                var countdownElement = document.getElementById("countdown-" + id);
+                if (countdownElement) {
+                    countdownElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+                } else {
+
+                    clearInterval(countdownFunction); // Stop interval if element is not found
+                }
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    if (countdownElement) {
+                        window.location.reload();
+                    }
+                }
+            }, 1000);
+        }
+    
+
         const blogs = document.querySelectorAll('.blog');
         const blogsPerPage = 4;
         let currentPage = 1;
@@ -224,7 +327,7 @@
                 window.location.href = "/login";
             }
         }
-        
+
         
     </script>
 {% endblock %}

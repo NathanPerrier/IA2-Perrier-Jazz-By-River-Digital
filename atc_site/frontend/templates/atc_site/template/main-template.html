@@ -3,6 +3,7 @@
   <head>
     
     {% load static %}
+    {% load user_filters %}
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +19,8 @@
 
     <title>Ambrose Treacy College</title>
 
+    {% block styles %}{% endblock %}
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -27,6 +30,7 @@
     <link rel="stylesheet" href="{% static '//atc_site//css//homepage//bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '//atc_site//css//homepage//style.css' %}"> 
     <link rel="stylesheet" href="{% static '//atc_site//css//homepage//stories//stories.css' %}">
+
   </head>
   <body>
 
@@ -81,7 +85,7 @@
                                     {% if user.avatar %}
                                         <img
                                         style="width:22.5px; border-radius:50%; margin-left: 8px; margin-bottom: 1.25px"
-                                        src="{% static avatar %}"
+                                        src="{{ user.avatar.url }}"
                                         alt="avatar" /></span>
                                     {% else %}
                                         
@@ -94,8 +98,17 @@
                                 <div class="dropdown-menu bg-light mt-2">
                                     <a href="/account" class="dropdown-item">Your Account</a>
                                     <a href="/account/manage" class="dropdown-item">Manage Account</a>
+                                    <a href="/account/billing/" class="dropdown-item">Billing Portal</a>
                                     {% if user.is_superuser %}
-                                        <a href="/admin/users" class="dropdown-item">Manage Users</a>
+                                        <a href="/admin" class="dropdown-item">Admin Pannel</a>
+                                        <a href="/admin/events/" class="dropdown-item">Manage Events</a>
+                                        <a href="/admin/dashboard/" class="dropdown-item">Admin Dashboard</a>
+                                        <a href="/events/create/" class="dropdown-item">Create An Event</a>
+                                    {% endif %}
+                                    {% if user|is_vendor %}
+                                        <a href="/vendor/dashboard/" class="dropdown-item">Vendor Dashboard</a>
+                                        <a href="/vendor/events/" class="dropdown-item">Manage Items</a>
+                                        <a href="/vendor/create/" class="dropdown-item">Add an Item</a>
                                     {% endif %}
                                     <a href="/booking/edit" class="dropdown-item">Manage Booking</a>  <!-- IF BOOKING EXISTS -->
                                     <a href="/logout/" class="dropdown-item">Logout</a>
@@ -106,7 +119,7 @@
                     <div class="login-box shake">
                         {% if not is_authenticated %}
                             <a type="button" href="/login" class="btn login-button" style="font-weight:1000;">Login</a>
-                            <a type="button" href="/register/" class="btn register-button" style="font-weight:1000;">Signup</a>
+                            <a type="button" href="/register/" class="btn text-dark register-button" style="font-weight:1000;">Register</a>
                         {% endif %}
                     </div>
                 </div>
@@ -153,7 +166,7 @@
                 </div>
                 <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.7s">
                     <h5 class="text-white mb-4">Get In Touch</h5>
-                    <p><i class="fa fa-map-marker-alt me-3"></i>Twigg St, Brisbane, Queensland</p>
+                    <p><i class="fa fa-map-marker me-3"></i>Twigg St, Brisbane, Queensland</p>
                     <p><i class="fa fa-phone me-3"></i><a class="text-white-50" href="tel:07 3878 0500" target="">(07) 3878 0500</a></p>
                     <p><i class="fa fa-envelope me-3"></i><a class="text-white-50" href="mailto:admin@atc.qld.edu.au">admin@atc.qld.edu.au</a></p>
                     <div class="d-flex pt-2">
@@ -164,7 +177,7 @@
                     <div class="position-relative w-100 mt-4">
                         <form method="post" onsubmit="addToNewsletter(); return false;" id="newsletter-form">
                             <input class="form-control border-0 rounded-pill w-100 ps-4 pe-5" type="email" name="email_news" placeholder="Enter Your Email" style="height: 48px;">
-                            <button type="submit" id="newsletter-form-submit" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa fa-paper-plane text-primary fs-4"></i></button>
+                            <button type="submit" id="newsletter-form-submit" class="btn shadow-none position-absolute top-0 end-0 mt-1 me-2"><i class="fa-solid fa-paper-plane fa-beat text-primary fs-4"></i></button>
                         </form>
                     </div>
                     <small class="text-white-50 m-3">Stay In Touch!</small>
@@ -183,7 +196,7 @@
                             <a href="/#About">About Us</a>
                             <a href="/terms and policies/terms and conditions">Terms and Conditions</a>
                             <a href="/weather/">Weather</a>
-                            <a href="/events">Events</a>
+                            <a href="/events/">Events</a>
                         </div>
                     </div>
                 </div>
@@ -194,10 +207,10 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" {% if is_authenticated %}style="right: 70px;"{% else %}style="right:15px"{% endif %} class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up text-white text-bold"></i></a>
 
       
-
+    <script src="https://kit.fontawesome.com/02870e7611.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'atc_site//js//homepage//main.js' %}"></script>
@@ -209,9 +222,14 @@
     <script src="{% static 'atc_site//js//jqBootstrapValidation.js' %}"></script>
     <script src="{% static 'atc_site//js//contact-form.js' %}"></script>
     <script src="{% static 'atc_site//js//homepage//main.js' %}"></script>
+    <script src="{% static 'atc_site//js//homepage//shadow.js' %}"></script>
+  
+    <script src="{% static '/atc_site/js/chatbot/main.js' %}"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
     <script>
         var contactAjaxUrl = "{% url 'contact_ajax' %}";
         var newsletterAjaxUrl = "{% url 'newsletter_ajax' %}";
@@ -255,7 +273,7 @@
                 alert("Please enter a valid email address");
                 return;
             }
-            fetch('newsletter_ajax/', { // Replace with the correct URL
+            fetch('/newsletter_ajax/', { // Replace with the correct URL
                 method: 'POST',
                 body: emailData,
                 headers: { 'X-CSRFToken': getCookie('csrftoken') },

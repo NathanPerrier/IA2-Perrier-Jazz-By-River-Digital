@@ -7,12 +7,14 @@ from pathlib import Path
 import socket
 import os
 
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 env_path = '.env'
 
 from decouple import config, Csv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'import_export', # test
     'django_otp',
     'django_otp.plugins.otp_static',
     'django_otp.plugins.otp_totp',
@@ -65,7 +68,6 @@ INSTALLED_APPS = [
     "atc_site.backend.atc.events",
     "atc_site.backend.atc.events.booking",
     "atc_site.backend",
-    "atc_site.backend.auth.forgot_password",
     "atc_site.unitTests",
 ]
 
@@ -91,6 +93,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ROOT_URLCONF = "atc_site.urls"
+
+# SITE_ID = 1
 
 default_app_config = 'atc_site.apps.ATC_SiteConfig'
 

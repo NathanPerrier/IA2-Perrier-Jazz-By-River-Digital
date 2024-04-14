@@ -19,7 +19,7 @@ def reset_messages(request):
 
     # Create a system MessageATC
     try:
-        Message.objects.create(role='system', content='You are a helpful weather assistant that has access to almost all weather data. You are to answer purely weather-based questions. Try to include figures in your response to justify your reasoning.', model=GPT_MODEL, user=request.user)
+        Message.objects.create(role='system', content='You are a helpful chatbot designed to assist users and admins with certain site abilities such as editing their account, creationg or editing a booking, etc.', model=GPT_MODEL, user=request.user)
     except Exception as e:
         print('error:', e)
         
@@ -30,8 +30,14 @@ def reset_messages(request):
 @csrf_exempt
 def chat(request):
     print(request.user.first_name)
+<<<<<<< HEAD
     user_message = request.POST.get('MessageATC')
     Message.objects.create(role='user', content=user_message, model=Message.objects.filter(user=request.user).all().order_by('timestamp').last().model, user=request.user)
+=======
+    user_messgae = request.POST.get('message')
+    print('user_messgae:', user_messgae)
+    Message.objects.create(role='user', content=user_messgae, model=Message.objects.filter(user=request.user).all().order_by('timestamp').last().model, user=request.user)
+>>>>>>> 05720b96496c712aa914421a8bf25c7fcfa85106
     
     previous_MessageATCs = Message.objects.filter(user=request.user).all().order_by('timestamp')
     if previous_MessageATCs.count() > 0:
@@ -49,7 +55,7 @@ def chat(request):
         bot_response = ChatbotATC(GPT_MODEL).chat_completion_request(request.POST.get('MessageATC'))
         Message.objects.create(role='assistant', content=bot_response, model=GPT_MODEL, user=request.user)
     print(Message.objects.all())
-    return JsonResponse({'MessageATC': bot_response})
+    return JsonResponse({'message': bot_response})
 
 @require_POST
 @csrf_exempt

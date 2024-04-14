@@ -1,0 +1,10 @@
+{% extends 'atc_site/template/login-signup.html' %}
+{% load static %}           
+{% block content %}                   
+    <img style="width: 150px;padding-bottom:5%;" class="logo" src="{% static '//atc_site//images/logos/atc-logo.svg' %}">   <!-- school logo -->
+    <form>   <!-- creates a form and calls upon the function contact_form_page and set's the method to POST-->
+        <h1 style="padding-bottom:5%;">Your Booking Has Been Canceled!</h1>
+        <p style="padding-bottom:5%;">Your booking has been successfully canceled, your money will be refunded with 3-5 business days.</p>
+        <a href="/" class="submit btn-a">Home</a>                                             
+    </form> 
+{% endblock %} 

@@ -2,13 +2,13 @@ from django.contrib import admin
 from django.urls import include, path
 from .views import stream_video_atc_site, contact_ajax, newsletter_ajax
 from atc_site.backend import views as atc_views
-from . import main
-from . import views
+from . import main, views, errors, dashboards
 
 urlpatterns = [
     path("", main.index, name="atc_index"),
     
     path('events/', include('atc_site.backend.atc.events.urls')),
+    path('booking/', include('atc_site.backend.atc.events.booking.urls')),
     path("", include('atc_site.backend.atc.chatbotATC.urls')),
 
     path("erea", main.erea, name="erea"),
@@ -44,8 +44,16 @@ urlpatterns = [
     path('forgot/get_email/', atc_views.forgot_password_get_email_view, name='forgot_password_get_email'),
     path('forgot/get_code/', atc_views.forgot_password_get_code_view, name='forgot_password_get_code'),
     path('forgot/set_password/', atc_views.forgot_password_set_password_view, name='forgot_password_set_password'),
+    path('forgot/confirmed', main.forgot_password_confirmed, name='forgot_password_confirmed'),
     
     path('account', main.account_page, name='account'),
+    path('account/billing/', views.billing_portal_view, name='billing_portal'),
+    path('account/manage', main.manage_account_page, name='manage_account'),
+    
+    path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
+    path('admin/dashboard/', dashboards.admin_dashboard, name='dashboard_admin'),
     
     path('logout/', views.logout_view, name='logout'),
+    
+    path('404', errors.handler404, name='error_404'),
 ]

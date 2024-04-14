@@ -67,7 +67,7 @@
             {% if user.avatar %}
                 <a class="nav-item nav-link mb-2 mt-auto" href="/weather/logout/"> <img
                 style="width:22.5px; border-radius:50%;"
-                src="{% static avatar %}"
+                src="{{ user.avatar.url }}"
                 alt="avatar" /></span></a>
             {% else %}
                 <a class="nav-item nav-link mb-2 mt-auto" href="/weather/logout/">

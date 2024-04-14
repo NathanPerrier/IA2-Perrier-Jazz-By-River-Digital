@@ -16,16 +16,15 @@
     new WOW().init();
 
 
-    // parallax video
+    // parallax image
     document.addEventListener('scroll', function() {
         const image = document.getElementById('parallaxVideo');
         const scrolled = window.scrollY;
         
         const scaleFactor = 1 + (scrolled * 0.0005);
-        const top = -50 - scaleFactor;
-        
-        image.style.transform = `translate3d(0, ${scrolled * -0.6}px, 0) scale(${scaleFactor * 1.25})`;
-        image.style.transform = `tranlateY(${top}px)`;
+        const top = scaleFactor/1.25;
+        image.style.display = 'block';
+        image.style.transform = `translate3d(0, ${scrolled * -0.6}px, 0) translateY(${top}px)  scale(${top * 1.25})`;
       });
       
 
@@ -50,11 +49,13 @@
             $('.account').removeClass('text-primary').css('top', '-150px');
             $('.account').addClass('text-light').css('top', '0px');
             $('.login-button').removeClass('text-primary border-primary').css('top', '-150px');
-            $('.register-button').removeClass('text-white bg-primary border-primary').css('top', '-1500px');
+            $('.register-button').removeClass('text-white bg-primary border-primary').css('top', '-150px');
+            $('.register-button').addClass('text-dark').css('top', '-150px');
             $('.navbar-toggler-icon').removeClass('navbar-toggler-icon-dark').css('top', '-150px');  
             $('.navbar-toggler-icon').addClass('navbar-toggler-icon-light').css('top', '-150px');  
         }
     });
+
     $(window).scroll(function () {
         if ($(this).scrollTop() == 0) {
             $('.home-link').removeClass('bi-house').css('top', '0px');
@@ -92,7 +93,7 @@
     $(".testimonial-carousel").owlCarousel({
         items: 1,
         autoplay: true,
-        smartSpeed: 2000,
+        smartSpeed: 6000,
         dots: false,
         loop: true,
         nav: false,
