@@ -30,8 +30,8 @@ def reset_messages(request):
 @csrf_exempt
 def chat(request):
     print(request.user.first_name)
-    user_messgae = request.POST.get('MessageATC')
-    Message.objects.create(role='user', content=user_messgae, model=Message.objects.filter(user=request.user).all().order_by('timestamp').last().model, user=request.user)
+    user_message = request.POST.get('MessageATC')
+    Message.objects.create(role='user', content=user_message, model=Message.objects.filter(user=request.user).all().order_by('timestamp').last().model, user=request.user)
     
     previous_MessageATCs = Message.objects.filter(user=request.user).all().order_by('timestamp')
     if previous_MessageATCs.count() > 0:
