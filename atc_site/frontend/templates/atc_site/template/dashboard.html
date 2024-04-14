@@ -269,6 +269,7 @@
 
 
       {% block content %}{% endblock %}
+      {% include 'atc_site/chatbot/chat.html' %}
 
       <footer class="footer pt-3  ">
         <div class="container-fluid">
@@ -319,17 +320,18 @@
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-  
-<script src="{% static '/soft-ui-pro/js/core/popper.min.js' %}"></script>
-<script src="{% static '/soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
-<script src="{% static '/soft-ui-pro/js/plugins/perfect-scrollbar.min.js' %}"></script>
-<script src="{% static '/soft-ui-pro/js/plugins/smooth-scrollbar.min.js' %}"></script>
-<script src="{% static '/soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
+  <script src="{% static '/atc_site/js/chatbot/main.js' %}"></script>
+    
+  <script src="{% static '/soft-ui-pro/js/core/popper.min.js' %}"></script>
+  <script src="{% static '/soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
+  <script src="{% static '/soft-ui-pro/js/plugins/perfect-scrollbar.min.js' %}"></script>
+  <script src="{% static '/soft-ui-pro/js/plugins/smooth-scrollbar.min.js' %}"></script>
+  <script src="{% static '/soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
 
-<script src="{% static '/soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
-<script src="{% static '/soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
-<script src="{% static '/soft-ui-pro/js/plugins/chartjs.min.js' %}"></script>
-<script>
+  <script src="{% static '/soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
+  <script src="{% static '/soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
+  <script src="{% static '/soft-ui-pro/js/plugins/chartjs.min.js' %}"></script>
+  <script>
     var ctx1 = document.getElementById("chart-line-1").getContext("2d");
 
     var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);

@@ -42,11 +42,18 @@
 .back-to-top {
     position: fixed;
     display: none;
-    right: 45px;
-    bottom: 45px;
+    right: 70px;
+    bottom: 20px;
+    width: 45px;
+    height: 45px;
+    padding: 9px;
     z-index: 99;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
 }
 
+.back-to-top:hover {
+    background: var(--secondary);
+}
 
 /*** Heading ***/
 h1,
