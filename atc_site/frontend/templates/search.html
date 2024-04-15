@@ -52,7 +52,7 @@
             searchButton.addEventListener('click', function(event) {
                 event.preventDefault();
                 var query = searchInput.value;
-                window.location.href = '/search/' + encodeURIComponent(query);
+                window.location.href = '/weather/search/' + encodeURIComponent(query);
             });
 
             setTimeout(function() {
