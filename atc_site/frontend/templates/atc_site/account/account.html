@@ -116,7 +116,7 @@
                         <!--<p class="card-text mb-auto my-1">Total: ${{ booking.payment.amount }}</p>-->
                         <!--<p class="card-text mb-auto my-1">{{booking.event.description}}</p>-->
                 
-                        <div class="button-container" style="display: flex; justify-content: space-between;">                          
+                        <div class="button-container mt-2" style="display: flex; justify-content: space-between;">                          
                           <a href="/booking/{{ booking.id }}/" class="stretched-link mt-2">View Booking &#8594;</a>
                           <div class="LD-area text-white">
                             <div class="p-2 rounded bg-secondary text-center">  <!-- change color based on status -->
@@ -125,7 +125,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-auto d-none d-lg-block">
+                      <div class="col-auto d-none d-lg-block" style="max-width: 35%">
                         <img class="img-fluid img-cover blog-small-image" src="{{ booking.event.image.url }}" alt="">
                       </div>
                     </div>
