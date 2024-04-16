@@ -45,20 +45,6 @@ class ChatbotATC:
                         timestep=function_args.get("timestep"),
                     )
 
-                elif function_name in  ['get_current_weather', 'get_daily_weather_forecast', 'get_hourly_weather_forecast']:
-                    function_response = function_to_call(
-                        location=function_args.get("location"),
-                        unit=function_args.get("unit", "metric"),
-                        fields=function_args.get("fields"),
-                    )
-                    
-                   
-                elif function_name == 'get_weather_on_route':
-                    function_response = function_to_call(
-                        startLocation=function_args.get("startLocation"),
-                        endLocation=function_args.get("endLocation"),
-                        mode=function_args.get("mode"),
-                    )
                 else:
                     function_response = function_to_call()
                             
