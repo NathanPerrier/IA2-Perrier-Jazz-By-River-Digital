@@ -6,7 +6,7 @@ IA2 - Digital Solutions - Year 12 - QCAA
 
 ## Description
 
-This is an event booking and ticketing website for Ambrose Treacy College, a Brisbane Boys School. The website allows users to book tickets for various events organized by the school. It is built using Django framework and follows the MVC design pattern. The website also includes user authentication features to ensure secure access to the booking system.
+This is an event booking and ticketing website for Ambrose Treacy College, a Brisbane Boys School. The website allows users to book tickets for various events organized by the school. It is built using Django framework and follows the MVC design pattern. The website also includes user authentication features to ensure secure access to the booking system. Built upon the stripe API integration pattern to process payments and invoices.
 
 The application uses various APIs and AI technologies to provide users with accurate and up-to-date data.
 
