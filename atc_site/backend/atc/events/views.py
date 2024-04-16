@@ -26,7 +26,7 @@ def create_ticket_checkout_session(request, event_id):
     allowed_groups = event.target_groups.all()
     if event.available_tickets > 0:
         if event.sale_release_date < timezone.now() and event.sale_end_date > timezone.now():
-            if (request.user.is_superuser or request.user in event.organizer) or (event.target_groups and request.user.groups.filter(id__in=[group.id for group in allowed_groups]).exists()) or not event.target_groups:
+            if request.user.is_superuser or request.user == event.organizer or (event.target_groups and request.user.groups.filter(id__in=allowed_groups).exists()) or event.target_groups.count() == 0:
                 additional_items = []
                 
                 for item in EventFoodAndDrinks.objects.filter(event=event):

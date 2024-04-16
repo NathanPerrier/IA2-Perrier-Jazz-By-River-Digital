@@ -1,7 +1,7 @@
 from ..config import *
 
 class EventVoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('name', 'description', 'event', 'stripe_price_id')
+    list_display = ('name', 'description', 'price', 'event', 'stripe_price_id')
     search_fields = ('name', 'description')
     
     
@@ -23,7 +23,7 @@ class EventVoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             
             price = stripe.Price.create(
                 product=product.id,
-                unit_amount=5000,
+                unit_amount=int(obj.price)*100,
                 currency="aud",
             )
             
@@ -43,7 +43,7 @@ class EventVoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             )
             price = stripe.Price.create(
                 product=product.id,
-                unit_amount=5000,
+                unit_amount=int(obj.price)*100,
                 currency="aud",
             )
             

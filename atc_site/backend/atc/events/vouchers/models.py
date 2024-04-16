@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import make_password, check_password
 class EventVoucher(models.Model):
     name = models.CharField(max_length=200, blank=False)
     description = models.TextField(blank=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
     stripe_price_id = models.CharField(max_length=256, blank=True, null=True)
     
