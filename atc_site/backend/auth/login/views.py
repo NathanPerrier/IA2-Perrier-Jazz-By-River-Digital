@@ -8,7 +8,7 @@ from ...weather_app.main import index as indexWeather
 
 def loginViewWeather(request, error=None):
     if request.method == 'POST':
-        user = authenticate(request, email=request.POST['email'], password=request.POST['password']) #CustomUserManager().authenticate(email=request.POST['email'], password=request.POST['password']) 
+        user = authenticate(request, email=request.POST['email'].lower(), password=request.POST['password']) #CustomUserManager().authenticate(email=request.POST['email'], password=request.POST['password']) 
         if user is not None:
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             loginRequest(request, user, backend='django.contrib.auth.backends.ModelBackend')
@@ -20,7 +20,7 @@ def loginViewWeather(request, error=None):
 
 def loginViewATC(request, error=None):
     if request.method == 'POST':
-        user = authenticate(request, email=request.POST['email'], password=request.POST['password']) #CustomUserManager().authenticate(email=request.POST['email'], password=request.POST['password']) 
+        user = authenticate(request, email=request.POST['email'].lower(), password=request.POST['password']) #CustomUserManager().authenticate(email=request.POST['email'], password=request.POST['password']) 
         if user is not None:
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             loginRequest(request, user, backend='django.contrib.auth.backends.ModelBackend')

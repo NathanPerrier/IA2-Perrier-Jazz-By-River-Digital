@@ -22,19 +22,19 @@ from ...auth.register.models import RegisterAuth
 
 def register_get_email_view(request, error=''):
     if request.method == 'POST':
-        success, error = RegisterAuth.create_and_send_reset_code(request.POST['first_name'], request.POST['last_name'], request.POST['email'])
+        success, error = RegisterAuth.create_and_send_reset_code(request.POST['first_name'], request.POST['last_name'], request.POST['email'].lower())
         return JsonResponse({'success': success, 'error': error})
     return register_page_weather(request) if 'weather' in request.path else register_page_atc(request)
 
 def register_get_code_view(request):    
     if request.method == 'POST':
-        success, error = RegisterAuth.check_code_entry(request.POST['email'], request.POST['code'])
+        success, error = RegisterAuth.check_code_entry(request.POST['email'].lower(), request.POST['code'])
         return JsonResponse({'success': success, 'error': error})
     return register_page_weather(request) if 'weather' in request.path else register_page_atc(request)
 
 def register_set_password_view(request):
     if request.method == 'POST':
-        user = CustomUser.objects.check_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'], password=request.POST['password'])
+        user = CustomUser.objects.check_user(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'].lower(), password=request.POST['password'])
         email = EmailAddress(user=user, email=user.email, primary=True, verified=True)
         email.save()
         create_stripe_customer(user)
