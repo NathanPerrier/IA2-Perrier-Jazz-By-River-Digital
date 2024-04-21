@@ -2,14 +2,15 @@
 {% load static %}
 {% load user_filters %}
 {% block content %}
+<link rel="stylesheet" id="pagestyle" href="{% static 'soft-ui-pro/css/soft-ui-dashboard-lite.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'atc_site/css/account/style.css' %}">
 <div class="container-fluid pt-5 bg-primary hero-header">
 	<div class="container pt-5">
 		<div class="row g-5 pt-5">
 			<div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
 				<h1 class="display-4 text-white mb-4 animated slideInRight">Manage Account</h1>
-				<nav aria-label="breadcrumb">
-					<ol class="breadcrumb justify-content-center justify-content-lg-start mb-0">
+				<nav aria-label="breadcrumb" class="mt-0 ms-0 pl-0">
+					<ol class="breadcrumb justify-content-center justify-content-lg-start mb-0 mt-0 ms-0" style="background:rgba(0,0,0,0)">
 						<li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
 						<li class="breadcrumb-item"><a class="text-white" href="/account">Account</a></li>
 						<li class="breadcrumb-item text-white active" aria-current="page">Manage</li>
@@ -64,53 +65,58 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>First Name*</label>
+							<label>First Name <span class="text-danger">*</span></label>
 							<input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name" value="{{user.first_name}}">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Last Name*</label>
+							<label>Last Name <span class="text-danger">*</span></label>
 							<input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name" value="{{user.last_name}}">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Email*</label>
+							<label>Email <span class="text-danger">*</span></label>
 							<input type="text" class="form-control" id="email" name="email" placeholder="Email" value="{{user.email}}">
 							{% if error == 'Email already in use' %}	
 								<p class="text-danger mt-1">{{error}}</p>
 							{% endif %}
 						</div>
 					</div>
-					
-					<div class="col-md-6">
-						<div class="form-group row">
-							<label for="address" class="mr-2">Address</label>
-							<div class="col-sm-2 py-1">
-								<input type="text" class="form-control" id="street_number" name="street_number" placeholder="Number" value="{{address.street_number}}">
-								<input type="hidden" id="current_street_number" value="{{ address.street_number }}">
-							</div>
-							<div class="col-sm-4 px-1 py-1">
-								<input type="text" class="form-control" id="street_name" name="street_name" placeholder="Street" value="{{address.street_name}}">
-								<input type="hidden" id="current_street_name" value="{{ address.street_name }}">
-							</div>
-							<div class="col-sm-3 py-1 px-1">
-								<input type="text" class="form-control" id="suburb" name="suburb" placeholder="Suburb" value="{{address.suburb}}">
-								<input type="hidden" id="current_suburb" value="{{ address.suburb }}">
-							</div>
-							<div class="col-sm-3 py-1 px-1">
-								<input type="text" class="form-control" id="postcode" name="postcode" placeholder="Postcode" value="{{address.postcode}}">
-								<input type="hidden" id="current_postcode" value="{{ address.postcode }}">
+
+					{% if stripe_customer.address %}
+						<div class="col-md-6">
+							<div class="form-group row">
+								<label for="address" class="mr-2">Address</label>
+								<div class="col-sm-2 py-1">
+									<input type="text" class="form-control" id="street_number" name="street_number" placeholder="Number" value="{{ stripe_customer.address.line1|split:' '|first }}">
+									<input type="hidden" id="current_street_number" value="{{ stripe_customer.address.line1|split:' '|first }}">
+								</div>
+								<div class="col-sm-4 px-1 py-1">
+									<input type="text" class="form-control" id="street_name" name="street_name" placeholder="Street" value="{{ stripe_customer.address.line1|split:' '|slice:'1:'|join:' ' }}">
+									<input type="hidden" id="current_street_name" value="{{ stripe_customer.address.line1|split:' '|slice:'1:'|join:' ' }}">
+								</div>
+								<div class="col-sm-3 py-1 px-1">
+									<input type="text" class="form-control" id="city" name="city" placeholder="City" value="{{ stripe_customer.address.city }}">
+									<input type="hidden" id="current_city" value="{{ stripe_customer.address.city }}">
+								</div>
+								<div class="col-sm-3 py-1 px-1">
+									<input type="text" class="form-control" id="postcode" name="postcode" placeholder="Postcode" value="{{ stripe_customer.address.postal_code}}">
+									<input type="hidden" id="current_postcode" value="{{ stripe_customer.address.postal_code }}">
+								</div>
 							</div>
 						</div>
-					</div>
+					{% endif %}
+
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>Phone Number</label>
-							<input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{user.phone_number}}">
+							<input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number" value="{{ stripe_customer.phone }}">
 						</div>
 					</div>
+				
+
 					{% if user|is_student %}
 						<div class="col-md-6">
 							<div class="form-group">
@@ -188,15 +194,14 @@
 		</div>
 		<div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab" style="width:75.4vw;">
 			<h3 class="mb-4">Change Profile Picture</h3>
-			<form action="{{ url_for('account.validate_picture_update' %}" method="POST" enctype="multipart/form-data">
+			<form action="{{ url_for('account.validate_picture_update' %}" method="POST" enctype="multipart/form-data" class="form-control dropzone" id="dropzone">
 				{{ formPicture.csrf_token }}
 		
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
-							<div class="form-group">
-								<label class="mb-1">Upload an Image</label><br>
-								<input type="file" id="file-input" name="picture" accept="image/*" />
+							<div class="fallback">
+								<input name="file" type="file" id="file-upload" />
 							</div>
 							<div class="form-check">
 								<input class="form-check-input" type="checkbox" name="checkbox" id="defaultCheck2" >
@@ -234,7 +239,10 @@
 		</div>
 	</div>
 </div>
-
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="{% static 'soft-ui-pro/js/core/popper.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/dropzone.min.js' %}"></script>
 <script>
 	document.getElementById('cancel-button-account').addEventListener('click', function() {
 		window.location.reload()
@@ -252,6 +260,7 @@
 			window.location.href = "/account/manage/delete";
 		}
 	}
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

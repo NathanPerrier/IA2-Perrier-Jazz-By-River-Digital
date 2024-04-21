@@ -56,3 +56,7 @@ def in_target_groups(user, event):
 def rangefilter(value):
     return range(1, value + 1)
 
+
+@register.filter
+def split(value, key):
+    return value.split(key)
