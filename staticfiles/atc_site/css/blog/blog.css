@@ -34,6 +34,15 @@
     color: #ff0000 !important;
 }
 
+.row > #child-element, .row > #big-child-element {
+  display: flex;
+  flex-direction: column;
+}
+
+.row > #child-element > .d-flex, .row > #big-child-element > .d-flex {
+  flex-grow: 1;
+}
+
 @media (max-width: 740px) {
   #search-bar, .event-search-bar {
     display: none;

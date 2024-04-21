@@ -118,7 +118,7 @@
                             {% if day.now %}
                               Today
                             {% else %}
-                              {{ day.date }}
+                              {{ day.date|add_day|date:"d M, Y" }}
                             {% endif %}
                           </span>
                           {% if day.now %}
@@ -126,7 +126,7 @@
                           {% else %}
                             <span class="temp">
                               {% if day.temp_min %}
-                                {{ day.temp_min }}/
+                                {{ day.temp_min }}°C/
                               {% endif %}
                               {{day.temp_max}}°C
                             </span>
@@ -148,6 +148,7 @@
                           <img src="{% static icon_path %}" alt="Weather Icon">
                         {% endwith %}
                       </div>
+                      <div class="description mt-0 mb-1 text-bold">{{ day.date|add_day|date:"l" }}</div>
                       <div class="description mt-0">{{ day.short_text }}</div>
                       <div class="bottom-info">
                         <span class="humidity">Rain: {{ day.rain.chance }}%</span>
@@ -195,7 +196,7 @@
         <div class="locations pt-0 mt-0">
           <div class="left pt-0">
             <div class="top">
-              <a href="/search/Hervey%20Bay%20QLD%2C%20Australia%2C%20Home"><div class="location card-location">  <!-- LINK!! -->
+              <a href="/weather/search/Hervey%20Bay%20QLD%2C%20Australia%2C%20Home"><div class="location card-location">  <!-- LINK!! -->
                   <div class="temp-symbol">
                     <span class="temperature">{{ hervey_bay.0.temp }}°C</span>
                     {% if hervey_bay.0.icon_descriptor == 'partly_cloudy' or hervey_bay.0.icon_descriptor == 'mostly_sunny' or hervey_bay.0.icon_descriptor == 'cloudy' %}
@@ -220,7 +221,7 @@
               </div></a>
             </div>
             <div class="bottom">
-              <a href="/search/Perth%2C%20Home"><div class="location card-location">
+              <a href="/weather/search/Perth%2C%20Home"><div class="location card-location">
                 <div class="temp-symbol">
                   <span class="temperature">{{ perth.0.temp }}°C</span>
                     {% if perth.0.icon_descriptor == 'partly_cloudy' or perth.0.icon_descriptor == 'mostly_sunny' or perth.0.icon_descriptor == 'cloudy' %}
@@ -247,7 +248,7 @@
           </div>
           <div class="middle">
             <div class="top">
-              <a href="/search/Melbourne%2C%20Home"><div class="location card-location">
+              <a href="/weather/search/Melbourne%2C%20Home"><div class="location card-location">
                 <div class="temp-symbol">
                   <span class="temperature">{{ melbourne.0.temp }}°C</span>
                   {% if melbourne.0.icon_descriptor == 'partly_cloudy' or melbourne.0.icon_descriptor == 'mostly_sunny' or melbourne.0.icon_descriptor == 'cloudy' %}
@@ -272,7 +273,7 @@
               </div></a>
             </div>
             <div class="bottom">
-              <a href="/search/Gold%20Coast%20QLD%2C%20Australia%2C%20Home"><div class="location card-location">
+              <a href="/weather/search/Gold%20Coast%20QLD%2C%20Australia%2C%20Home"><div class="location card-location">
                 <div class="temp-symbol">
                   <span class="temperature">{{ gold_coast.0.temp }}°C</span>
                   {% if gold_coast.0.icon_descriptor == 'partly_cloudy' or gold_coast.0.icon_descriptor == 'mostly_sunny' or gold_coast.0.icon_descriptor == 'cloudy' %}
@@ -299,7 +300,7 @@
           </div>
           <div class="right">
             <div class="top">
-              <a href="/search/sydney%2C%20Home"><div class="location card-location">
+              <a href="/weather/search/sydney%2C%20Home"><div class="location card-location">
                 <div class="temp-symbol">
                   <span class="temperature">{{ sydney.0.temp }}°C</span>
                   {% if sydney.0.icon_descriptor == 'partly_cloudy' or sydney.0.icon_descriptor == 'mostly_sunny' or sydney.0.icon_descriptor == 'cloudy' %}
@@ -324,7 +325,7 @@
               </div></a>
             </div>
             <div class="bottom">
-              <a href="/search/Brisbane%20City%2C%20Home"><div class="location card-location">
+              <a href="/weather/search/Brisbane%20City%2C%20Home"><div class="location card-location">
                 <div class="temp-symbol">
                   <span class="temperature">{{ forecast_hourly.0.temp }}°C</span>
                   {% if forecast_daily.0.icon_descriptor == 'partly_cloudy' or forecast_daily.0.icon_descriptor == 'mostly_sunny' or forecast_daily.0.icon_descriptor == 'cloudy' %}
@@ -473,7 +474,7 @@
           "type": 'raster',
           "tiles": [`https://api.tomorrow.io/v4/map/tile/{z}/{x}/{y}/${DATA_FIELD}/${TIMESTAMP}.png?apikey=${API_KEY}`],
           "tileSize": 256,
-          "attribution": '&copy; <a href="http://127.0.0.1:8000/atc/">Powered by Ambrose Treacy College</a>'
+          "attribution": '&copy; <a href="http://127.0.0.1:8000/">Powered by Ambrose Treacy College</a>'
       });
       map.addLayer({
           "id": "radar-tiles",

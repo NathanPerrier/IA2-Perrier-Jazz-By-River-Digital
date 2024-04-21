@@ -18,3 +18,11 @@ def add_date(date):
     created_date += timedelta(minutes=2)
     
     return created_date
+
+@register.filter
+def add_day(date):
+    created = datetime.strptime(date, "%Y-%m-%dT%H:%M:%SZ")
+    # Add 2 days
+    created_date = created + timedelta(days=1)
+    
+    return created_date

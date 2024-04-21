@@ -42,7 +42,6 @@
 .back-to-top {
     position: fixed;
     display: none;
-    right: 70px;
     bottom: 20px;
     width: 45px;
     height: 45px;
