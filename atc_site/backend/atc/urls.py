@@ -55,6 +55,7 @@ urlpatterns = [
     
     path('vendor/dashboard/', vendor.vendor_dashboard, name='dashboard_vendor'),
     path('vendor/dashboard/items/', vendor.vendor_items, name='vendor_items'),
+    path('vendor/dashboard/items/create/', vendor.create_item, name='create_item'),
     path('vendor/dashboard/orders/', vendor.vendor_orders, name='vendor_orders'),
     path('vendor/dashboard/orders/<int:order_id>/', vendor.vendor_order, name='vendor_order'),
     

@@ -98,13 +98,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {% if title == 'Users' %}active{% endif %}" href="/vendor/dashboard/items/">
+                <a class="nav-link {% if title == 'Manage Items' %}active{% endif %}" href="/vendor/dashboard/items/">
                   <span class="sidenav-mini-icon"> I </span>
                   <span class="sidenav-normal"> Manage Items </span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link {% if title == 'Users' %}active{% endif %}" href="/vendor/dashboard/orders/">
+                <a class="nav-link {% if title == 'Manage Orders' %}active{% endif %}" href="/vendor/dashboard/orders/">
                   <span class="sidenav-mini-icon"> O </span>
                   <span class="sidenav-normal"> Manage Orders </span>
                 </a>
@@ -178,7 +178,10 @@
       
       {% block content %}{% endblock %}
       {% include 'atc_site/chatbot/chat.html' %}
-      
+
+      <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div>
+      <div class="ps__rail-y" style="top: 0px; height: 718px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 432px;"></div></div>
+
       <footer class="footer pt-3  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -254,18 +257,15 @@
     
     <script src="{% static 'soft-ui-pro/js/core/popper.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
-    <script src="{% static 'soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
-    <script src="{% static 'soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/chartjs.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/choices.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/countup.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/datatables.js' %}"></script>
-    <script src="{% static 'soft-ui-pro/js/plugins/dragula.min.js' %}"></script>  
     <script src="{% static 'soft-ui-pro/js/plugins/dropzone.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/flatpickr.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/moment.min.js' %}"></script>
-    <script src="{% static 'soft-ui-pro/js/plugins/multistep-form.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/multistep-form.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/nouislider.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/orbit-controls.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/perfect-scrollbar.min.js' %}"></script>
@@ -276,6 +276,11 @@
     <script src="{% static 'soft-ui-pro/js/plugins/smooth-scrollbar.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/sweetalert.min.js' %}"></script>
     <script src="{% static 'soft-ui-pro/js/plugins/threejs.js' %}"></script>
+
+    {% block scripts %}{% endblock %}
+
+    <script src="{% static 'soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
+    <script src="{% static 'soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
     
     <script src="{% static 'soft-ui-pro/js/soft-ui-dashboard.min.js' %}"></script>
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"87203683cfeaa870","version":"2024.3.0","token":"1b7cbb72744b40c580f8633c6b62637e"}' crossorigin="anonymous"></script>

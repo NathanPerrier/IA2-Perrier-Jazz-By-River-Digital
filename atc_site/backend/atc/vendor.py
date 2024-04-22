@@ -17,13 +17,13 @@ def vendor_dashboard(request):
 @login_required
 def vendor_items(request):
     if request.user.groups.filter(name='Vendor').exists():
-        return render(request, 'atc_site//vendor//manage_items.html', {'title': 'Vendor Items', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
+        return render(request, 'atc_site//vendor//manage_items.html', {'title': 'Manage Items', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required 
 def vendor_orders(request):
     if request.user.groups.filter(name='Vendor').exists():
-        return render(request, 'atc_site//vendor//manage_orders.html', {'title': 'Vendor Orders', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
+        return render(request, 'atc_site//vendor//manage_orders.html', {'title': 'Manage Orders', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -32,3 +32,16 @@ def vendor_order(request, order_id):
         return render(request, 'atc_site//vendor//manage_order.html', {'title': 'Vendor Order', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+
+
+@login_required
+def create_item(request):
+    if request.user.groups.filter(name='Vendor').exists():
+        return render(request, 'atc_site//vendor//create_item.html', {'title': 'Create Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def edit_item(request, item_id):
+    if request.user.groups.filter(name='Vendor').exists():
+        return render(request, 'atc_site//vendor//edit_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
