@@ -51,7 +51,7 @@ class CustomUserManager(BaseUserManager):
             if re.match(pattern, email):
                 return True
         return False
-    
+
     def is_teacher(self, first_name, last_name, email):
         pattern = r'^' + re.escape(last_name.lower() + first_name[0].lower()) + r'@atc\.qld\.edu\.au$'
         return re.match(pattern, email) is not None

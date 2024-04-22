@@ -31,7 +31,6 @@ def admin_dashboard(request):
 
 
 
-# Methods
 
 
 def get_customers_percentage_increase():
