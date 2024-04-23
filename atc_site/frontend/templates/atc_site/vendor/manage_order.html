@@ -46,14 +46,14 @@
                     <hr class="horizontal dark mt-4 mb-4">
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-12">
-                            <h6 class="mb-3">Track Booking</h6>
+                            <h6 class="mb-3">Track Order</h6>
                             <div class="timeline timeline-one-side">
                                 <div class="timeline-block mb-3">
                                     <span class="timeline-step">
                                     <i class="ni ni-bell-55 text-secondary"></i>
                                     </span>
                                     <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Booking received</h6>
+                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Order received</h6>
                                         <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{booking_order.booking.creation_time}}</p>
                                     </div>
                                 </div>
@@ -70,22 +70,11 @@
                                     </div>
                                     <div class="timeline-block mb-3">
                                         <span class="timeline-step">
-                                        <i class="ni ni-html5 text-secondary"></i>
-                                        </span>
-                                        <div class="timeline-content">
-                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Booking Confirmed</h6>
-                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{booking.creation_time|date:"F j, Y"}}</p>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-block mb-3">
-                                        <span class="timeline-step">
                                             <i class="ni ni-check-bold text-success text-gradient"></i>
                                         </span>
                                         <div class="timeline-content">
-                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Ticket Sent</h6>
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Order Confirmed</h6>
                                             <p class="text-secondary font-weight-bold text-xs mt-1 mb-2">{{  invoice.created|add_date|date:"F j, Y" }}</p>
-                                            <p class="text-sm mb-2">Didn't recieve your ticket? <a href="{{ invoice.hosted_invoice_url }}" target="_blank" class="text-secondary font-weight-bold text-xs mt-1 mb-0">Download Ticket</a></p>
-                                            <p class="text-sm">Note: Your event ticket is your receipt. Please bring it with you to the event.</p>
                                         </div>
                                     </div>
                                 {% else %}
@@ -96,8 +85,8 @@
                                         <div class="timeline-content">
                                             <h6 class="text-dark text-sm font-weight-bold mb-0">Awaiting Payment</h6>
                                             <p class="text-danger font-weight-bold text-xs mt-1 mb-0">{{ invoice.created|date:"F j, Y" }}</p>
-                                            <p class="text-sm mb-2">We have not recieved your payment yet. If you beleive this is an issue, please <a href="/#contact" class="text-primary  font-weight-bold text-xs mt-1 mb-0">Contact Us</a>.</p>
-                                            <a href="{{invoice.hosted_invoice_url}}" target="_blank" class="text-white btn btn-danger font-weight-bold text-xs mt-1 mb-0">Pay Now <i class="fa fa-arrow-right ms-1"></i></a>
+                                            <p class="text-sm mb-2">We have not recieved the customers payment yet. If you beleive this is an issue, please <a href="/#contact" class="text-primary  font-weight-bold text-xs mt-1 mb-0">Contact Us</a>.</p>
+                                            <a href="mailto:{{ booking_order.booking.user.email}}" target="_blank" class="text-white btn btn-danger text-xs mt-1 mb-0">Contact Customer</a>
                                         </div>
                                     </div>
         
