@@ -1,6 +1,7 @@
 
 {% extends 'atc_site/template/vendor_dashboard.html' %} 
 {% load static %} 
+{% load user_filters %}
 {% block content %}
 
 
@@ -33,274 +34,46 @@
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="datatable-search">
                         <thead class="thead-light">
-                            <tr><th data-sortable="" style="width: 19.4145%;"><a href="#" class="dataTable-sorter">Id</a></th><th data-sortable="" style="width: 21.5716%;"><a href="#" class="dataTable-sorter">Date</a></th><th data-sortable="" style="width: 21.1094%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.886%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 29.4299%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 14.3297%;"><a href="#" class="dataTable-sorter">Revenue</a></th></tr>
+                            <tr><th data-sortable="" style="width: 19.4145%;"><a href="#" class="dataTable-sorter">Id</a></th><th data-sortable="" style="width: 21.5716%;"><a href="#" class="dataTable-sorter">Order Date</a></th><th data-sortable="" style="width: 21.1094%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.886%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 29.4299%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 15.2542%;"><a href="#" class="dataTable-sorter">Quantity</a></th><th data-sortable="" style="width: 14.3297%;"><a href="#" class="dataTable-sorter">Revenue</a></th></tr>
                         </thead>
-                        <tbody><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck1">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10421</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 10:20 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <img src="../../../assets/img/team-2.jpg" class="avatar avatar-xs me-2" alt="user image">
-                                <span>Orlando Imieto</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">Nike Sport V2</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$140,20</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check pt-0">
-                                    <input class="form-check-input" type="checkbox" id="customCheck2">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10422</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 10:53 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <img src="../../../assets/img/team-1.jpg" class="avatar avatar-xs me-2" alt="user image">
-                                <span>Alice Murinho</span>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">Valvet T-shirt</span>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">$42,00</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck3">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10423</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 11:13 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-dark mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-undo" aria-hidden="true"></i></button>
-                                <span>Refunded</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xs me-2 bg-gradient-dark">
-                                    <span>M</span>
-                                </div>
-                                <span>Michael Mirra</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Leather Wallet
-                                <span class="text-secondary ms-2"> +1 more </span>
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$25,50</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck4">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10424</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 12:20 PM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <img src="../../../assets/img/team-3.jpg" class="avatar avatar-xs me-2" alt="user image">
-                                    <span>Andrew Nichel</span>
-                                </div>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Bracelet Onu-Lino
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$19,40</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck5">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10425</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 1:40 PM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-times" aria-hidden="true"></i></button>
-                                <span>Canceled</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <img src="../../../assets/img/team-4.jpg" class="avatar avatar-xs me-2" alt="user image">
-                                    <span>Sebastian Koga</span>
-                                </div>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Phone Case Pink
-                                <span class="text-secondary ms-2"> x 2 </span>
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$44,90</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck6">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10426</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 2:19 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xs me-2 bg-gradient-primary">
-                                    <span>L</span>
-                                </div>
-                                <span>Laur Gilbert</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Backpack Niver
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$112,50</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck7">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10427</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">1 Nov, 3:42 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xs me-2 bg-gradient-dark">
-                                    <span>I</span>
-                                </div>
-                                <span>Iryna Innda</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Adidas Vio
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$200,00</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck8">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10428</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">2 Nov, 9:32 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar avatar-xs me-2 bg-gradient-dark">
-                                    <span>A</span>
-                                </div>
-                                <span>Arrias Liunda</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Airpods 2 Gen
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$350,00</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck9">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10429</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">2 Nov, 10:14 AM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                <span>Paid</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <img src="../../../assets/img/team-5.jpg" class="avatar avatar-xs me-2" alt="user image">
-                                    <span>Rugna Ilpio</span>
-                                </div>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Bracelet Warret
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$15,00</span>
-                        </td></tr><tr><td>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="customCheck10">
-                                </div>
-                                <p class="text-xs font-weight-bold ms-2 mb-0">#10430</p>
-                            </div>
-                        </td><td class="font-weight-bold">
-                            <span class="my-2 text-xs">2 Nov, 12:56 PM</span>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-dark mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-undo" aria-hidden="true"></i></button>
-                                <span>Refunded</span>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <div class="d-flex align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <img src="../../../assets/img/ivana-squares.jpg" class="avatar avatar-xs me-2" alt="user image">
-                                    <span>Anna Landa</span>
-                                </div>
-                            </div>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">
-                                Watter Bottle India
-                                <span class="text-secondary ms-2"> x 3 </span>
-                            </span>
-                        </td><td class="text-xs font-weight-bold">
-                            <span class="my-2 text-xs">$25,00</span>
-                        </td></tr></tbody>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="customCheck1">
+                                            </div>
+                                            <p class="text-xs font-weight-bold ms-2 mb-0">#{{order.id}}</p>
+                                        </div>
+                                    </td>
+                                    <td class="font-weight-bold">
+                                        <span class="my-2 text-xs">{{ order.creation_date|date:"d M, Y"}}</span>
+                                    </td>
+                                    <td class="text-xs font-weight-bold">
+                                        <div class="d-flex align-items-center">
+                                            <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
+                                            <span>Paid</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs font-weight-bold">
+                                        <div class="d-flex align-items-center">
+                                            {% if order.user.avatar %}<img src="{{ order.user.avatar.url}}" class="avatar avatar-xs me-2" alt="user image">{%else%}<img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true" class="avatar avatar-xs me-2" alt="user image">{%endif%}
+                                            <span>{{ order.user.first_name }} {{ order.user.last_name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs font-weight-bold">
+                                        <span class="my-2 text-xs">{{ order.item.food_and_drinks_item.name }}</span>
+                                    </td>
+                                    <td class="text-xs font-weight-bold">
+                                        <span class="my-2 text-xs">{{ order.quantity }}</span>
+                                    </td>
+                                    <td class="text-xs font-weight-bold">
+                                        <span class="my-2 text-xs">${{ order.item.food_and_drinks_item.price|multiply:order.quantity }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                     </table></div><div class="dataTable-bottom"><div class="dataTable-info">Showing 1 to 10 of 12 entries</div><nav class="dataTable-pagination"><ul class="dataTable-pagination-list"><li class="pager"><a href="#" data-page="1">‹</a></li><li class="active"><a href="#" data-page="1">1</a></li><li class=""><a href="#" data-page="2">2</a></li><li class="pager"><a href="#" data-page="2">›</a></li></ul></nav></div></div>
                 </div>
             </div>

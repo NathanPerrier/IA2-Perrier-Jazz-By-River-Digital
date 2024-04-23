@@ -50,18 +50,18 @@
                 
                 <div class="row">
                     <div class="col-12 col-lg-8 m-auto">
-                        <form class="multisteps-form__form mb-8" style="height: 408px;">
-                            
+                        <form class="multisteps-form__form mb-8" method="POST" style="height: 408px;">
+                            {% csrf_token %}
                             <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
                                 <h5 class="font-weight-bolder">Item Information</h5>
                                 <div class="multisteps-form__content">
                                     <div class="row mt-3">
                                         <div class="col-12 col-sm-6">
                                             <label>Name</label>
-                                            <input class="multisteps-form__input form-control" type="text" placeholder="eg. Sausage Roll" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input class="multisteps-form__input form-control" name="name" type="text" placeholder="eg. Sausage Roll" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                         <div class="col-12 col-sm-6 mt-3 mt-sm-0">
-                                            <label>Quantity</label>
+                                            <label>Stock</label>
                                             <input class="multisteps-form__input form-control" type="text" placeholder="eg. 42" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="button-row d-flex mt-4">
                                         <button class="btn bg-gradient-secondary mb-0 js-btn-prev" type="button" title="Prev">Prev</button>
-                                        <button class="btn bg-gradient-dark ms-auto mb-0" type="button" title="Send">Send</button>
+                                        <button class="btn bg-gradient-dark ms-auto mb-0" type="button" type="submit" method="POST" name="submit" title="Send">Send</button>
                                     </div>
                                 </div>
                             </div>

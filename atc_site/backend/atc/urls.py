@@ -55,6 +55,8 @@ urlpatterns = [
     
     path('vendor/dashboard/', vendor.vendor_dashboard, name='dashboard_vendor'),
     path('vendor/dashboard/items/', vendor.vendor_items, name='vendor_items'),
+    path('vendor/dashboard/items/<int:item_id>/edit/', vendor.edit_item, name="vendor_item_edit"),
+    path('vendor/dashboard/items/<int:item_id>/delete/', vendor.delete_item, name="vendor_item_delete"),
     path('vendor/dashboard/items/create/', vendor.create_item, name='create_item'),
     path('vendor/dashboard/orders/', vendor.vendor_orders, name='vendor_orders'),
     path('vendor/dashboard/orders/<int:order_id>/', vendor.vendor_order, name='vendor_order'),
