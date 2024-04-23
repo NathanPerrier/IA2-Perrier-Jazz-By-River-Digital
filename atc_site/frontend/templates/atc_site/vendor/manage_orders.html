@@ -34,16 +34,13 @@
                 <div class="table-responsive">
                     <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="datatable-search">
                         <thead class="thead-light">
-                            <tr><th data-sortable="" style="width: 19.4145%;"><a href="#" class="dataTable-sorter">Id</a></th><th data-sortable="" style="width: 21.5716%;"><a href="#" class="dataTable-sorter">Order Date</a></th><th data-sortable="" style="width: 21.1094%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.886%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 29.4299%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 15.2542%;"><a href="#" class="dataTable-sorter">Quantity</a></th><th data-sortable="" style="width: 14.3297%;"><a href="#" class="dataTable-sorter">Revenue</a></th></tr>
+                            <tr><th data-sortable="" style="width: 9.4145%;"><a href="#" class="dataTable-sorter">Id</a></th><th data-sortable="" style="width: 21.5716%;"><a href="#" class="dataTable-sorter">Order Date</a></th><th data-sortable="" style="width: 21.1094%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.886%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 29.4299%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 15.2542%;"><a href="#" class="dataTable-sorter">Quantity</a></th><th data-sortable="" style="width: 14.3297%;"><a href="#" class="dataTable-sorter">Revenue</a></th><th data-sortable="" style="width: 9.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                         </thead>
                         <tbody>
                             {% for order in orders %}
-                                <tr>
+                            <a href="/vendor/dashboard/orders/{{order.id}}/"><tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="customCheck1">
-                                            </div>
                                             <p class="text-xs font-weight-bold ms-2 mb-0">#{{order.id}}</p>
                                         </div>
                                     </td>
@@ -52,8 +49,22 @@
                                     </td>
                                     <td class="text-xs font-weight-bold">
                                         <div class="d-flex align-items-center">
-                                            <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
-                                            <span>Paid</span>
+                                            {% for booking_order in booking_orders %}
+                                                {% if booking_order.food_and_drinks == order %}
+                                                    {% if booking_order.booking.payment.status.status == 'PAID' %}
+                                                        <button class="btn btn-icon-only btn-rounded btn-outline-success mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-check" aria-hidden="true"></i></button>
+                                                    {% elif booking_order.booking.payment.status.status == 'REFUNDED' %}
+                                                        <button class="btn btn-icon-only btn-rounded btn-outline-danger mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-times" aria-hidden="true"></i></button>
+                                                    {% else %}
+                                                        <button class="btn btn-icon-only btn-rounded btn-outline-warning mb-0 me-2 btn-sm d-flex align-items-center justify-content-center"><i class="fas fa-exclamation" aria-hidden="true"></i></button>
+                                                    {% endif %}
+                                                    {% if booking_order.booking.payment.status.status %}
+                                                        <span>{{ booking_order.booking.payment.status.status }}</span>
+                                                    {% else %}
+                                                        <span>UNKNOWN</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
                                     </td>
                                     <td class="text-xs font-weight-bold">
@@ -71,7 +82,12 @@
                                     <td class="text-xs font-weight-bold">
                                         <span class="my-2 text-xs">${{ order.item.food_and_drinks_item.price|multiply:order.quantity }}</span>
                                     </td>
-                                </tr>
+                                    <td class="text-sm">
+                                        <a href="/vendor/dashboard/orders/{{order.id}}/" data-bs-toggle="tooltip" data-bs-original-title="View Order">
+                                            <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr></a>
                             {% endfor %}
                         </tbody>
                     </table></div><div class="dataTable-bottom"><div class="dataTable-info">Showing 1 to 10 of 12 entries</div><nav class="dataTable-pagination"><ul class="dataTable-pagination-list"><li class="pager"><a href="#" data-page="1">‹</a></li><li class="active"><a href="#" data-page="1">1</a></li><li class=""><a href="#" data-page="2">2</a></li><li class="pager"><a href="#" data-page="2">›</a></li></ul></nav></div></div>

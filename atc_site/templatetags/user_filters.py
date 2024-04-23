@@ -63,5 +63,9 @@ def split(value, key):
 
 @register.filter
 def multiply(value1, value2):
-    print(value1, value2)
     return value1*value2
+
+
+@register.filter
+def total_vendor_price(invoice_lines, vendor_items):
+    return sum(item.amount for item in invoice_lines if item.description in vendor_items)

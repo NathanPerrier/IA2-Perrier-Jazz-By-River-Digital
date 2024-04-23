@@ -38,10 +38,8 @@ def vendor_orders(request):
         try:
             #get items from FoodandDrinks where item.item.vendor is request.user
             orders = get_vendor_orders(request.user)
-            return render(request, 'atc_site//vendor//manage_orders.html', {'title': 'Manage Orders', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'orders': orders})
-        except Exception as e: 
-            print(e)
-            return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
+            return render(request, 'atc_site//vendor//manage_orders.html', {'title': 'Manage Orders', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'orders': orders, 'booking_orders': BookingFoodAndDrinks.objects.all()})
+        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -51,8 +49,10 @@ def vendor_order(request, order_id):
             order = FoodAndDrinks.objects.get(id=order_id)
             booking_order = BookingFoodAndDrinks.objects.get(food_and_drinks=order)
             payment_intent = stripe.PaymentIntent.retrieve(booking_order.booking.payment.stripe_payment_id)
-            if order.vendor == request.user: return render(request, 'atc_site//vendor//manage_order.html', {'title': 'Vendor Order', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'order': order, 'booking_order': booking_order, 'payment_intent': payment_intent})
-        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
+            if order.item.food_and_drinks_item.vendor == request.user: return render(request, 'atc_site//vendor//manage_order.html', {'title': 'Vendor Order', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'order': order, 'booking_order': booking_order, 'payment_intent': payment_intent, 'invoice': stripe.Invoice.retrieve(booking_order.booking.stripe_invoice_id), 'payment_method': stripe.PaymentMethod.retrieve(payment_intent.payment_method), 'vendor_items': get_names_of_items(request.user), 'customer': stripe.Customer.retrieve(f'customuser-{booking_order.booking.user.id}')})
+        except Exception as e:
+            print(e)
+            return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 
@@ -99,6 +99,17 @@ def get_vendor_orders(vendor):
         
     
     return vendor_orders
+
+def get_names_of_items(vendor):
+    """
+    Get all names of items for a given vendor.
+    """
+    items = EventFoodAndDrinks.objects.filter(food_and_drinks_item__vendor=vendor).all()
+    item_names = []
+    for item in items:
+        item_names.append(item.food_and_drinks_item.name)
+        
+    return item_names
 
 def get_active_items(vendor):
     active_items = []

@@ -1,134 +1,175 @@
 {% extends 'atc_site/template/vendor_dashboard.html' %} 
 {% load static %} 
+{% load date_extras %}
+{% load user_filters %}
 {% block content %}
 
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-lg-8 mx-auto">
-            <div class="card mb-4">
-                <div class="card-header p-3 pb-0">
+        <div class="col-lg-11 mx-auto">
+            <div class="card">
+                <div class="card-header p-4 pb-0 d-flex">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6>Order Details</h6>
+                            <h6>Vendor Order Details</h6>
                             <p class="text-sm mb-0">
-                                Order no. <b>241342</b> from <b>23.02.2021</b>
+                                Booking no. <b>{{ booking_order.booking.id }}</b> from <b>{{ booking_order.booking.creation_time|date:"d M, Y" }}</b>
                             </p>
                             <p class="text-sm">
-                                Code: <b>KF332</b>
+                                Last Modified: <b>{{ booking_order.booking.last_modified|date:"d M, Y" }}</b>
                             </p>
                         </div>
-                        <a href="javascript:;" class="btn bg-gradient-secondary ms-auto mb-0">Invoice</a>
+                    </div>
+                    <div class="ms-auto mt-4">
+                        <span class="badge badge-sm if bg-gradient-success px-3 py-2">{{booking_order.booking.status.status}}</span>
                     </div>
                 </div>
-                <div class="card-body p-3 pt-0">
+                <div class="card-body p-3 pt-0 px-5">
                     <hr class="horizontal dark mt-0 mb-4">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-12">
                             <div class="d-flex">
+                                <a href="/events/{{booking_order.booking.event.id}}/" target="_blank"><div>
+                                    <img src="{{ booking_order.booking.event.image.url }}" style="object-fit:cover" class="avatar avatar-xxl me-3 img-cover" alt="product image">
+                                </div></a>
                                 <div>
-                                    <img src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1400&amp;q=80" class="avatar avatar-xxl me-3" alt="product image">
-                                </div>
-                                <div>
-                                    <h6 class="text-lg mb-0 mt-2">Gold Glasses</h6>
-                                    <p class="text-sm mb-3">Order was delivered 2 days ago.</p>
-                                    <span class="badge badge-sm bg-gradient-success">Delivered</span>
+                                    <h6 class="text-lg mb-0 mt-2">{{booking_order.booking.event.name}}</h6>
+                                    <p class="text-sm mb-3">{{booking_order.booking.event.description}}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-12 my-auto text-end">
-                            <a href="javascript:;" class="btn bg-gradient-info mb-0">Contact Us</a>
-                            <p class="text-sm mt-2 mb-0">Do you like the product? Leave us a review <a href="javascript:;">here</a>.</p>
+                            <a href="/#contact" class="btn text-white bg-dark mb-0"><b>Contact Us</b></a>
+                            <p class="text-sm mt-2 mb-0">Please Contact us if there are any issues!</p>
                         </div>
                     </div>
                     <hr class="horizontal dark mt-4 mb-4">
                     <div class="row">
                         <div class="col-lg-3 col-md-6 col-12">
-                            <h6 class="mb-3">Track order</h6>
+                            <h6 class="mb-3">Track Booking</h6>
                             <div class="timeline timeline-one-side">
                                 <div class="timeline-block mb-3">
                                     <span class="timeline-step">
-                                        <i class="ni ni-bell-55 text-secondary"></i>
+                                    <i class="ni ni-bell-55 text-secondary"></i>
                                     </span>
                                     <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Order received</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 7:20 AM</p>
+                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Booking received</h6>
+                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{booking_order.booking.creation_time}}</p>
                                     </div>
                                 </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="ni ni-html5 text-secondary"></i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Generate order id #1832412</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 7:21 AM</p>
-                                    </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
+                                
+                                {% if invoice.paid %}
+                                    <div class="timeline-block mb-3">
+                                        <span class="timeline-step">
                                         <i class="ni ni-cart text-secondary"></i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Order transmited to courier</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 8:10 AM</p>
+                                        </span>
+                                        <div class="timeline-content">
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Payment Confirmed</h6>
+                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{  invoice.created|add_date|date:"F j, Y" }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="timeline-block mb-3">
-                                    <span class="timeline-step">
-                                        <i class="ni ni-check-bold text-success text-gradient"></i>
-                                    </span>
-                                    <div class="timeline-content">
-                                        <h6 class="text-dark text-sm font-weight-bold mb-0">Order delivered</h6>
-                                        <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">22 DEC 4:54 PM</p>
+                                    <div class="timeline-block mb-3">
+                                        <span class="timeline-step">
+                                        <i class="ni ni-html5 text-secondary"></i>
+                                        </span>
+                                        <div class="timeline-content">
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Booking Confirmed</h6>
+                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">{{booking.creation_time|date:"F j, Y"}}</p>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="timeline-block mb-3">
+                                        <span class="timeline-step">
+                                            <i class="ni ni-check-bold text-success text-gradient"></i>
+                                        </span>
+                                        <div class="timeline-content">
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Ticket Sent</h6>
+                                            <p class="text-secondary font-weight-bold text-xs mt-1 mb-2">{{  invoice.created|add_date|date:"F j, Y" }}</p>
+                                            <p class="text-sm mb-2">Didn't recieve your ticket? <a href="{{ invoice.hosted_invoice_url }}" target="_blank" class="text-secondary font-weight-bold text-xs mt-1 mb-0">Download Ticket</a></p>
+                                            <p class="text-sm">Note: Your event ticket is your receipt. Please bring it with you to the event.</p>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="timeline-block mb-3">
+                                        <span class="timeline-step">
+                                        <i class="ni ni-cart text-danger"></i>
+                                        </span>
+                                        <div class="timeline-content">
+                                            <h6 class="text-dark text-sm font-weight-bold mb-0">Awaiting Payment</h6>
+                                            <p class="text-danger font-weight-bold text-xs mt-1 mb-0">{{ invoice.created|date:"F j, Y" }}</p>
+                                            <p class="text-sm mb-2">We have not recieved your payment yet. If you beleive this is an issue, please <a href="/#contact" class="text-primary  font-weight-bold text-xs mt-1 mb-0">Contact Us</a>.</p>
+                                            <a href="{{invoice.hosted_invoice_url}}" target="_blank" class="text-white btn btn-danger font-weight-bold text-xs mt-1 mb-0">Pay Now <i class="fa fa-arrow-right ms-1"></i></a>
+                                        </div>
+                                    </div>
+        
+                                {% endif %}
+                               
                             </div>
                         </div>
-                        <div class="col-lg-5 col-md-6 col-12">
-                            <h6 class="mb-3">Payment details</h6>
-                            <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-                                <img class="w-10 me-3 mb-0" src="../../../assets/img/logos/mastercard.png" alt="logo">
-                                <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852</h6>
-                                <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="We do not store card details">
-                                    <i class="fas fa-info" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                            <h6 class="mb-3 mt-4">Billing Information</h6>
-                            <ul class="list-group">
-                                <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
-                                    <div class="d-flex flex-column">
-                                        <h6 class="mb-3 text-sm">Oliver Liam</h6>
-                                        <span class="mb-2 text-xs">Company Name: <span class="text-dark font-weight-bold ms-2">Viking Burrito</span></span>
-                                        <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-2 font-weight-bold">oliver@burrito.com</span></span>
-                                        <span class="text-xs">VAT Number: <span class="text-dark ms-2 font-weight-bold">FRB1235476</span></span>
+                        {% if invoice.paid %}
+                            <div class="col-lg-6 col-md-6 col-12">
+                                <h6 class="mb-3">Payment details</h6>
+                                {% if payment_method.type == 'card' %}
+                                    <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row d-flex justify-content-between">
+                                        <img class="w-10 me-3 mb-0" src="https://demos.creative-tim.com/marketplace/soft-ui-dashboard-pro/assets/img/logos/{{payment_method.card.brand}}.png" alt="logo">
+                                        <h6 class="mb-0 ms-auto">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;{{payment_method.card.last4}}</h6>
+                                        <span class="ms-auto"><h6 class="mb-0">{{ payment_method.card.exp_month }}/{{ payment_method.card.exp_year }}</h6></span>
+                                        {% if payment_method.card.checks.cvc_check == 'pass' %}<span class="badge bg-gradient-success ms-auto">Valid</span>{% else %}<span class="badge bg-gradient-danger ms-auto">Invalid</span>{% endif %}
+                                        <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="We do not store card details">
+                                            <i class="fas fa-info" aria-hidden="true"></i>
+                                        </button>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-lg-3 col-12 ms-auto">
+                                {% else %} 
+                                    <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
+                                        <img class="w-10 me-3 mb-0" src="https://demos.creative-tim.com/marketplace/soft-ui-dashboard-pro/assets/img/logos/{{payment_method.type}}.png" alt="logo">
+                                        <h6 class="mb-0">{{ payment_method.type|title }}</h6>
+                                        <span class="ms-auto"><h6 class="mb-0">{{ payment_method.email }}</h6></span>
+                                        <button type="button" class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="" data-bs-original-title="We do not store card details">
+                                            <i class="fas fa-info" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                                <h6 class="mb-3 mt-4">Billing Information</h6>
+                                <ul class="list-group">
+                                    <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+                                        <div class="d-flex flex-column">
+                                            <h6 class="mb-3 text-sm">{{ booking_order.booking.user.first_name }} {{ booking_order.booking.user.last_name }}</h6>
+                                            <span class="mb-2 text-xs">Address: <span class="text-dark font-weight-bold ms-2">{{customer.address.line1}}, {{customer.address.city}}, {{customer.address.postal_code}}</span></span>
+                                            <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-2 font-weight-bold">{{ booking_order.booking.user.email}}</span></span>
+                                            {% if customer.phone %}
+                                                <span class="text-xs">Phone Number: <span class="text-dark ms-2 font-weight-bold">{{customer.phone}}</span></span>
+                                            {% else %}
+                                                <span class="text-xs">Currency: <span class="text-dark ms-2 font-weight-bold">{{customer.currency|title }}</span></span>
+                                            {% endif %}
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class=" {% if invoice.paid %}col-lg-3{%else%}col-lg-8{%endif%} col-12 ms-auto">
                             <h6 class="mb-3">Order Summary</h6>
-                            <div class="d-flex justify-content-between">
-                                <span class="mb-2 text-sm">
-                                    Product Price:
-                                </span>
-                                <span class="text-dark font-weight-bold ms-2">$90</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="mb-2 text-sm">
-                                    Delivery:
-                                </span>
-                                <span class="text-dark ms-2 font-weight-bold">$14</span>
-                            </div>
+                            {% for item in invoice.lines.data %}
+                                {% if item.description in vendor_items %}
+                                    {% if item.description != booking.event.name %}
+                                        <div class="d-flex justify-content-between">
+                                            <span class="mb-2 text-sm">
+                                                {{ item.quantity }}x {{ item.description }}
+                                            </span>
+                                            <span class="text-dark font-weight-bold ms-2">{{ item.amount|div:100 }}</span>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
                             <div class="d-flex justify-content-between">
                                 <span class="text-sm">
                                     Taxes:
                                 </span>
-                                <span class="text-dark ms-2 font-weight-bold">$1.95</span>
+                                <span class="text-dark ms-2 font-weight-bold">${% if invoice.tax %}{{ invoice.tax }}{% else %}0.00{%endif%}</span>
                             </div>
-                            <div class="d-flex justify-content-between mt-4">
+                            <div class="d-flex justify-content-between mt-3 " style="border-top: 1px solid var(--dark);">
                                 <span class="mb-2 text-lg">
                                     Total:
                                 </span>
-                                <span class="text-dark text-lg ms-2 font-weight-bold">$105.95</span>
+                                <span class="text-dark text-lg ms-2 font-weight-bold">${{ invoice.lines.data|total_vendor_price:vendor_items|div:100 }}</span>
                             </div>
                         </div>
                     </div>

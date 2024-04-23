@@ -26,3 +26,4 @@ def add_day(date):
     created_date = created + timedelta(days=1)
     
     return created_date
+
