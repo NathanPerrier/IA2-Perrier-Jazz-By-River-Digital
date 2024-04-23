@@ -18,7 +18,7 @@ def vendor_dashboard(request):
 @login_required
 def vendor_items(request):
     if request.user.groups.filter(name='Vendor').exists():
-        return render(request, 'atc_site//vendor//manage_items.html', {'title': 'Manage Items', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'items': FoodAndDrinksItem.objects.filter(vendor=request.user).all(), 'active_items': EventFoodAndDrinks.objects.filter(food_and_drinks_item__vendor=request.user).values('food_and_drinks_item')})
+        return render(request, 'atc_site//vendor//manage_items.html', {'title': 'Manage Items', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'items': FoodAndDrinksItem.objects.filter(vendor=request.user).all(), 'active_items': get_active_items(request.user)})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -99,3 +99,12 @@ def get_vendor_orders(vendor):
         
     
     return vendor_orders
+
+def get_active_items(vendor):
+    active_items = []
+    items = EventFoodAndDrinks.objects.filter(food_and_drinks_item__vendor=vendor)
+    
+    for item in items:
+        active_items.append(item.food_and_drinks_item)
+        
+    return active_items

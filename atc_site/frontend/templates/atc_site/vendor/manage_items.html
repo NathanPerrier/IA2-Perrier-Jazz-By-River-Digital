@@ -74,7 +74,7 @@
                                         <td class="text-sm">{{item.event.name}}</td>
                                         <td>
                                             {% if item in active_items %}
-                                                {%if item.stock > 0 %}<span class="badge badge-secondary badge-sm">In Stock</span>{%else%}<span class="badge badge-danger badge-sm">Out of Stock</span>{%endif%}
+                                                {% if item.stock > 0 %}<span class="badge badge-secondary badge-sm">In Stock</span>{%else%}<span class="badge badge-danger badge-sm">Out of Stock</span>{%endif%}
                                             {% else %}
                                                 <span class="d-flex">
                                                     <span class="badge badge-danger badge-sm">Not Active</span> 
