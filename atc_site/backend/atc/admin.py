@@ -5,6 +5,7 @@ from .main import *
 from django.db.models import Count
 from django.utils import timezone
 import time, datetime
+from .events.food_and_drinks.models import FoodAndDrinksItem, FoodAndDrinks, BookingFoodAndDrinks, EventFoodAndDrinks
 
 stripe.api_key = config('STRIPE_API_KEY')
 
@@ -14,7 +15,7 @@ from .email import send_contact_emails, send_newsletter_emails
 @login_required
 def admin_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
-        return render(request, 'atc_site//admin_dashboard.html', {'title': 'Overview', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 
+        return render(request, 'atc_site//admin//admin_dashboard.html', {'title': 'Overview', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 
                                                                 'top_selling_event': get_top_selling_event(),
                                                                 'customers': stripe.Customer.list(), 
                                                                 'income': (stripe.Balance.retrieve()['available'][0]['amount']+stripe.Balance.retrieve()['pending'][0]['amount']) / 100,
@@ -28,9 +29,51 @@ def admin_dashboard(request):
 
 # other dashboard pages go here
 
+#* VENDORS
 
+@login_required
+def vendor_items_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//vendor_items_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'items': FoodAndDrinksItem.objects.all(), 'active_items': get_active_items()})
 
+@login_required
+def activate_item(request, item_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            item = FoodAndDrinksItem.objects.get(id=item_id)
+            EventFoodAndDrinks.objects.create(event=item.event, food_and_drinks_item=item)
+            return redirect('vendor_items_dashboard')
+        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+@login_required
+def deactivate_item(request, item_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            item = FoodAndDrinksItem.objects.get(id=item_id)
+            EventFoodAndDrinks.objects.get(event=item.event, food_and_drinks_item=item).delete()
+            return redirect('vendor_items_dashboard')
+        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def edit_item(request, item_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            item = FoodAndDrinksItem.objects.get(id=item_id)
+            return render(request, 'atc_site//admin//edit_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'item': item})
+        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def delete_item(request, item_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            item = FoodAndDrinksItem.objects.get(id=item_id)
+            item.delete()
+            return redirect('vendor_items_dashboard')
+        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 
 def get_customers_percentage_increase():
@@ -114,3 +157,12 @@ def get_top_selling_event():
         sale_release_date__lt=timezone.now(),
         sale_end_date__gt=timezone.now()
     ).annotate(tickets_sold=Count('tickets')).order_by('-tickets_sold').first()
+    
+def get_active_items():
+    items = EventFoodAndDrinks.objects.all()
+    active_items = []
+    
+    for item in items:
+        active_items.append(item.food_and_drinks_item)
+        
+    return active_items

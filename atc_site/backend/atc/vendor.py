@@ -21,14 +21,14 @@ def vendor_items(request):
         return render(request, 'atc_site//vendor//manage_items.html', {'title': 'Manage Items', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'items': FoodAndDrinksItem.objects.filter(vendor=request.user).all(), 'active_items': get_active_items(request.user)})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
-@login_required
-def vendor_item(request, item_id):
-    if request.user.groups.filter(name='Vendor').exists():
-        try:
-            item = FoodAndDrinksItem.objects.get(id=item_id)
-            if request.user == item.vendor: return render(request, 'atc_site//vendor//view_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'item': item})
-        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
-    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+# @login_required
+# def vendor_item(request, item_id):
+#     if request.user.groups.filter(name='Vendor').exists():
+#         try:
+#             item = FoodAndDrinksItem.objects.get(id=item_id)
+#             if request.user == item.vendor: return render(request, 'atc_site//vendor//view_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'item': item})
+#         except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
+#     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 
 

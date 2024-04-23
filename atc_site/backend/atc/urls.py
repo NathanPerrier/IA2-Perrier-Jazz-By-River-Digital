@@ -50,9 +50,15 @@ urlpatterns = [
     path('account/billing/', views.billing_portal_view, name='billing_portal'),
     path('account/manage', main.manage_account_page, name='manage_account'),
     
-    path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
+    # path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
     path('admin/dashboard/', admin.admin_dashboard, name='dashboard_admin'),
     
+    path('admin/dashboard/vendors/items/', admin.vendor_items_dashboard, name='vendor_items_dashboard'),
+    path('admin/dashboard/vendors/items/<int:item_id>/activate/', admin.activate_item, name='vendor_item_atcivate'),
+    path('admin/dashboard/vendors/items/<int:item_id>/deactivate/', admin.deactivate_item, name='vendor_items_deactivate'),
+    path('admin/dashboard/vendors/items/<int:item_id>/edit/', admin.edit_item, name='vendor_item_edit'),
+    path('admin/dashboard/vendors/items/<int:item_id>/delete/', admin.delete_item, name='vendor_item_delete'),
+        
     path('vendor/dashboard/', vendor.vendor_dashboard, name='dashboard_vendor'),
     path('vendor/dashboard/items/', vendor.vendor_items, name='vendor_items'),
     path('vendor/dashboard/items/<int:item_id>/edit/', vendor.edit_item, name="vendor_item_edit"),
