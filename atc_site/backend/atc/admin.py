@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.utils import timezone
 import time, datetime
 from .events.food_and_drinks.models import FoodAndDrinksItem, FoodAndDrinks, BookingFoodAndDrinks, EventFoodAndDrinks
-from .events.vouchers.models import Voucher
+from .events.vouchers.models import Voucher, BookingVouchers
 from .events.models import Events, EventSchedule, EventScheduleItem
 from .events.booking.models import Booking, BookingStatus
 from .events.booking.tickets.models import Tickets
@@ -43,6 +43,20 @@ def admin_dashboard(request):
 def users_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
         return render(request, 'atc_site//admin//users_dashboard.html', {'title': 'Users Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'users': CustomUser.objects.all()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def delete_user(request, user_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            BookingFoodAndDrinks.objects.filter(user=CustomUser.objects.get(id=user_id)).delete()  
+            FoodAndDrinks.objects.filter(user=CustomUser.objects.get(id=user_id)).delete()
+            BookingVouchers.objects.filter(user=CustomUser.objects.get(id=user_id)).delete()
+            Voucher.objects.filter(user=CustomUser.objects.get(id=user_id)).delete()
+            Booking.objects.filter(user=CustomUser.objects.get(id=user_id)).delete()
+            CustomUser.objects.get(id=user_id).delete()
+            return redirect('/admin/dashboard/users/')
+        except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 #* BOOKINGS
@@ -128,6 +142,19 @@ def delete_event(request, event_id):
 def vouchers_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
         return render(request, 'atc_site//admin//vouchers_dashboard.html', {'title': 'Vouchers Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vouchers': Voucher.objects.all()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def delete_voucher(request, voucher_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            voucher = Voucher.objects.get(id=voucher_id)
+            BookingVouchers.objects.filter(voucher=voucher).delete()
+            EventVoucher.objects.filter(voucher=voucher).delete()
+            stripe.Coupon.retrieve(voucher.stripe_coupon_id).delete()
+            voucher.delete()
+            return redirect('/admin/dashboard/vouchers/')
+        except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 #* VENDORS

@@ -54,11 +54,13 @@ urlpatterns = [
     path('admin/dashboard/', admin.admin_dashboard, name='dashboard_admin'),
     
     path('admin/dashboard/vouchers/', admin.vouchers_dashboard, name='vouchers_dashboard'),
+    path('admin/dashboard/vouchers/<int:voucher_id>/delete/', admin.delete_voucher, name='delete_voucher'),
     
     path('admin/dashboard/bookings/', admin.bookings_dashboard, name='bookings_dashboard'),
     path('admin/dashboard/bookings/<int:booking_id>/delete/', admin.delete_booking, name='booking_dashboard'),
     
     path('admin/dashboard/users/', admin.users_dashboard, name='users_dashboard'),
+    path('admin/dashboard/users/<int:user_id>/delete/', admin.delete_user, name='delete_user'),
     
     path('admin/dashboard/events/', admin.events_dashboard, name='users_dashboard'),
     path('admin/dashboard/events/<int:event_id>/delete/', admin.delete_event, name='delete_event'),

@@ -52,64 +52,22 @@
                     <div class="table-responsive">
                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
                             <thead class="thead-light">
-                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Price</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Tcikets Left</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Sold</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Target Groups</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Organiser</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Availablity</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Sale Dates</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                                <tr><th data-sortable="" style="width: 26.2542%;"><a href="#" class="dataTable-sorter">Name</a></th><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Price</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Amount Left</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Expiration Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                             </thead>
                             <tbody>
                                 {% for item in vouchers %}
                                     <tr>
                                         <td>
                                             <div class="d-flex">
-                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ item.image.url }}" alt="{{item.name}}">
-                                                <h6 class="ms-3 my-auto">{{item.name}}</h6>
+                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ item.voucher.event.image.url }}" alt="{{item.name}}">
+                                                <h6 class="ms-3 my-auto">{{item.voucher.name}}</h6>
                                             </div>
-                                        </td>
-                                        <td class="text-sm">${{item.ticket_price}}</td>
-                                        <td class="text-sm">{{item.available_tickets}}</td>
-                                        <td class="text-sm">{{item.sold}}</td>
+                                        <td class="text-sm"> {{item.event.name}}</td>
+                                        <td class="text-sm">{{item.user.email}}</td>
+                                        <td class="text-sm">${{item.voucher.price}}</td>
+                                        <td class="text-sm">${{item.amount_left}}</td>
+                                        <td class="text-sm">{{item.expiration_date|date:"d, M, Y"}}</td>
                                         <td class="text-sm">
-                                            {% if not item.target_groups.all %}
-                                                <span>None</span>
-                                            {% endif %}
-                                            {% for group in item.target_groups.all %}
-                                                <span>{{ group.name }}s</span>{% if not forloop.last %}, {% endif %}
-                                            {% endfor %}
-                                        </td>
-                                        <td class="text-sm">{{item.organizer.email}}</td>
-                                        <td>
-                                            {% if item.available_tickets > 0 %}
-                                                {% if item.sale_start_date > now %}
-                                                    <span class="badge badge-warning badge-sm">Coming Soon</span>
-                                                {% else %}
-                                                    {% if item.sale_end_date < now %}
-                                                        <span class="badge badge-danger badge-sm">Sale Ended</span>
-                                                    {% else %}
-                                                        <span class="badge badge-success badge-sm">On Sale</span>
-                                                    {% endif %}
-                                                {% endif %}
-                                            {%else%}
-                                                <span class="badge badge-danger badge-sm">Sold Out</span>
-                                            {%endif%}                                
-                                        </td>
-                                        <td>
-                                            {% if item.date > now %}
-                                                <span class="badge badge-warning badge-sm">Upcoming</span>
-                                            {% else %}
-                                                <span class="badge badge-danger badge-sm">Ended</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {{ item.sale_release_date|date:"d M, Y" }} - {{ item.sale_end_date|date:"d M, Y"}}
-                                        </td>
-                                        <td>
-                                            {{ item.date|date:"d M, Y" }}
-                                        </td>
-                                        <td class="text-sm">
-                                            <a href="/events/{{item.id}}/" data-bs-toggle="tooltip" data-bs-original-title="View Order">
-                                                <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
-                                            </a>
-                                            <a href="/events/{{item.id}}/edit/" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product">
-                                                <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
-                                            </a>
                                             <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
                                                 <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
                                             </a>
@@ -167,7 +125,7 @@
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.replace('/admin/dashboard/events/'+item_id+'/delete/');
+                        window.location.replace('/admin/dashboard/vouchers/'+item_id+'/delete/');
                     }
                 });
             }

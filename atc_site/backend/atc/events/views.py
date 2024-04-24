@@ -184,6 +184,34 @@ def checkout_success(request, event_id):
                     voucher.code = make_password(voucher.code)
                     voucher.save()
                     
+                if (stripe.checkout.Session.retrieve(checkout_session.id).total_details.amount_discount > 0 and product.description != event.name):
+                    product_price = stripe.Price.create(
+                        product=product.price.product,
+                        unit_amount=0,
+                        currency='aud',
+                    )
+                
+                    stripe.InvoiceItem.create(
+                        # id=f'invoice-{booking.id}',
+                        customer=checkout_session.customer,
+                        quantity=product.quantity,
+                        currency='aud',
+                        price=product_price.id,
+                        description=product.description,
+                        invoice=invoice.id,
+                    )
+                else:
+                    stripe.InvoiceItem.create(
+                        # id=f'invoice-{booking.id}',
+                        customer=checkout_session.customer,
+                        quantity=product.quantity,
+                        currency='aud',
+                        price=product.price.id,
+                        description=product.description,
+                        invoice=invoice.id,
+                    )
+            
+                    
             if stripe.checkout.Session.retrieve(checkout_session.id).total_details.amount_discount > 0:
                 session = stripe.checkout.Session.retrieve(checkout_session.id, expand=['total_details.breakdown'])
                 stripe_voucher = session.total_details.breakdown.discounts[0].discount.coupon.id
