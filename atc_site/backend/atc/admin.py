@@ -22,6 +22,7 @@ def admin_dashboard(request):
                                                                 'customers': stripe.Customer.list(), 
                                                                 'income': (stripe.Balance.retrieve()['available'][0]['amount']+stripe.Balance.retrieve()['pending'][0]['amount']) / 100,
                                                                 'bookings': Booking.objects.all(), 
+                                                                'events': Events.objects.all(),
                                                                 'customers_percentage_increase': get_customers_percentage_increase(),
                                                                 'customers_for_each_month_month': get_customers_for_each_month('month'), 'customers_for_each_month': get_customers_for_each_month(),
                                                                 'income_for_each_month_month': get_income_for_each_month('month'), 'income_for_each_month': get_income_for_each_month(),
