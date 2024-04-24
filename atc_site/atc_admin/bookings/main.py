@@ -80,7 +80,12 @@ class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 item.food_and_drinks.item.food_and_drinks_item.save()
             
             BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
-            BookingVouchers.objects.filter(booking=obj).delete()
+            booking_vouchers = BookingVouchers.objects.filter(booking=obj)
+            
+            for voucher in booking_vouchers:
+                stripe.Coupon.delete(voucher.voucher.stripe_coupon_id)
+                voucher.voucher.delete()
+                voucher.delete()
             
             Tickets.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
             Payment.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()

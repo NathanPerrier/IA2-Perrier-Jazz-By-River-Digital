@@ -12,7 +12,9 @@ from .booking.models import Booking, BookingStatus
 from .booking.tickets.models import Tickets
 from .booking.payment.models import Payment, PaymentStatus
 from .models import Events
+from ..email import send_custom_emails
 from django.utils import timezone
+
 
 stripe.api_key = config('STRIPE_API_KEY')
 checkout_session = None
@@ -56,6 +58,7 @@ def create_ticket_checkout_session(request, event_id):
                             'address': 'auto',
                         },
                         automatic_tax={'enabled': True},
+                        allow_promotion_codes=True,
                         billing_address_collection='required',
                     )
                     return redirect(checkout_session.url)
@@ -64,7 +67,6 @@ def create_ticket_checkout_session(request, event_id):
         return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'This event is no longer available. Please contact the administrator if you believe this is an error.'})
     return render(request, 'atc_site//sold_out.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': event})
     
-@login_required
 def checkout_success(request, event_id):
     try:
         if stripe.checkout.Session.retrieve(checkout_session.id).payment_status == 'paid':
@@ -174,27 +176,46 @@ def checkout_success(request, event_id):
                         booking=Booking.objects.get(stripe_invoice_id=invoice.id),
                     )
                     
+                    #remove??
+                    send_custom_emails(request.user.email, request.user.first_name, 'Voucher Purchased', f'Thank you for purchasing a voucher for {event.name}, this voucher can be used online or in-person. \nYour code is: \n \n {voucher.code}')
+                    
                     voucher.stripe_coupon_id = stripe_voucher.id
                     voucher.stripe_code_id = promo_code.id
                     voucher.code = make_password(voucher.code)
                     voucher.save()
-            
-                print('INVOICE')  
-                stripe.InvoiceItem.create(
-                    # id=f'invoice-{booking.id}',
-                    customer=checkout_session.customer,
-                    quantity=product.quantity,
-                    currency='aud',
-                    price=product.price,
-                    description=product.description,
-                    invoice=invoice.id,
+                    
+            if stripe.checkout.Session.retrieve(checkout_session.id).total_details.amount_discount > 0:
+                session = stripe.checkout.Session.retrieve(checkout_session.id, expand=['total_details.breakdown'])
+                stripe_voucher = session.total_details.breakdown.discounts[0].discount.coupon.id
+                voucher = Voucher.objects.get(stripe_coupon_id=stripe_voucher)
+                
+                amount_left = float(voucher.amount_left) - session.total_details.amount_discount/100
+                
+                stripe_voucher = stripe.Coupon.retrieve(voucher.stripe_coupon_id).delete()
+                promo_code = stripe.PromotionCode.retrieve(voucher.stripe_code_id)
+                
+                stripe_voucher = stripe.Coupon.create(
+                    id=f'voucher-{str(voucher.id)}',
+                    name=voucher.voucher.name,
+                    amount_off=int(amount_left*100),
+                    currency="aud",
+                    duration='forever',
+                    redeem_by=timezone.now() + timezone.timedelta(days=365),
+                    applies_to={'products':[item.stripe_product_id for item in FoodAndDrinksItem.objects.filter(event=event)]},
                 )
-            
+                promo_code = stripe.PromotionCode.create(coupon=stripe_voucher.id, customer=session.customer, code=promo_code.code)
+
+                voucher.amount_left = amount_left
+                voucher.stripe_code_id = promo_code.id
+                voucher.stripe_coupon_id = stripe_voucher.id
+                voucher.save()
+
+               
             paid_invoice = stripe.Invoice.pay(invoice.id, paid_out_of_band=True)
             
             payment.amount = paid_invoice.total/100
             payment.save()
-             
+            
             return redirect(paid_invoice.hosted_invoice_url, code=303)
         else: return redirect(f'/events/{str(event_id)}/checkout/', code=303)
     except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '500', 'title' : 'Internal Server Error', 'desc' : f'{e}. Please try again later.'})

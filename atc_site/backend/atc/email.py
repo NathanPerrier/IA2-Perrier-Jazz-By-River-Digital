@@ -2,6 +2,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from asgiref.sync import sync_to_async
+
 
 def send_contact_emails(user_email, admin_email, name, subject, message):
     context = {
@@ -72,6 +74,26 @@ def send_newsletter_emails(user_email, admin_email):
 
     email = EmailMessage(
         'Thank you for subscribing',
+        email_body,
+        settings.EMAIL_HOST_USER,
+        [user_email]
+    )
+    email.content_subtype = 'html'
+    email.fail_silently = False
+    email.send()
+
+
+def send_custom_emails(user_email, name, subject, message):
+    context = {
+        'name': name,
+        'email': user_email,
+        'subject': subject,
+        'message': message,
+    }
+    email_body = render_to_string('atc_site/email.html', context)
+
+    email = EmailMessage(
+        subject,
         email_body,
         settings.EMAIL_HOST_USER,
         [user_email]

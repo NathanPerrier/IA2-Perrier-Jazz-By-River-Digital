@@ -13,6 +13,7 @@ from .events.booking.models import Booking, BookingStatus
 from .events.booking.tickets.models import Tickets
 from .events.booking.payment.models import Payment, PaymentStatus
 from ...models import CustomUser
+from .email import send_custom_emails
 from .events.booking.models import Booking
 
 stripe.api_key = config('STRIPE_API_KEY')
@@ -59,15 +60,13 @@ def delete_booking(request, booking_id):
         try:
             obj = Booking.objects.get(id=booking_id)
             payment_intent = stripe.PaymentIntent.retrieve(obj.payment.stripe_payment_id)
-            print(payment_intent)
 
-                                  
-            refund = stripe.Refund.create(
-                payment_intent=payment_intent,
-            )
-            
-            print(' delete stripe items')
-            
+            try:                     
+                refund = stripe.Refund.create(
+                    payment_intent=payment_intent,
+                )
+            except: print('refund error')
+           
             food_and_drink_items = BookingFoodAndDrinks.objects.filter(booking=obj)
             for item in food_and_drink_items:
                 item.food_and_drinks.item.food_and_drinks_item.stock += item.food_and_drinks.quantity
@@ -75,7 +74,12 @@ def delete_booking(request, booking_id):
                 item.food_and_drinks.item.food_and_drinks_item.save()
             
             BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
-            BookingVouchers.objects.filter(booking=obj).delete()
+            booking_vouchers = BookingVouchers.objects.filter(booking=obj)
+            
+            for voucher in booking_vouchers:
+                stripe.Coupon.delete(voucher.voucher.stripe_coupon_id)
+                voucher.voucher.delete()
+                voucher.delete()
             
             Tickets.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
             Payment.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
