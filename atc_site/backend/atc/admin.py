@@ -240,14 +240,6 @@ def get_income_for_each_month(option=False):
     print(payouts_for_each_month)
     return payouts_for_each_month[::-1]
 
-def get_income():
-    invoices = stripe.Invoice.list()['data']
-    total = 0
-    
-    for transaction in invoices:
-        total += transaction['subtotal']
-
-    return total/100
 
 def get_booking_for_each_month(option=False):
     months = []

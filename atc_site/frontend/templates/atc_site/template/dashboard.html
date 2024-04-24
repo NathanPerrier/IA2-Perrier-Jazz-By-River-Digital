@@ -106,50 +106,28 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {% if title == 'Users' %}active{% endif %}" href="/admin/dashboard/users/">
+                      <a class="nav-link {% if title == 'Users Dashboard' %}active{% endif %}" href="/admin/dashboard/users/">
                         <span class="sidenav-mini-icon"> U </span>
                         <span class="sidenav-normal"> Users </span>
                       </a>
                     </li>
                     <li class="nav-item ">
-                      <a class="nav-link {% if title == 'Events' %}active{% endif %} " href="/admin/dashboard/events/">
+                      <a class="nav-link {% if title == 'Events Dashboard' %}active{% endif %} " href="/admin/dashboard/events/">
                         <span class="sidenav-mini-icon"> E </span>
                         <span class="sidenav-normal"> Events </span>
                       </a>
                     </li>
                     <li class="nav-item ">
-                      <a class="nav-link {% if title == 'Vouchers' %}active{% endif %} " href="/admin/dashboard/vouchers/">
+                      <a class="nav-link {% if title == 'Vouchers Dashboard' %}active{% endif %} " href="/admin/dashboard/vouchers/">
                         <span class="sidenav-mini-icon"> V </span>
                         <span class="sidenav-normal"> Vouchers </span>
                       </a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link {% if title == 'Bookings' or title == 'Bookings Dashboard' %}active{% endif %} "  data-bs-toggle="collapse" aria-expanded="false" href="#bDropdown">
+                    <li class="nav-item ">
+                      <a class="nav-link {% if title == 'Bookings Dashboard' %}active{% endif %}" href="/admin/dashboard/bookings/">
                         <span class="sidenav-mini-icon"> B </span>
                         <span class="sidenav-normal"> Bookings </span>
                       </a>
-                      <div class="collapse " id="bDropdown">
-                        <ul class="nav nav-sm flex-column">
-                          <li class="nav-item">
-                            <a class="nav-link " href="/admin/dashboard/bookings/">
-                              <span class="sidenav-mini-icon text-xs"> B </span>
-                              <span class="sidenav-normal"> Bookings </span>
-                            </a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link " href="/admin/dashboard/bookings/tickets/">
-                              <span class="sidenav-mini-icon text-xs"> T </span>
-                              <span class="sidenav-normal"> Tickets </span>
-                            </a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link " href="/admin/dashboard/bookings/payments/">
-                              <span class="sidenav-mini-icon text-xs"> P </span>
-                              <span class="sidenav-normal"> Payments </span>
-                            </a>
-                          </li>
-                        </ul>
-                      </div>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link {% if title == 'Stripe' %}active{% endif %} " data-bs-toggle="collapse" aria-expanded="false" href="#sDropdown">
@@ -186,7 +164,7 @@
                       </div>
                     </li>
                     <li class="nav-item ">
-                      <a class="nav-link {% if title == 'Vendors' %}active{% endif %} " data-bs-toggle="collapse" aria-expanded="false" href="#vDropdown">
+                      <a class="nav-link {% if title == 'Vendor Dashboard' %}active{% endif %} " data-bs-toggle="collapse" aria-expanded="false" href="#vDropdown">
                         <span class="sidenav-mini-icon"> V </span>
                         <span class="sidenav-normal"> Vendors <b class="caret"></b></span>
                       </a>
