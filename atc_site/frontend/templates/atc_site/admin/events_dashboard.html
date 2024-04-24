@@ -67,7 +67,14 @@
                                         <td class="text-sm">${{item.ticket_price}}</td>
                                         <td class="text-sm">{{item.available_tickets}}</td>
                                         <td class="text-sm">{{item.sold}}</td>
-                                        <td class="text-sm">{{item.target_groups}}</td>
+                                        <td class="text-sm">
+                                            {% if not item.target_groups.all %}
+                                                <span>None</span>
+                                            {% endif %}
+                                            {% for group in item.target_groups.all %}
+                                                <span>{{ group.name }}s</span>{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </td>
                                         <td class="text-sm">{{item.organizer.email}}</td>
                                         <td>
                                             {% if item.available_tickets > 0 %}
