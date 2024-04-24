@@ -6,6 +6,8 @@ from django.db.models import Count
 from django.utils import timezone
 import time, datetime
 from .events.food_and_drinks.models import FoodAndDrinksItem, FoodAndDrinks, BookingFoodAndDrinks, EventFoodAndDrinks
+from .events.models import Events, EventSchedule, EventScheduleItem
+from .events.booking.models import Booking
 
 stripe.api_key = config('STRIPE_API_KEY')
 
@@ -28,6 +30,31 @@ def admin_dashboard(request):
 
 
 # other dashboard pages go here
+
+#* EVENTS
+
+@login_required
+def events_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//events_dashboard.html', {'title': 'Events Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'events': Events.objects.all(), 'now': timezone.now()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def delete_event(request, event_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            event = Events.objects.get(id=event_id)
+            EventFoodAndDrinks.objects.filter(event=event).delete()
+            FoodAndDrinksItem.objects.filter(event=event).delete()
+            EventSchedule.objects.filter(event=event).delete()
+            Booking.objects.filter(event=event).delete()
+            
+            event.delete()
+            return redirect('/admin/dashboard/events/')
+        except Exception as e:
+            print(e)
+            return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 #* VENDORS
 

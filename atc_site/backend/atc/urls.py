@@ -53,6 +53,9 @@ urlpatterns = [
     # path('dashboard/', views.stripe_dashboard, name='stripe_dashboard'),
     path('admin/dashboard/', admin.admin_dashboard, name='dashboard_admin'),
     
+    path('admin/dashboard/events/', admin.events_dashboard, name='users_dashboard'),
+    path('admin/dashboard/events/<int:event_id>/delete/', admin.delete_event, name='delete_event'),
+    
     path('admin/dashboard/vendors/items/', admin.vendor_items_dashboard, name='vendor_items_dashboard'),
     path('admin/dashboard/vendors/items/<int:item_id>/activate/', admin.activate_item, name='vendor_item_atcivate'),
     path('admin/dashboard/vendors/items/<int:item_id>/deactivate/', admin.deactivate_item, name='vendor_items_deactivate'),
