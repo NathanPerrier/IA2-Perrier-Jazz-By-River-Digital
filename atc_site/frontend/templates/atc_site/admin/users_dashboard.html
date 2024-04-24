@@ -1,0 +1,180 @@
+
+{% extends 'atc_site/template/dashboard.html' %} 
+{% load static %} 
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">               
+                <div class="card-header pb-0">
+                    <div class="d-lg-flex">
+                        <div>
+                            <h5 class="mb-0">All Users</h5>
+                            <p class="text-sm mb-0">
+                                All of the sites users!
+                            </p>
+                        </div>
+                        <div class="ms-auto my-auto mt-lg-0 mt-4">
+                            <div class="ms-auto my-auto">
+                                <button type="button" class="btn btn-outline-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">
+                                    Import
+                                </button>
+                                <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog mt-lg-10">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalLabel">Import CSV</h5>
+                                                <i class="fas fa-upload ms-3" aria-hidden="true"></i>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>You can browse your computer for a file.</p>
+                                                <div action="/vendor/dashboard/items/upload/" class="form-control dropzone dz-clickable productImg" id="productImg"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input dropbox" type="checkbox" value="" id="importCheck" checked="">
+                                                    <label class="custom-control-label" for="importCheck">I accept the terms and conditions</label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn bg-gradient-primary btn-sm">Upload</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv" type="button" name="button">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-0">
+                    <div class="table-responsive">
+                        <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
+                            <thead class="thead-light">
+                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Email</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Price</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Tcikets Left</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Sold</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Target Groups</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Organiser</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Availablity</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Sale Dates</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                            </thead>
+                            <tbody>
+                                {% for item in users %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ item.image.url }}" alt="{{item.name}}">
+                                                <h6 class="ms-3 my-auto">{{item.name}}</h6>
+                                            </div>
+                                        </td>
+                                        <td class="text-sm">${{item.ticket_price}}</td>
+                                        <td class="text-sm">{{item.available_tickets}}</td>
+                                        <td class="text-sm">{{item.sold}}</td>
+                                        <td class="text-sm">
+                                            {% if not item.target_groups.all %}
+                                                <span>None</span>
+                                            {% endif %}
+                                            {% for group in item.target_groups.all %}
+                                                <span>{{ group.name }}s</span>{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td class="text-sm">{{item.organizer.email}}</td>
+                                        <td>
+                                            {% if item.available_tickets > 0 %}
+                                                {% if item.sale_start_date > now %}
+                                                    <span class="badge badge-warning badge-sm">Coming Soon</span>
+                                                {% else %}
+                                                    {% if item.sale_end_date < now %}
+                                                        <span class="badge badge-danger badge-sm">Sale Ended</span>
+                                                    {% else %}
+                                                        <span class="badge badge-success badge-sm">On Sale</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {%else%}
+                                                <span class="badge badge-danger badge-sm">Sold Out</span>
+                                            {%endif%}                                
+                                        </td>
+                                        <td>
+                                            {% if item.date > now %}
+                                                <span class="badge badge-warning badge-sm">Upcoming</span>
+                                            {% else %}
+                                                <span class="badge badge-danger badge-sm">Ended</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ item.sale_release_date|date:"d M, Y" }} - {{ item.sale_end_date|date:"d M, Y"}}
+                                        </td>
+                                        <td>
+                                            {{ item.date|date:"d M, Y" }}
+                                        </td>
+                                        <td class="text-sm">
+                                            <a href="/events/{{item.id}}/" data-bs-toggle="tooltip" data-bs-original-title="View Order">
+                                                <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="/events/{{item.id}}/edit/" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product">
+                                                <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
+                                            </a>
+                                            <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
+                                                <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody> 
+                        </table></div><div class="dataTable-bottom"><div class="dataTable-info">Showing 1 to 7 of 15 entries</div><nav class="dataTable-pagination"><ul class="dataTable-pagination-list"><li class="pager"><a href="#" data-page="1">‹</a></li><li class="active"><a href="#" data-page="1">1</a></li><li class=""><a href="#" data-page="2">2</a></li><li class=""><a href="#" data-page="3">3</a></li><li class="pager"><a href="#" data-page="2">›</a></li></ul></nav></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    if (document.getElementById('products-list')) {
+        const dataTableSearch = new simpleDatatables.DataTable("#products-list", {
+            searchable: true,
+            fixedHeight: false,
+            perPage: 7
+        });
+        
+        document.querySelectorAll(".export").forEach(function(el) {
+            el.addEventListener("click", function(e) {
+                var type = el.dataset.type;
+                
+                var data = {
+                    type: type,
+                    filename: "soft-ui-" + type,
+                };
+                
+                if (type === "csv") {
+                    data.columnDelimiter = "|";
+                }
+                
+                dataTableSearch.export(data);
+            });
+        });
+    };
+
+    function confirmDelete(item_id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#7367f0',
+            cancelButtonColor: '#28c76f',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.replace('/admin/dashboard/events/'+item_id+'/delete/');
+                    }
+                });
+            }
+        })
+    }
+
+</script>
+
+
+{% endblock %}

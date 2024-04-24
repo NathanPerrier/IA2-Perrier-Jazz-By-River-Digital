@@ -1,18 +1,21 @@
 import stripe
 from decouple import config
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from .main import *
 from django.db.models import Count
 from django.utils import timezone
 import time, datetime
 from .events.food_and_drinks.models import FoodAndDrinksItem, FoodAndDrinks, BookingFoodAndDrinks, EventFoodAndDrinks
+from .events.vouchers.models import Voucher
 from .events.models import Events, EventSchedule, EventScheduleItem
+from .events.booking.models import Booking, BookingStatus
+from .events.booking.tickets.models import Tickets
+from .events.booking.payment.models import Payment, PaymentStatus
+from ...models import CustomUser
 from .events.booking.models import Booking
 
 stripe.api_key = config('STRIPE_API_KEY')
-
-from django.contrib.auth import logout
-from .email import send_contact_emails, send_newsletter_emails
 
 @login_required
 def admin_dashboard(request):
@@ -20,7 +23,7 @@ def admin_dashboard(request):
         return render(request, 'atc_site//admin//admin_dashboard.html', {'title': 'Overview', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 
                                                                 'top_selling_event': get_top_selling_event(),
                                                                 'customers': stripe.Customer.list(), 
-                                                                'income': get_income(),
+                                                                'income': (stripe.Balance.retrieve()['available'][0]['amount']+stripe.Balance.retrieve()['pending'][0]['amount'])/100,
                                                                 'bookings': Booking.objects.all(), 
                                                                 'events': Events.objects.all(),
                                                                 "last_3_transactions": stripe.Invoice.list(limit=3)['data'],
@@ -32,6 +35,63 @@ def admin_dashboard(request):
 
 
 # other dashboard pages go here
+
+#* USERS
+
+@login_required
+def users_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//users_dashboard.html', {'title': 'Users Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'users': CustomUser.objects.all()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+#* BOOKINGS
+
+@login_required
+def bookings_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//bookings_dashboard.html', {'title': 'Bookings Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'bookings': get_invoices_for_bookings(Booking.objects.all())})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+
+@login_required
+def delete_booking(request, booking_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            obj = Booking.objects.get(id=booking_id)
+            payment_intent = stripe.PaymentIntent.retrieve(obj.payment.stripe_payment_id)
+            print(payment_intent)
+
+                                  
+            refund = stripe.Refund.create(
+                payment_intent=payment_intent,
+            )
+            
+            print(' delete stripe items')
+            
+            food_and_drink_items = BookingFoodAndDrinks.objects.filter(booking=obj)
+            for item in food_and_drink_items:
+                item.food_and_drinks.item.food_and_drinks_item.stock += item.food_and_drinks.quantity
+                item.food_and_drinks.item.food_and_drinks_item.quantity_sold -= item.food_and_drinks.quantity
+                item.food_and_drinks.item.food_and_drinks_item.save()
+            
+            BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
+            BookingVouchers.objects.filter(booking=obj).delete()
+            
+            Tickets.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
+            Payment.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
+            BookingStatus.objects.get(stripe_invoice_id=obj.stripe_invoice_id).delete()
+            
+        except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
+            
+        event = obj.event
+        event.available_tickets += 1
+        event.sold -= 1
+        event.save()
+        
+        obj.delete()
+        
+        return redirect('/admin/dashboard/bookings/')
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 #* EVENTS
 
@@ -58,12 +118,27 @@ def delete_event(request, event_id):
             return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+#* VOUCHERS
+
+@login_required
+def vouchers_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//vouchers_dashboard.html', {'title': 'Vouchers Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vouchers': Voucher.objects.all()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
 #* VENDORS
+
+@login_required
+def vendors_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//vendors_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendors':  CustomUser.objects.filter(groups=Group.objects.get(name='Vendor'))})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
 def vendor_items_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
         return render(request, 'atc_site//admin//vendor_items_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'items': FoodAndDrinksItem.objects.all(), 'active_items': get_active_items()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
 def activate_item(request, item_id):
@@ -104,6 +179,8 @@ def delete_item(request, item_id):
         except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+
+#* Other
 
 def get_customers_percentage_increase():
     if len(stripe.Customer.list(created={'gte': int(time.time()) - 86400})) > 0:
@@ -204,3 +281,9 @@ def get_active_items():
         active_items.append(item.food_and_drinks_item)
         
     return active_items
+
+def get_invoices_for_bookings(bookings):
+    invoices=[]
+    for booking in bookings:
+        invoices.append([booking, stripe.Invoice.retrieve(booking.stripe_invoice_id)])
+    return invoices

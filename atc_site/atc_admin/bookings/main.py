@@ -75,9 +75,9 @@ class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             
             food_and_drink_items = BookingFoodAndDrinks.objects.filter(booking=obj)
             for item in food_and_drink_items:
-                item.food_and_drinks.item.stock += item.food_and_drinks.quantity
-                item.food_and_drinks.item.quantity_sold -= item.food_and_drinks.quantity
-                item.food_and_drinks.item.save()
+                item.food_and_drinks.item.food_and_drinks_item.stock += item.food_and_drinks.quantity
+                item.food_and_drinks.item.food_and_drinks_item.quantity_sold -= item.food_and_drinks.quantity
+                item.food_and_drinks.item.food_and_drinks_item.save()
             
             BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
             BookingVouchers.objects.filter(booking=obj).delete()
@@ -94,5 +94,6 @@ class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         event.sold -= 1
         
         event.save()
+        obj.delete()
         
         return super().delete_view(request, object_id, extra_context)

@@ -124,14 +124,14 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link {% if title == 'Bookings' %}active{% endif %} "  data-bs-toggle="collapse" aria-expanded="false" href="#bDropdown">
+                      <a class="nav-link {% if title == 'Bookings' or title == 'Bookings Dashboard' %}active{% endif %} "  data-bs-toggle="collapse" aria-expanded="false" href="#bDropdown">
                         <span class="sidenav-mini-icon"> B </span>
                         <span class="sidenav-normal"> Bookings </span>
                       </a>
                       <div class="collapse " id="bDropdown">
                         <ul class="nav nav-sm flex-column">
                           <li class="nav-item">
-                            <a class="nav-link " href="/admin/dashboard/bookings/bookings/">
+                            <a class="nav-link " href="/admin/dashboard/bookings/">
                               <span class="sidenav-mini-icon text-xs"> B </span>
                               <span class="sidenav-normal"> Bookings </span>
                             </a>
@@ -193,7 +193,7 @@
                       <div class="collapse " id="vDropdown">
                         <ul class="nav nav-sm flex-column">
                           <li class="nav-item">
-                            <a class="nav-link " href="/admin/dashboard/vendors/vendors/">
+                            <a class="nav-link " href="/admin/dashboard/vendors/">
                               <span class="sidenav-mini-icon text-xs"> V </span>
                               <span class="sidenav-normal"> Vendors </span>
                             </a>
