@@ -20,9 +20,10 @@ def admin_dashboard(request):
         return render(request, 'atc_site//admin//admin_dashboard.html', {'title': 'Overview', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 
                                                                 'top_selling_event': get_top_selling_event(),
                                                                 'customers': stripe.Customer.list(), 
-                                                                'income': (stripe.Balance.retrieve()['available'][0]['amount']+stripe.Balance.retrieve()['pending'][0]['amount']) / 100,
+                                                                'income': get_income(),
                                                                 'bookings': Booking.objects.all(), 
                                                                 'events': Events.objects.all(),
+                                                                "last_3_transactions": stripe.Invoice.list(limit=3)['data'],
                                                                 'customers_percentage_increase': get_customers_percentage_increase(),
                                                                 'customers_for_each_month_month': get_customers_for_each_month('month'), 'customers_for_each_month': get_customers_for_each_month(),
                                                                 'income_for_each_month_month': get_income_for_each_month('month'), 'income_for_each_month': get_income_for_each_month(),
@@ -144,7 +145,7 @@ def get_income_for_each_month(option=False):
     payouts_for_each_month = []
     month_data = []
     for i, month in enumerate(months):
-        month_data.append(stripe.BalanceTransaction.list(created={'lte': int(time.time()) - (86400*(i*30))})['data'])
+        month_data.append(stripe.Invoice.list(created={'lte': int(time.time()) - (86400*(i*30))})['data'])
     
     print(month_data)
     
@@ -152,7 +153,7 @@ def get_income_for_each_month(option=False):
         total = 0
         try:
             for amount in transaction:
-                total += amount['amount']
+                total += amount['subtotal']
             payouts_for_each_month.append(total/100)
         except:
             payouts_for_each_month.append(0)
@@ -161,6 +162,15 @@ def get_income_for_each_month(option=False):
     
     print(payouts_for_each_month)
     return payouts_for_each_month[::-1]
+
+def get_income():
+    invoices = stripe.Invoice.list()['data']
+    total = 0
+    
+    for transaction in invoices:
+        total += transaction['subtotal']
+
+    return total/100
 
 def get_booking_for_each_month(option=False):
     months = []

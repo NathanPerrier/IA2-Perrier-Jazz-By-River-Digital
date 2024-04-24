@@ -36,15 +36,19 @@ def create_ticket_checkout_session(request, event_id):
                     additional_items.append(voucher)
 
                 try:
+                    items=[]
+                    for item in additional_items:
+                        if check_stock(item): items.append({'price': str(item.stripe_price_id), 'quantity': 1, "adjustable_quantity": {"enabled": True, "minimum": 0, "maximum": get_stock(item)}})
+                        
                     checkout_session = stripe.checkout.Session.create(
                         customer=f'customuser-{str(request.user.id)}',
                         payment_method_types=['card'],
-                        line_items=([   #! fix
+                        line_items=([  
                             {
                                 'price': event.stripe_price_id,  
                                 'quantity': 1,
                             }
-                        ]) + ([{'price': str(item.stripe_price_id), 'quantity': 1, "adjustable_quantity": {"enabled": True, "minimum": 0, "maximum": get_stock(item)}} for item in additional_items]),
+                        ]) + items,
                         mode='payment',
                         success_url=request.build_absolute_uri(f'/events/{str(event.id)}/checkout/success/'),
                         cancel_url=request.build_absolute_uri(f'/events/{str(event.id)}/'),
@@ -55,8 +59,7 @@ def create_ticket_checkout_session(request, event_id):
                         billing_address_collection='required',
                     )
                     return redirect(checkout_session.url)
-                except Exception as e:
-                    return JsonResponse({'error': str(e)})
+                except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '500', 'title' : 'Internal Server Error', 'desc' : f'{e}. Please try again later.'})
             return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this event.'})
         return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'This event is no longer available. Please contact the administrator if you believe this is an error.'})
     return render(request, 'atc_site//sold_out.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': event})
@@ -193,13 +196,18 @@ def checkout_success(request, event_id):
             payment.save()
              
             return redirect(paid_invoice.hosted_invoice_url, code=303)
-        else:
-            return redirect(f'/events/{str(event_id)}/checkout/', code=303)
-    except Exception as e:
-        return JsonResponse({'error': str(e)})
+        else: return redirect(f'/events/{str(event_id)}/checkout/', code=303)
+    except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '500', 'title' : 'Internal Server Error', 'desc' : f'{e}. Please try again later.'})
 
 def get_stock(item):
     try:
         return item.stock
     except:
         return 1
+    
+def check_stock(item):
+    try:
+        if item.stock > 0: return True
+        return False
+    except:
+        return True

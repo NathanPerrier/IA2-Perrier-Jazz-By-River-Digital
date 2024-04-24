@@ -42,7 +42,6 @@
       <link rel="stylesheet" href="{% static 'soft-ui-pro/css/skins/custom.css' %}">
   </head>
   <body class="g-sidenav-show  bg-gray-100">
-
       <!-- nav start -->
         <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
           <div class="sidenav-header">
@@ -116,6 +115,12 @@
                       <a class="nav-link {% if title == 'Events' %}active{% endif %} " href="/admin/dashboard/events/">
                         <span class="sidenav-mini-icon"> E </span>
                         <span class="sidenav-normal"> Events </span>
+                      </a>
+                    </li>
+                    <li class="nav-item ">
+                      <a class="nav-link {% if title == 'Vouchers' %}active{% endif %} " href="/admin/dashboard/vouchers/">
+                        <span class="sidenav-mini-icon"> V </span>
+                        <span class="sidenav-normal"> Vouchers </span>
                       </a>
                     </li>
                     <li class="nav-item">
@@ -662,6 +667,8 @@
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+
+
   </script>
 
 

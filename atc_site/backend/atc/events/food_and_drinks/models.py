@@ -25,8 +25,8 @@ class FoodAndDrinksItem(models.Model):
     
     def save(self, *args, **kwargs):
         vendor_group = Group.objects.get(name='Vendor')
-        if self.quantity_sold > self.stock:
-            raise ValueError("Sold quantity cannot be more than available quantity")
+        if self.stock < 0:
+            raise ValidationError("Stock cannot be negative")
         if self.vendor not in CustomUser.objects.filter(groups=vendor_group):
             raise ValidationError("CustomUser must be in the Vendor group")
         super().save(*args, **kwargs)
