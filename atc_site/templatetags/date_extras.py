@@ -1,7 +1,7 @@
 from django import template
 from datetime import datetime, timedelta
 import pytz
-from atc_site.backend.location.main import GetLocation
+from django.utils import timezone
 
 register = template.Library()
 
@@ -26,4 +26,3 @@ def add_day(date):
     created_date = created + timedelta(days=1)
     
     return created_date
-

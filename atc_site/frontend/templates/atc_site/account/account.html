@@ -1,5 +1,6 @@
 {% extends "atc_site/template/main-template.html" %}
 {% load static %}
+{% load date_extras %}
 {% block content %}
 <link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'atc_site/css/account/main.css' %}" rel="stylesheet">
@@ -99,7 +100,8 @@
                     <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="min-width:100%">
                       <div class="col p-4 d-flex flex-column position-static"> <!--style="max-height: 280px"-->
                         <h3 class="mb-0" style="font-size:1.5rem">{{ booking.event.name }}</h3>
-                        <div class="my-1 text-muted"><small>{{booking.event.location }}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ booking.event.date|date:"d M, Y" }}</small></div>
+                        <div class="mt-1 text-muted"><small>{{booking.event.location }}</small><div class="text-dark ms-2" style="display:inline;border-right: 1.75px solid #6c757d90;"></div><small class="ms-1">{{ booking.event.date|date:"d M, Y" }}</small></div>
+                        <small class="text-muted my-0 mb-1">Ordered: {{booking.creation_time}} UTC</small>
                         <p class="card-text mb-auto my-1">Includes: 
                           <span class="badge bg-primary text-white">Ticket</span>
                           {% for item in food_and_drinks_booking %}
