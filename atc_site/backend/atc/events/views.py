@@ -152,7 +152,7 @@ def checkout_success(request, event_id):
                     voucher = Voucher.objects.create(
                         user=request.user,
                         voucher=event_voucher,
-                        code=Voucher.generate_code(),
+                        code=Voucher.generate_code().capitalize(),
                         purchase_amount=product.price.unit_amount/100,
                         amount_left=product.price.unit_amount/100,
                         event=event,

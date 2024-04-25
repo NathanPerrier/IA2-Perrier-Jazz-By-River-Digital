@@ -78,6 +78,7 @@ class BookingAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 item.food_and_drinks.item.food_and_drinks_item.stock += item.food_and_drinks.quantity
                 item.food_and_drinks.item.food_and_drinks_item.quantity_sold -= item.food_and_drinks.quantity
                 item.food_and_drinks.item.food_and_drinks_item.save()
+                item.food_and_drinks.delete()
             
             BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
             booking_vouchers = BookingVouchers.objects.filter(booking=obj)

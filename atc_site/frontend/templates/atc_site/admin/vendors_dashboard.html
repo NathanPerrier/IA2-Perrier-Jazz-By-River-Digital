@@ -17,32 +17,6 @@
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
-                                <button type="button" class="btn btn-outline-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">
-                                    Import
-                                </button>
-                                <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog mt-lg-10">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalLabel">Import CSV</h5>
-                                                <i class="fas fa-upload ms-3" aria-hidden="true"></i>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>You can browse your computer for a file.</p>
-                                                <div action="/vendor/dashboard/items/upload/" class="form-control dropzone dz-clickable productImg" id="productImg"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input dropbox" type="checkbox" value="" id="importCheck" checked="">
-                                                    <label class="custom-control-label" for="importCheck">I accept the terms and conditions</label>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn bg-gradient-primary btn-sm">Upload</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv" type="button" name="button">Export</button>
                             </div>
                         </div>
@@ -52,62 +26,48 @@
                     <div class="table-responsive">
                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
                             <thead class="thead-light">
-                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Price</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Tcikets Left</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Sold</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Target Groups</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Organiser</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Availablity</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Sale Dates</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Email</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">First Name</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Last Name</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Revenue</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">Items</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                             </thead>
                             <tbody>
-                                {% for item in vendors %}
+                                {% for item, items, revenue in vendors %}
                                     <tr>
                                         <td>
                                             <div class="d-flex">
-                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ item.image.url }}" alt="{{item.name}}">
-                                                <h6 class="ms-3 my-auto">{{item.name}}</h6>
+                                                {% if item.avatar %}
+                                                    <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ item.avatar.url }}" alt="{{item.name}}">
+                                                {% else %}
+                                                    <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="https://api.dicebear.com/6.x/initials/svg?seed={{item.first_name}}&randomizeIds=true" alt="{{item.name}}">
+                                                {% endif %}
+                                                <h6 class="ms-3 my-auto">{{item.email}}</h6>
                                             </div>
                                         </td>
-                                        <td class="text-sm">${{item.ticket_price}}</td>
-                                        <td class="text-sm">{{item.available_tickets}}</td>
-                                        <td class="text-sm">{{item.sold}}</td>
+                                        <td class="text-sm">{{item.first_name}}</td>
+                                        <td class="text-sm">{{item.last_name}}</td>
+                                        <td class="text-sm">${{revenue}}</td>
                                         <td class="text-sm">
-                                            {% if not item.target_groups.all %}
-                                                <span>None</span>
-                                            {% endif %}
-                                            {% for group in item.target_groups.all %}
-                                                <span>{{ group.name }}s</span>{% if not forloop.last %}, {% endif %}
-                                            {% endfor %}
-                                        </td>
-                                        <td class="text-sm">{{item.organizer.email}}</td>
-                                        <td>
-                                            {% if item.available_tickets > 0 %}
-                                                {% if item.sale_start_date > now %}
-                                                    <span class="badge badge-warning badge-sm">Coming Soon</span>
-                                                {% else %}
-                                                    {% if item.sale_end_date < now %}
-                                                        <span class="badge badge-danger badge-sm">Sale Ended</span>
+                                            {% if items|length > 2 %}
+                                                {% for vendor_item in items %}
+                                                    {% if forloop.counter <= 2 %}
+                                                        <span class="badge badge-secondary badge-sm">{{ vendor_item.name }}</span>
                                                     {% else %}
-                                                        <span class="badge badge-success badge-sm">On Sale</span>
+                                                        {% if forloop.counter == 3 %}
+                                                            <div id="expandableSection-{{item.id}}" style="display:none;">
+                                                        {% endif %}
+                                                        <span class="badge badge-secondary badge-sm">{{ vendor_item.name }}</span>
+                                                        {% if forloop.counter == invoice.lines|length %}
+                                                            </div>
+                                                            <a class="badge badge-dark bg-primary text-white me-2 mt-1" href="javascript:void(0);" onclick="toggleSection({{item.id}})">Show More</a>
+                                                        {% endif %}
                                                     {% endif %}
-                                                {% endif %}
-                                            {%else%}
-                                                <span class="badge badge-danger badge-sm">Sold Out</span>
-                                            {%endif%}                                
-                                        </td>
-                                        <td>
-                                            {% if item.date > now %}
-                                                <span class="badge badge-warning badge-sm">Upcoming</span>
+                                                {% endfor %}
                                             {% else %}
-                                                <span class="badge badge-danger badge-sm">Ended</span>
+                                                {% for vendor_item in items %}
+                                                    <span class="badge badge-secondary badge-sm">{{ vendor_item.name }}</span>
+                                                {% endfor %}
                                             {% endif %}
                                         </td>
-                                        <td>
-                                            {{ item.sale_release_date|date:"d M, Y" }} - {{ item.sale_end_date|date:"d M, Y"}}
-                                        </td>
-                                        <td>
-                                            {{ item.date|date:"d M, Y" }}
-                                        </td>
                                         <td class="text-sm">
-                                            <a href="/events/{{item.id}}/" data-bs-toggle="tooltip" data-bs-original-title="View Order">
-                                                <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
-                                            </a>
-                                            <a href="/events/{{item.id}}/edit/" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product">
+                                            <a href="/adminatc_site/customuser/{{item.id}}/change/" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product">
                                                 <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
                                             </a>
                                             <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
@@ -167,11 +127,22 @@
                     'success'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.replace('/admin/dashboard/events/'+item_id+'/delete/');
+                        window.location.replace('/admin/dashboard/vendors/'+item_id+'/delete/');
                     }
                 });
             }
         })
+    }
+
+    function toggleSection(item_id) {
+        var section = document.getElementById("expandableSection-"+item_id);
+        if (section.style.display === "none") {
+            section.style.display = "block";
+            event.target.textContent = "Show Less";
+        } else {
+            section.style.display = "none";
+            event.target.textContent = "Show More";
+        }
     }
 
 </script>

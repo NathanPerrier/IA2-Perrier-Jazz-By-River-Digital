@@ -1,6 +1,7 @@
 
 {% extends 'atc_site/template/dashboard.html' %} 
 {% load static %} 
+{% load date_extras %}
 {% block content %}
 
 <div class="container-fluid py-4">
@@ -10,16 +11,13 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">All Users</h5>
+                            <h5 class="mb-0">All Invoices</h5>
                             <p class="text-sm mb-0">
-                                All of the sites users!
+                                All Invoices for all Bookings!
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
-                                <button type="button" class="btn btn-outline-primary btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#import">
-                                    Import
-                                </button>
                                 <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog mt-lg-10">
                                         <div class="modal-content">
@@ -52,50 +50,58 @@
                     <div class="table-responsive">
                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
                             <thead class="thead-light">
-                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Email</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">First Name</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Last Name</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">is_staff</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">is_superuser</a></th><th data-sortable="" style="width: 12.2542%;"><a href="#" class="dataTable-sorter">is_active</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 18.1757%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Revenue</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Currency</a></td><th data-sortable="" style="width: 18.2542%;"><a href="#" class="dataTable-sorter">Items</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Creation Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                             </thead>
                             <tbody>
-                                {% for item in users %}
+                                {% for item, booking in invoices %}
                                     <tr>
                                         <td>
                                             <div class="d-flex">
-                                                {% if item.avatar %}
-                                                    <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ item.avatar.url }}" alt="{{item.name}}">
-                                                {% else %}
-                                                    <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="https://api.dicebear.com/6.x/initials/svg?seed={{item.first_name}}&randomizeIds=true" alt="{{item.name}}">
-                                                {% endif %}
-                                                <h6 class="ms-3 my-auto">{{item.email}}</h6>
+                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ booking.event.image.url }}" alt="{{booking.event.name}}">
+                                                <h6 class="ms-3 my-auto">{{booking.event.name}}</h6>
                                             </div>
                                         </td>
-                                        <td class="text-sm">{{item.first_name}}</td>
-                                        <td class="text-sm">{{item.last_name}}</td>
+                                        <td class="text-sm">{{item.customer_email}}</td>
+                                        <td class="text-sm">${{item.subtotal|div:100}}</td>
+                                        <td class="text-sm">{{ item.lines.data.0.price.currency|upper }}</td>
                                         <td class="text-sm">
-                                            {% if item.is_staff %}
-                                                <span class="badge badge-success">True</span>
+                                            {% if item.lines|length > 2 %}
+                                                {% for line in item.lines %}
+                                                    {% if forloop.counter <= 2 %}
+                                                        <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
+                                                    {% else %}
+                                                        {% if forloop.counter == 3 %}
+                                                            <div id="expandableSection-{{item.id}}" style="display:none;">
+                                                        {% endif %}
+                                                        <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
+                                                        {% if forloop.counter == invoice.lines|length %}
+                                                            </div>
+                                                            <a class="badge badge-dark bg-primary text-white me-2 mt-1" href="javascript:void(0);" onclick="toggleSection({{item.id}})">Show More</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
                                             {% else %}
-                                                <span class="badge badge-danger">False</span>
+                                                {% for line in item.lines %}
+                                                    <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
+                                                {% endfor %}
                                             {% endif %}
                                         </td>
-                                        <td class="text-sm">
-                                            {% if item.is_superuser %}
-                                                <span class="badge badge-success">True</span>
+                                        <td>
+                                            {% if not item.status == 'paid' %}
+                                                <span class="badge badge-warning badge-sm">{{ item.status }}</span>
                                             {% else %}
-                                                <span class="badge badge-danger">False</span>
+                                                <span class="badge badge-success badge-sm">{{ item.status}}</span>
                                             {% endif %}
                                         </td>
-                                        <td class="text-sm">
-                                            {% if item.is_active %}
-                                                <span class="badge badge-success">True</span>
-                                            {% else %}
-                                                <span class="badge badge-danger">False</span>
-                                            {% endif %}
+                                        <td>
+                                            {{ booking.creation_time|date:"d M, Y" }}
                                         </td>
                                         <td class="text-sm">
-                                            <a href="/adminatc_site/customuser/{{item.id}}/change/" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit product">
-                                                <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
+                                            <a href="{{item.hosted_invoice_url}}" data-bs-toggle="tooltip" data-bs-original-title="View Order">
+                                                <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
                                             </a>
-                                            <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
-                                                <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
+                                            <a href="{{item.invoice_pdf}}" class="ms-3" data-bs-toggle="tooltip" data-bs-original-title="View Invoice">
+                                                <i class="fas fa-file-invoice text-secondary" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -134,29 +140,18 @@
         });
     };
 
-    function confirmDelete(item_id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#7367f0',
-            cancelButtonColor: '#28c76f',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                ).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.replace('/admin/dashboard/users/'+item_id+'/delete/');
-                    }
-                });
-            }
-        })
+  
+    function toggleSection(item_id) {
+        var section = document.getElementById("expandableSection-"+item_id);
+        if (section.style.display === "none") {
+            section.style.display = "block";
+            event.target.textContent = "Show Less";
+        } else {
+            section.style.display = "none";
+            event.target.textContent = "Show More";
+        }
     }
+
 
 </script>
 

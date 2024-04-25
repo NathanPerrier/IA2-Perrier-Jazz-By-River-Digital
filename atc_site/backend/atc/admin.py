@@ -86,6 +86,7 @@ def delete_booking(request, booking_id):
                 item.food_and_drinks.item.food_and_drinks_item.stock += item.food_and_drinks.quantity
                 item.food_and_drinks.item.food_and_drinks_item.quantity_sold -= item.food_and_drinks.quantity
                 item.food_and_drinks.item.food_and_drinks_item.save()
+                item.food_and_drinks.delete()
             
             BookingFoodAndDrinks.objects.filter(booking=obj).delete() #? obj.id?
             booking_vouchers = BookingVouchers.objects.filter(booking=obj)
@@ -162,7 +163,22 @@ def delete_voucher(request, voucher_id):
 @login_required
 def vendors_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
-        return render(request, 'atc_site//admin//vendors_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendors':  CustomUser.objects.filter(groups=Group.objects.get(name='Vendor'))})
+        return render(request, 'atc_site//admin//vendors_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendors': get_vendors()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+
+@login_required
+def delete_vendor(request, vendor_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            vendor = CustomUser.objects.get(id=vendor_id)
+            FoodAndDrinksItem.objects.filter(vendor=vendor).delete()
+            EventFoodAndDrinks.objects.filter(food_and_drinks_item__vendor=vendor).delete()
+            vendor_group = Group.objects.get(name='Vendor')  
+            vendor.groups.remove(vendor_group)  
+            vendor.save()
+            return redirect('/admin/dashboard/vendors/')
+        except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -209,6 +225,16 @@ def delete_item(request, item_id):
             return redirect('vendor_items_dashboard')
         except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+
+#* STRIPE
+
+@login_required
+def stripe_invoice_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//stripe_invoice_dashboard.html', {'title': 'Stripe Invoice Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'invoices': get_stripe_invoices()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
 
 
 #* Other
@@ -310,3 +336,22 @@ def get_invoices_for_bookings(bookings):
     for booking in bookings:
         invoices.append([booking, stripe.Invoice.retrieve(booking.stripe_invoice_id)])
     return invoices
+
+def get_vendors():
+    vendors = []
+    for vendor in CustomUser.objects.filter(groups=Group.objects.get(name='Vendor')):
+        revenue = 0
+        for order in FoodAndDrinks.objects.filter(item__food_and_drinks_item__vendor=vendor):
+            revenue += order.item.food_and_drinks_item.price * order.quantity
+        vendors.append([vendor, FoodAndDrinksItem.objects.filter(vendor=vendor).all(), revenue])
+        
+    return vendors
+
+def get_stripe_invoices():
+    invoices = []
+    for invoice in stripe.Invoice.list():
+        for booking in Booking.objects.all():
+            if invoice.id == booking.stripe_invoice_id:
+                invoices.append([invoice, booking])
+    return invoices
+

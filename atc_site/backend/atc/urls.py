@@ -65,7 +65,10 @@ urlpatterns = [
     path('admin/dashboard/events/', admin.events_dashboard, name='users_dashboard'),
     path('admin/dashboard/events/<int:event_id>/delete/', admin.delete_event, name='delete_event'),
     
+    path('admin/dashboard/stripe/invoices/', admin.stripe_invoice_dashboard, name='stripe_invoice'),
+    
     path('admin/dashboard/vendors/', admin.vendors_dashboard, name='vendors_dashboard'),
+    path('admin/dashboard/vendors/<int:vendor_id>/delete/', admin.delete_vendor, name='delete_vendor'),
     path('admin/dashboard/vendors/items/', admin.vendor_items_dashboard, name='vendor_items_dashboard'),
     path('admin/dashboard/vendors/items/<int:item_id>/activate/', admin.activate_item, name='vendor_item_atcivate'),
     path('admin/dashboard/vendors/items/<int:item_id>/deactivate/', admin.deactivate_item, name='vendor_items_deactivate'),
