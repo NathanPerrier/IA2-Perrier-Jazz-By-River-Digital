@@ -23,6 +23,7 @@ class Voucher(models.Model):
     expiration_date = models.DateTimeField(blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
+    sent = models.BooleanField(default=False)
     stripe_coupon_id = models.CharField(max_length=256, blank=True, null=True)
     stripe_code_id = models.CharField(max_length=256, blank=True, null=True)
 

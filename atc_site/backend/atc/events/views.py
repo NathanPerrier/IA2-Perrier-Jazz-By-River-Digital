@@ -136,7 +136,7 @@ def checkout_success(request, event_id):
                     BookingFoodAndDrinks.objects.create(
                         food_and_drinks=food_and_drink,
                         user=request.user,
-                        booking=Booking.objects.get(stripe_invoice_id=invoice.id),
+                        booking=booking,
                     )
                     
                     print('FOOD AND DRINKS ITEM CREATED')
@@ -156,6 +156,7 @@ def checkout_success(request, event_id):
                         purchase_amount=product.price.unit_amount/100,
                         amount_left=product.price.unit_amount/100,
                         event=event,
+                        sent=True,
                         expiration_date=timezone.now() + timezone.timedelta(days=365),
                     )
                     
@@ -173,11 +174,16 @@ def checkout_success(request, event_id):
                     BookingVouchers.objects.create(
                         voucher=voucher,
                         user=request.user,
-                        booking=Booking.objects.get(stripe_invoice_id=invoice.id),
+                        booking=booking,
                     )
                     
                     #remove??
-                    send_custom_emails(request.user.email, request.user.first_name, 'Voucher Purchased', f'Thank you for purchasing a voucher for {event.name}, this voucher can be used online or in-person. \nYour code is: \n \n {voucher.code}')
+                    try:
+                        send_custom_emails(request.user.email, request.user.first_name, 'Voucher Purchased', f'Thank you for purchasing a voucher for {event.name}, this voucher can be used online or in-person. \nYour code is: \n \n {voucher.code}')
+                    except Exception as e: 
+                        print(e)
+                        voucher.sent = False
+                        voucher.save()
                     
                     voucher.stripe_coupon_id = stripe_voucher.id
                     voucher.stripe_code_id = promo_code.id

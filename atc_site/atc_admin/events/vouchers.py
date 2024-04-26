@@ -53,14 +53,18 @@ class EventVoucherAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             )
         # link = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
         obj.stripe_price_id = price.id
-        print(obj.stripe_price_id)
+        obj.save()
         super().save_model(request, obj, form, change)
         
     
     def delete_view(self, request, object_id, extra_context=None):
         obj = self.get_object(request, object_id)
         
-        stripe.Product.delete(id=f'event-voucher-{str(obj.id)}')
-        stripe.Price.modify(id=obj.stripe_price_id, active=False)
-        
+        try:
+            stripe.Product.delete(id=f'event-voucher-{str(obj.id)}')
+            stripe.Price.modify(id=obj.stripe_price_id, active=False)
+        except Exception as e:
+            print(e)
+            
+        obj.delete()    
         return super().delete_view(request, object_id, extra_context)

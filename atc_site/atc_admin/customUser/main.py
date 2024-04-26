@@ -85,13 +85,20 @@ class CustomUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
         if not change:
             EmailAddress.objects.create(user=obj, email=obj.email, primary=True, verified=True)
+            
+        obj.save()
+        super().save_model(request, obj, form, change)
     
 
     def delete_view(self, request, object_id, extra_context=None):
         obj = self.get_object(request, object_id)
         
-        stripe.Customer.delete(f'customuser-{str(obj.id)}')
+        try:
+            stripe.Customer.delete(f'customuser-{str(obj.id)}')
+        except Exception as e:
+            print(e)
         
+        obj.delete()
         return super().delete_view(request, object_id, extra_context)
     
 

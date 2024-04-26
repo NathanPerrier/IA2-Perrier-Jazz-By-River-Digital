@@ -55,6 +55,7 @@ urlpatterns = [
     
     path('admin/dashboard/vouchers/', admin.vouchers_dashboard, name='vouchers_dashboard'),
     path('admin/dashboard/vouchers/<int:voucher_id>/delete/', admin.delete_voucher, name='delete_voucher'),
+    path('admin/dashboard/vouchers/<int:voucher_id>/send/', admin.send_voucher, name='edit_voucher'),
     
     path('admin/dashboard/bookings/', admin.bookings_dashboard, name='bookings_dashboard'),
     path('admin/dashboard/bookings/<int:booking_id>/delete/', admin.delete_booking, name='booking_dashboard'),

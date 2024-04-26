@@ -23,4 +23,5 @@ class EventScheduleItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     search_fields = ('title', 'description', 'start_time', 'end_time')
     
     def save_model(self, request, obj, form, change):
+        obj.save()
         super().save_model(request, obj, form, change)

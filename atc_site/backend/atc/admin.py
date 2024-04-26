@@ -158,6 +158,21 @@ def delete_voucher(request, voucher_id):
         except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+@login_required
+def send_voucher(request, voucher_id):
+    if request.user.is_staff or request.user.is_superuser:
+        voucher = Voucher.objects.get(id=voucher_id)
+        code = stripe.PromotionCode.retrieve(voucher.stripe_code_id)
+        try:
+            send_custom_emails(request.user.email, request.user.first_name, 'Voucher Purchased', f'Thank you for purchasing a voucher for {voucher.event.name}, this voucher can be used online or in-person. \nYour code is: \n \n {code.code}')
+            voucher.sent = True
+        except Exception as e: 
+            print(e)
+            voucher.sent = False
+        voucher.save()
+        return redirect('/admin/dashboard/vouchers/')
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
 #* VENDORS
 
 @login_required

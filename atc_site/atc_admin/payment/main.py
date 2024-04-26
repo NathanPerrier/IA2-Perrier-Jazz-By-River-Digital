@@ -61,4 +61,5 @@ class PaymentAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         return custom_urls + urls
     
     def save_model(self, request, obj, form, change):
+        obj.save()
         return super().save_model(request, obj, form, change)

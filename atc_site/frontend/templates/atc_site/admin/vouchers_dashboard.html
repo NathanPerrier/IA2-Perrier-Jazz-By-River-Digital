@@ -52,7 +52,7 @@
                     <div class="table-responsive">
                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
                             <thead class="thead-light">
-                                <tr><th data-sortable="" style="width: 26.2542%;"><a href="#" class="dataTable-sorter">Name</a></th><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Price</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Amount Left</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Expiration Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                                <tr><th data-sortable="" style="width: 26.2542%;"><a href="#" class="dataTable-sorter">Name</a></th><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Price</a></th><th data-sortable="" style="width: 11.1757%;"><a href="#" class="dataTable-sorter">Amount Left</a></th><th data-sortable="" style="width: 10.4176%;"><a href="#" class="dataTable-sorter">Expiration Date</a></th><th data-sortable="" style="width: 25.4176%;"><a href="#" class="dataTable-sorter">Sent</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                             </thead>
                             <tbody>
                                 {% for item in vouchers %}
@@ -66,6 +66,16 @@
                                         <td class="text-sm">{{item.user.email}}</td>
                                         <td class="text-sm">${{item.voucher.price}}</td>
                                         <td class="text-sm">${{item.amount_left}}</td>
+                                        <td class="text-sm">
+                                            {% if item.sent %}
+                                                <span class="badge badge-success badge-sm">SENT</span>
+                                            {% else %}
+                                                <div class="d-flex">
+                                                    <span class="badge badge-danger badge-sm">NOT SENT</span>
+                                                    <a href="/admin/dashboard/vouchers/{{item.id}}/send/" class="ms-3"><i class="fa fa-send"></i></a>
+                                                </div>
+                                            {% endif %}
+                                        </td>
                                         <td class="text-sm">{{item.expiration_date|date:"d, M, Y"}}</td>
                                         <td class="text-sm">
                                             <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
