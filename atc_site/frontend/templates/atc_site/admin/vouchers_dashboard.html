@@ -75,7 +75,15 @@
                                     </tr>
                                 {% endfor %}
                             </tbody> 
-                        </table></div><div class="dataTable-bottom"><div class="dataTable-info">Showing 1 to 7 of 15 entries</div><nav class="dataTable-pagination"><ul class="dataTable-pagination-list"><li class="pager"><a href="#" data-page="1">‹</a></li><li class="active"><a href="#" data-page="1">1</a></li><li class=""><a href="#" data-page="2">2</a></li><li class=""><a href="#" data-page="3">3</a></li><li class="pager"><a href="#" data-page="2">›</a></li></ul></nav></div></div>
+                        </table></div>
+                        {% if vouchers|length == 0 %}
+                            <div class="text-center">
+                                <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
+                                <h5 class="text-center">Their No Items To Display!</h5>
+                                <small class="text-center">If you believe this is a mistake, please <a href="/#contact">contact us!</a></small>
+                            </div>
+                        {% endif %}
+                        <div class="dataTable-bottom"><div class="dataTable-info">Showing 1 to 7 of 15 entries</div><nav class="dataTable-pagination"><ul class="dataTable-pagination-list"><li class="pager"><a href="#" data-page="1">‹</a></li><li class="active"><a href="#" data-page="1">1</a></li><li class=""><a href="#" data-page="2">2</a></li><li class=""><a href="#" data-page="3">3</a></li><li class="pager"><a href="#" data-page="2">›</a></li></ul></nav></div></div>
                     </div>
                 </div>
             </div>

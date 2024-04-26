@@ -56,6 +56,8 @@ class CustomUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         if 'password' in form.changed_data:
             obj.password = make_password(obj.password)
             
+        super().save_model(request, obj, form, change)
+            
         if obj.email.endswith('@atc.qld.edu.au') and (obj.email not in CustomUser.objects.values_list('email', flat=True)):
             if is_teacher(obj, obj.first_name, obj.last_name, obj.email):
                 obj.groups.add(Group.objects.get(name='Teacher'))
@@ -80,7 +82,7 @@ class CustomUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 name=str(obj.first_name + ' ' + obj.last_name),
                 email=obj.email,
             )
-        super().save_model(request, obj, form, change)
+
         if not change:
             EmailAddress.objects.create(user=obj, email=obj.email, primary=True, verified=True)
     

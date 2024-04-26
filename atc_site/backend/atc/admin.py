@@ -287,7 +287,8 @@ def get_income_for_each_month(option=False):
         total = 0
         try:
             for amount in transaction:
-                total += amount['subtotal']
+                if amount.id in [booking.stripe_invoice_id for booking in Booking.objects.all()]:
+                    total += amount['subtotal']
             payouts_for_each_month.append(total/100)
         except:
             payouts_for_each_month.append(0)
