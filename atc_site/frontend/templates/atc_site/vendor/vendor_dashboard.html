@@ -11,9 +11,9 @@
           <div class="col-7 text-start">
             <p class="text-sm mb-1 text-capitalize font-weight-bold">Sales</p>
             <h5 class="font-weight-bolder mb-0">
-              $230,220
+              ${{revenue}}
             </h5>
-            <span class="text-sm text-end text-success font-weight-bolder mt-auto mb-0">+55% <span class="font-weight-normal text-secondary">since last month</span></span>
+            <span class="text-sm text-end text-success font-weight-bolder mt-auto mb-0">+${{revenue}} <span class="font-weight-normal text-secondary">since last month</span></span>
           </div>
           <div class="col-5">
             <div class="dropdown text-end">
@@ -38,9 +38,9 @@
           <div class="col-7 text-start">
             <p class="text-sm mb-1 text-capitalize font-weight-bold">Customers</p>
             <h5 class="font-weight-bolder mb-0">
-              3.200
+              {{customers}}
             </h5>
-            <span class="text-sm text-end text-success font-weight-bolder mt-auto mb-0">+12% <span class="font-weight-normal text-secondary">since last month</span></span>
+            <span class="text-sm text-end text-success font-weight-bolder mt-auto mb-0">+{{customers}} <span class="font-weight-normal text-secondary">since last month</span></span>
           </div>
           <div class="col-5">
             <div class="dropdown text-end">
@@ -63,11 +63,11 @@
       <div class="card-body p-3 position-relative">
         <div class="row">
           <div class="col-7 text-start">
-            <p class="text-sm mb-1 text-capitalize font-weight-bold">Avg. Revenue</p>
+            <p class="text-sm mb-1 text-capitalize font-weight-bold">Active Orders</p>
             <h5 class="font-weight-bolder mb-0">
-              $1.200
+              {{ active_orders }}
             </h5>
-            <span class="font-weight-normal text-secondary text-sm"><span class="font-weight-bolder">+$213</span> since last month</span>
+            <span class="font-weight-normal text-secondary text-sm"><span class="font-weight-bolder text-success">+{{active_orders}}</span> since last month</span>
           </div>
           <div class="col-5">
             <div class="dropdown text-end">

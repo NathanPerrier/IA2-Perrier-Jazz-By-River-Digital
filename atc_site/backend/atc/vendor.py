@@ -12,7 +12,7 @@ stripe.api_key = config('STRIPE_API_KEY')
 @login_required
 def vendor_dashboard(request):
     if request.user.groups.filter(name='Vendor').exists():
-        return render(request, 'atc_site//vendor//vendor_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
+        return render(request, 'atc_site//vendor//vendor_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'customers': get_customer(request.user), 'revenue': get_revenue(request.user), 'active_orders': get_active_orders(request.user)})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -119,3 +119,32 @@ def get_active_items(vendor):
         active_items.append(item.food_and_drinks_item)
         
     return active_items
+
+def get_customer(vendor):
+    """
+    Get all customers for a given vendor.
+    """
+    items = BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item__vendor=vendor).all()
+    customers = []
+    for item in items:
+        if item.user not in customers:
+            customers.append(item.user)
+    return len(customers)
+
+def get_revenue(vendor):
+    revenue = 0
+    items = BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item__vendor=vendor).all()
+    for item in items:
+        revenue += item.food_and_drinks.quantity * item.food_and_drinks.item.food_and_drinks_item.price
+    return revenue
+
+def get_active_orders(vendor):
+    """
+    Get all active orders for a given vendor.
+    """
+    items = BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item__vendor=vendor).all()
+    active_orders = []
+    for item in items:
+        if item.booking.event.date > timezone.now():
+            active_orders.append(item.food_and_drinks)
+    return len(active_orders)

@@ -70,7 +70,7 @@
                                     <td class="text-xs font-weight-bold">
                                         <div class="d-flex align-items-center">
                                             {% if order.user.avatar %}<img src="{{ order.user.avatar.url}}" class="avatar avatar-xs me-2" alt="user image">{%else%}<img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true" class="avatar avatar-xs me-2" alt="user image">{%endif%}
-                                            <span>{{ order.user.first_name }} {{ order.user.last_name }}</span>
+                                            <span>{{ order.user.email }}</span>
                                         </div>
                                     </td>
                                     <td class="text-xs font-weight-bold">
