@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .main import *
 from django.db.models import Count
 from django.utils import timezone
-import time, datetime
+import time, datetime, calendar
 from .events.food_and_drinks.models import FoodAndDrinksItem, FoodAndDrinks, BookingFoodAndDrinks, EventFoodAndDrinks
 
 stripe.api_key = config('STRIPE_API_KEY')
@@ -12,7 +12,7 @@ stripe.api_key = config('STRIPE_API_KEY')
 @login_required
 def vendor_dashboard(request):
     if request.user.groups.filter(name='Vendor').exists():
-        return render(request, 'atc_site//vendor//vendor_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'customers': get_customer(request.user), 'revenue': get_revenue(request.user), 'active_orders': get_active_orders(request.user)})
+        return render(request, 'atc_site//vendor//vendor_dashboard.html', {'title': 'Vendor Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'customers': get_customer(request.user), 'revenue': get_revenue(request.user), 'active_orders': get_active_orders(request.user), 'revenue_for_each_month': get_revenue_for_each_month(request.user), 'revenue_by_customer': get_revenue_by_customer(request.user), 'top_selling_items': get_top_5_selling_items(request.user)})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -148,3 +148,52 @@ def get_active_orders(vendor):
         if item.booking.event.date > timezone.now():
             active_orders.append(item.food_and_drinks)
     return len(active_orders)
+
+def get_revenue_for_each_month(vendor):
+    """
+    Get revenue for each month for a given vendor.
+    """
+    items = BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item__vendor=vendor).all()
+    revenue = {}
+    for item in items:
+        month = item.booking.event.date.strftime('%B')
+        if month not in revenue:
+            revenue[month] = 0
+        revenue[month] += item.food_and_drinks.quantity * item.food_and_drinks.item.food_and_drinks_item.price
+        
+    if len(revenue) < 5:
+        # Create a new dictionary to hold the new items
+        new_items = {}
+        for i in range(5-len(revenue)):
+            new_items[calendar.month_name[datetime.datetime.now().month-(((5-1)-len(revenue))-i)]] = 0
+
+        # Update the new_items dictionary with the existing revenue dictionary
+        new_items.update(revenue)
+
+        # Replace the revenue dictionary with the new_items dictionary
+        revenue = new_items
+    return revenue
+
+def get_revenue_by_customer(vendor):
+    """
+    Get revenue by customer for a given vendor.
+    """
+    items = BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item__vendor=vendor).all()
+    revenue = {}
+    for item in items:
+        if item.user not in revenue and len(revenue) < 5:
+            revenue[item.user] = 0
+        revenue[item.user] += item.food_and_drinks.quantity * item.food_and_drinks.item.food_and_drinks_item.price
+    return {k: v for k, v in sorted(revenue.items(), key=lambda item: item[1], reverse=True)}
+
+def get_top_5_selling_items(vendor):
+    """
+    Get the top 5 selling items for a given vendor.
+    """
+    items = BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item__vendor=vendor).all()
+    top_items = {}
+    for item in items:
+        if item.food_and_drinks.item.food_and_drinks_item not in top_items:
+            top_items[item.food_and_drinks.item.food_and_drinks_item] = 0
+        top_items[item.food_and_drinks.item.food_and_drinks_item] += item.food_and_drinks.quantity*item.food_and_drinks.item.food_and_drinks_item.price
+    return {k: v for k, v in sorted(top_items.items(), key=lambda item: item[1], reverse=True)[:5]}

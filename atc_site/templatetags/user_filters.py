@@ -1,5 +1,6 @@
 from django import template
 import random
+from ..backend.atc.events.food_and_drinks.models import BookingFoodAndDrinks
 
 register = template.Library()
 
@@ -76,3 +77,10 @@ def total_vendor_price(invoice_lines, vendor_items):
 def get_random(*args):
     return random.choice(args)
      
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+@register.filter
+def get_orders_for_item(item):
+    return BookingFoodAndDrinks.objects.filter(food_and_drinks__item__food_and_drinks_item=item).count()
