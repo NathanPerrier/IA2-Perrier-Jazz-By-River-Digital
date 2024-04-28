@@ -223,7 +223,7 @@ def checkout_success(request, event_id):
                 stripe_voucher = session.total_details.breakdown.discounts[0].discount.coupon.id
                 voucher = Voucher.objects.get(stripe_coupon_id=stripe_voucher)
                 
-                amount_left = float(voucher.amount_left) - session.total_details.amount_discount/100
+                amount_left = max((float(voucher.amount_left) - session.total_details.amount_discount/100), 0)
                 
                 stripe_voucher = stripe.Coupon.retrieve(voucher.stripe_coupon_id).delete()
                 promo_code = stripe.PromotionCode.retrieve(voucher.stripe_code_id)
