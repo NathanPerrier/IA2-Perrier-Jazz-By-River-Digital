@@ -61,7 +61,11 @@ def vendor_order(request, order_id):
 def create_item(request):
     if request.user.groups.filter(name='Vendor').exists():
         if request.method == 'POST':
-            print(request.POST['name'].lower())
+            print(request.POST['name'].capitalize())
+            print('price', request.POST['price'])
+            print('stock', request.POST['stock'])
+            print('description', request.POST['description']) #! issue retrieving description (returns null)
+            return JsonResponse({'success': True})
         return render(request, 'atc_site//vendor//create_item.html', {'title': 'Create Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
@@ -69,6 +73,12 @@ def create_item(request):
 def edit_item(request, item_id):
     if request.user.groups.filter(name='Vendor').exists():
         #handle the POST request -> if request.POST:
+        if request.method == 'POST':
+            print(request.POST['name'].capitalize())
+            print('price', request.POST['price'])
+            print('stock', request.POST['stock'])
+            print('description', request.POST['description']) #! issue retrieving description (returns null)
+            return JsonResponse({'success': True})
         try:
             item = FoodAndDrinksItem.objects.get(id=item_id)
             if request.user == item.vendor: return render(request, 'atc_site//vendor//edit_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'item': item})

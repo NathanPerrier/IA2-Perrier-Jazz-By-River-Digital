@@ -50,7 +50,7 @@
                 
                 <div class="row">
                     <div class="col-12 col-lg-8 m-auto">
-                        <form class="multisteps-form__form mb-8" method="POST" style="height: 408px;">
+                        <form class="multisteps-form__form mb-8" method="POST" onSubmit="/vendor/dashboard/items/create/" style="height: 408px;">
                             {% csrf_token %}
                             <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
                                 <h5 class="font-weight-bolder">Item Information</h5>
@@ -62,7 +62,7 @@
                                         </div>
                                         <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                             <label>Stock</label>
-                                            <input class="multisteps-form__input form-control" type="text" placeholder="eg. 42" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input class="multisteps-form__input form-control" name="stock" type="text" placeholder="eg. 42" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 mt-sm-0 mt-4">
@@ -71,7 +71,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="border-radius: 8px 0 0 8px;">$</span>
                                             </div>
-                                            <input class="multisteps-form__input form-control ps-2" type="text" placeholder="eg. 5.99" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input class="multisteps-form__input form-control ps-2" name="price" type="text" placeholder="eg. 5.99" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="button-row d-flex mt-4">
                                         <button class="btn bg-gradient-secondary mb-0 js-btn-prev" type="button" title="Prev">Prev</button>
-                                        <button class="btn bg-gradient-dark ms-auto mb-0" type="button" type="submit" method="POST" name="submit" title="Send">Send</button>
+                                        <button class="btn bg-gradient-dark ms-auto mb-0" type="button" type="submit" onclick="addItem()" method="POST" name="submit" title="Send">Send</button>
                                     </div>
                                 </div>
                             </div>
@@ -125,6 +125,53 @@
 {% endblock %}
 {% block scripts %}
 <script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+
+    function addItem() {
+        const name = document.querySelector('input[name="name"]').value;
+        const stock  = document.querySelector('input[name="stock"]').value;
+        const price = document.querySelector('input[name="price"]').value;
+        const description =  document.querySelector('input[name="description"]');
+
+        console.log(document.getElementById('edit-description'));
+
+        // add validation, also fix retrieving description and image
+
+        var itemData = new FormData();
+        itemData.append('name', name);
+        itemData.append('stock', stock);
+        itemData.append('price', price);
+        itemData.append('description', description);
+
+        fetch('/vendor/dashboard/items/create/', {
+            method: 'POST',
+            body: itemData,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.replace("/vendor/dashboard/items/");
+            } else {
+                alert(data.error);
+            }
+        });
+    }
     
     if (document.getElementById('edit-deschiption')) {
         var quill = new Quill('#edit-deschiption', {

@@ -58,11 +58,11 @@
                                     <div class="row mt-3">
                                         <div class="col-12 col-sm-6">
                                             <label>Name</label>
-                                            <input class="multisteps-form__input form-control" type="text" placeholder="eg. Sausage Roll" value="{{ item.name }}" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input name="name" class="multisteps-form__input form-control" type="text" placeholder="eg. Sausage Roll" value="{{ item.name }}" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                         <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                             <label>Stock</label>
-                                            <input class="multisteps-form__input form-control" type="text" placeholder="eg. 42" value="{{ item.stock }}" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input name="stock" class="multisteps-form__input form-control" type="text" placeholder="eg. 42" value="{{ item.stock }}" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 mt-sm-0 mt-4">
@@ -71,7 +71,7 @@
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="border-radius: 8px 0 0 8px;">$</span>
                                             </div>
-                                            <input class="multisteps-form__input form-control ps-2" type="text" placeholder="eg. 5.99" value="{{ item.price }}" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input name="price" class="multisteps-form__input form-control ps-2" type="text" placeholder="eg. 5.99" value="{{ item.price }}" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -83,7 +83,7 @@
                                             
                                            
                                             <div id="edit-deschiption" class="h-50 ql-container ql-snow">
-                                                <div class="ql-editor" data-gramm="false" contenteditable="true">
+                                                <div name="description" class="ql-editor" data-gramm="false" contenteditable="true">
                                                     {{ item.description }}
                                                 </div>
                                                 <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
@@ -112,7 +112,7 @@
                                     </div>
                                     <div class="button-row d-flex mt-4">
                                         <button class="btn bg-gradient-secondary mb-0 js-btn-prev" type="button" title="Prev">Prev</button>
-                                        <button class="btn bg-gradient-dark ms-auto mb-0" type="button" title="Send">Send</button>
+                                        <button class="btn bg-gradient-dark ms-auto mb-0" onclick="editItem()" type="submit" title="Send">Send</button>
                                     </div>
                                 </div>
                             </div>
@@ -126,6 +126,55 @@
 {% endblock %}
 {% block scripts %}
 <script>
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+
+    function editItem() {
+        const name = document.querySelector('input[name="name"]').value;
+        const stock  = document.querySelector('input[name="stock"]').value;
+        const price = document.querySelector('input[name="price"]').value;
+        const description =  document.querySelector('input[name="description"]');
+
+        console.log(document.getElementById('edit-description'));
+
+        // add validation, also fix retrieving description and image
+
+        var itemData = new FormData();
+        itemData.append('name', name);
+        itemData.append('stock', stock);
+        itemData.append('price', price);
+        itemData.append('description', description);
+
+        fetch('/vendor/dashboard/items/edit/', {
+            method: 'POST',
+            body: itemData,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.replace("/vendor/dashboard/items/");
+            } else {
+                alert(data.error);
+            }
+        });
+    }
+    
     
     if (document.getElementById('edit-deschiption')) {
         var quill = new Quill('#edit-deschiption', {
