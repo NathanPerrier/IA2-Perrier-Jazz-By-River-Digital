@@ -34,7 +34,7 @@ class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         try:
             product = stripe.Product.create(
                 id=f'food-and-drinks-{str(obj.id)}',
-                name=obj.name,
+                name=obj.name.capitalize(),
                 active=True,
                 description=obj.description,
             )
@@ -60,7 +60,7 @@ class FoodAndDrinksItemAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             print(e)
             product = stripe.Product.modify(
                 id=f'food-and-drinks-{str(obj.id)}',
-                name=obj.name,
+                name=obj.name.capitalize(),
                 active=True,
                 description=obj.description,
             )

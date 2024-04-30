@@ -61,27 +61,106 @@ def vendor_order(request, order_id):
 def create_item(request):
     if request.user.groups.filter(name='Vendor').exists():
         if request.method == 'POST':
-            print(request.POST['name'].capitalize())
-            print('price', request.POST['price'])
-            print('stock', request.POST['stock'])
-            print('description', request.POST['description']) #! issue retrieving description (returns null)
+            try:
+                item = FoodAndDrinksItem(name=request.POST['name'].capitalize(), price=float(request.POST['price']), stock=int(request.POST['stock']), description=request.POST['description'], vendor=request.user, image=request.FILES['image'], event=Events.objects.get(id=request.POST['event']))
+                item.save()
+                
+                product = stripe.Product.create(
+                    id=f'food-and-drinks-{str(item.id)}',
+                    name=item.name.capitalize(),
+                    active=True,
+                    description=item.description,
+                )
+                
+                price = stripe.Price.create(
+                    product=product.id,
+                    unit_amount=int(item.price*100),  
+                    currency="aud",
+                )
+                
+                stripe.Product.modify(
+                    id=product.id,
+                    default_price=price.id,
+                )
+                
+                item.stripe_price_id = price.id
+                item.stripe_product_id = product.id
+                item.save()
+            except Exception as e:
+                return JsonResponse({'success': False, 'error': str(e)})
             return JsonResponse({'success': True})
-        return render(request, 'atc_site//vendor//create_item.html', {'title': 'Create Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user})
+        return render(request, 'atc_site//vendor//create_item.html', {'title': 'Create Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'active_events': Events.objects.filter(date__gte=timezone.now()).all()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
 def edit_item(request, item_id):
     if request.user.groups.filter(name='Vendor').exists():
-        #handle the POST request -> if request.POST:
-        if request.method == 'POST':
-            print(request.POST['name'].capitalize())
-            print('price', request.POST['price'])
-            print('stock', request.POST['stock'])
-            print('description', request.POST['description']) #! issue retrieving description (returns null)
-            return JsonResponse({'success': True})
         try:
             item = FoodAndDrinksItem.objects.get(id=item_id)
-            if request.user == item.vendor: return render(request, 'atc_site//vendor//edit_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'item': item})
+            if request.user == item.vendor: 
+                if request.method == 'POST':           
+                    try: 
+                        item.name = request.POST['name'].capitalize()
+                        item.price = float(request.POST['price'])
+                        item.stock = int(request.POST['stock'])
+                        item.description = request.POST['description']
+                        item.image = request.FILES['image'] if request.POST['image'] != item.image else item.image
+                        item.event=Events.objects.get(id=request.POST['event'])
+                        
+                        try:
+                            product = stripe.Product.create(
+                                id=f'food-and-drinks-{str(item.id)}',
+                                name=item.name.capitalize(),
+                                active=True,
+                                description=item.description,
+                            )
+                            
+                            price = stripe.Price.create(
+                                product=product.id,
+                                unit_amount=int(item.price*100),  
+                                currency="aud",
+                            )
+                            
+                            stripe.Product.modify(
+                                id=product.id,
+                                default_price=price.id,
+                            )
+                            
+                            for voucher in Voucher.objects.filter(event=item.event):
+                                stripe.Coupon.modify(
+                                    id=f'voucher-{str(voucher.id)}',
+                                    applies_to={'products':[f'food-and-drinks-{item.id}' for item in FoodAndDrinksItem.objects.filter(event=item.event)]},
+                                )
+                                
+                        except Exception as e:
+                            print(e)
+                            product = stripe.Product.modify(
+                                id=f'food-and-drinks-{str(item.id)}',
+                                name=item.name.capitalize(),
+                                active=True,
+                                description=item.description,
+                            )
+                            price = stripe.Price.create(
+                                product=product.id,
+                                unit_amount=int(item.price*100),  
+                                currency="aud",
+                            )
+                            
+                            stripe.Product.modify(
+                                id=product.id,
+                                default_price=price.id,
+                            )
+                        
+                        item.stripe_price_id = price.id
+                        item.stripe_product_id = product.id
+                        item.save()
+                        try: EventFoodAndDrinks.objects.get(food_and_drinks_item=item).delete()
+                        except: pass
+                    except Exception as e:
+                        print(e)
+                        return JsonResponse({'success': False, 'error': str(e)})
+                    return redirect('/vendor/dashboard/items/')
+                else: return render(request, 'atc_site//vendor//edit_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'vendor': request.user, 'item': item, 'active_events': Events.objects.filter(date__gte=timezone.now()).all()})
         except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'An error occured loading this page, if you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
