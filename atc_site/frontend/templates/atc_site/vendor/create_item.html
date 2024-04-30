@@ -50,7 +50,7 @@
                 
                 <div class="row">
                     <div class="col-12 col-lg-8 m-auto">
-                        <form class="multisteps-form__form mb-8" method="POST" onSubmit="/vendor/dashboard/items/create/" style="height: 408px;">
+                        <form class="multisteps-form__form mb-8" method="POST" enctype="multipart/form-data" style="height: 408px;">
                             {% csrf_token %}
                             <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
                                 <h5 class="font-weight-bolder">Item Information</h5>

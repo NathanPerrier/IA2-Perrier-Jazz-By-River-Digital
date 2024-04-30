@@ -104,7 +104,7 @@ def edit_item(request, item_id):
                         item.price = float(request.POST['price'])
                         item.stock = int(request.POST['stock'])
                         item.description = request.POST['description']
-                        item.image = request.FILES['image'] if request.POST['image'] != item.image else item.image
+                        item.image = request.FILES['image'] if request.FILES else item.image
                         item.event=Events.objects.get(id=request.POST['event'])
                         
                         try:

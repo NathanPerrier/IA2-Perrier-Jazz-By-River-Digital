@@ -244,7 +244,7 @@
         .then(response => response.json())
         .then(data => {
             if (!data.success) {
-                alert(data.error);
+                alert('error: '+data.error);
                 return;
             } else {
                 window.location.replace("/vendor/dashboard/items/");
