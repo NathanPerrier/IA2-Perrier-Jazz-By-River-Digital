@@ -50,28 +50,39 @@
                 
                 <div class="row">
                     <div class="col-12 col-lg-8 m-auto">
-                        <form class="multisteps-form__form mb-8" style="height: 408px;">
-                            
+                        <form class="multisteps-form__form mb-8"  style="height: 408px;" enctype="multipart/form-data">
+                            {% csrf_token %}               
                             <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
                                 <h5 class="font-weight-bolder">Item Information</h5>
                                 <div class="multisteps-form__content">
                                     <div class="row mt-3">
                                         <div class="col-12 col-sm-6">
                                             <label>Name</label>
-                                            <input class="multisteps-form__input form-control" type="text" placeholder="eg. Sausage Roll" value="{{ item.name }}" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input name="name" class="multisteps-form__input form-control" type="text" placeholder="eg. Sausage Roll" value="{{ item.name }}" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                         <div class="col-12 col-sm-6 mt-3 mt-sm-0">
                                             <label>Stock</label>
-                                            <input class="multisteps-form__input form-control" type="text" placeholder="eg. 42" value="{{ item.stock }}" onfocus="focused(this)" onfocusout="defocused(this)">
+                                            <input name="stock" class="multisteps-form__input form-control" type="text" placeholder="eg. 42" value="{{ item.stock }}" onfocus="focused(this)" onfocusout="defocused(this)">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 mt-sm-0 mt-4">
-                                        <label class="mt-4">Price</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="border-radius: 8px 0 0 8px;">$</span>
+                                    <div class="row mt-3 mt-4">
+                                        <div class="col-12 col-sm-6">
+                                            <label class="mt-4">Price</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" style="border-radius: 8px 0 0 8px;">$</span>
+                                                </div>
+                                                <input name="price" class="multisteps-form__input form-control ps-2" type="text" placeholder="eg. 5.99" value="{{ item.price }}" onfocus="focused(this)" onfocusout="defocused(this)">
                                             </div>
-                                            <input class="multisteps-form__input form-control ps-2" type="text" placeholder="eg. 5.99" value="{{ item.price }}" onfocus="focused(this)" onfocusout="defocused(this)">
+                                        </div>
+                                        <div class="col-12 col-sm-6 mt-3 mt-sm-0">
+                                            <label class="mt-4">Event</label>
+                                            <select name="event" class="form-select multisteps-form__input" id="choices-category" placeholder="Select an event" onfocus="focused(this)" onfocusout="defocused(this)">
+                                                <option class="active" value="{{ item.event.id }}" selected>{{ item.event.name }}</option>
+                                                {% for event in active_events %}
+                                                {% if event != item.event %}<option value="{{ event.id }}">{{ event.name }}</option>{%endif%}
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -83,7 +94,7 @@
                                             
                                            
                                             <div id="edit-deschiption" class="h-50 ql-container ql-snow">
-                                                <div class="ql-editor" data-gramm="false" contenteditable="true">
+                                                <div name="description" class="ql-editor" data-gramm="false" contenteditable="true">
                                                     {{ item.description }}
                                                 </div>
                                                 <div class="ql-clipboard" contenteditable="true" tabindex="-1"></div>
@@ -106,13 +117,13 @@
                                 <div class="multisteps-form__content">
                                     <div class="row mt-3">
                                         <div class="col-12">
-                                            <label>Product image</label>
-                                            <div action="/file-upload" class="form-control dropzone dz-clickable productImg" id="productImg"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
+                                            <label>New Product Image <small>(optional)</small></label>
+                                            <div action="/file-upload" class="form-control dropzone dz-clickable itemImg" id="productImg"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
                                         </div>
                                     </div>
                                     <div class="button-row d-flex mt-4">
                                         <button class="btn bg-gradient-secondary mb-0 js-btn-prev" type="button" title="Prev">Prev</button>
-                                        <button class="btn bg-gradient-dark ms-auto mb-0" type="button" title="Send">Send</button>
+                                        <button class="btn bg-gradient-dark ms-auto mb-0" onclick="editItem()" title="Send">Send</button>
                                     </div>
                                 </div>
                             </div>
@@ -126,12 +137,122 @@
 {% endblock %}
 {% block scripts %}
 <script>
-    
     if (document.getElementById('edit-deschiption')) {
         var quill = new Quill('#edit-deschiption', {
             theme: 'snow' // Specify theme in configuration
         });
     };
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    productImg = new Dropzone('.itemImg', {
+        url: '/admin/dashboard/vendors/items/create/',
+        autoProcessQueue: false,
+        uploadMultiple: false,
+        parallelUploads: 1,
+        maxFiles: 1,
+        acceptedFiles: 'image/*',
+        addRemoveLinks: true,
+        dictDefaultMessage: 'Drop item image here to upload',
+        init: function() {
+            this.on('addedfile', function(file) {
+                if (this.files.length > 1) {
+                    this.removeFile(this.files[0]);
+                }
+            });
+        }
+    });
+   
+    productImg.files[0] = '{{ item.image }}'; 
+
+    function editItem() {
+        const name = document.querySelector('input[name="name"]').value;
+        const stock  = document.querySelector('input[name="stock"]').value;
+        const price = document.querySelector('input[name="price"]').value;
+        const event = document.querySelector('select[name="event"]').value;
+        const description = quill.root.innerHTML.replace(/<[^>]*>?/gm, '').replace(/\s{2,}/g, ' ');
+        const image = productImg.files[0];
+
+        if (!name || !stock || !price || !event || !description || !image) {
+            alert('Please fill in all fields');
+            return;
+        }
+
+        if (isNaN(stock) || isNaN(price)) {
+            alert('Stock and price must be numbers');
+            return;
+        }
+
+        if (stock < 0 || price < 0) {
+            alert('Stock and price must be positive');
+            return;
+        }
+
+        if (stock % 1 !== 0) {
+            alert('Stock must be a whole number');
+            return;
+        }
+
+        if (image.size > 5000000) {
+            alert('Image size must be less than 5MB');
+            return;
+        }
+
+        if (image !== '{{ item.image }}') {
+            if (image.type.split('/')[0] !== 'image') {
+                alert('File must be an image');
+                return;
+            }
+        }
+
+        if (description.length > 500) {
+            alert('Description must be less than 500 characters');
+            return;
+        }
+
+        if (name.length > 199) {
+            alert('Name must be less than 200 characters');
+            return;
+        }
+
+        var itemData = new FormData();
+        itemData.append('name', name);
+        itemData.append('stock', stock);
+        itemData.append('price', price);
+        itemData.append('description', description);
+        itemData.append('image', image);
+        itemData.append('event', event);
+
+        fetch('/admin/dashboard/vendors/items/{{item.id}}/edit/', {
+            method: 'POST',
+            body: itemData,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                alert('error: '+data.error);
+                return;
+            } else {
+                window.location.replace("/admin/dashboard/vendors/items/");
+            }
+        });
+    }
+    
+
     
     if (document.getElementById('choices-category')) {
         var element = document.getElementById('choices-category');
@@ -178,10 +299,7 @@
         );
     };
 
-    Dropzone.options.productImg = {
-        maxFiles: 1,
-        // Other options...
-    };
+
 </script>
 {% endblock %}
 
