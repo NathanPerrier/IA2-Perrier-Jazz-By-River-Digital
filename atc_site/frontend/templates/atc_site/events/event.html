@@ -2,8 +2,8 @@
 {% load static %}
 {% load user_filters %}
 {% block content %}
-<link type="text/css" href="{% static 'css/blog/blog.css' %}" rel="stylesheet">
-
+<link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'atc_site/css/events/timeline.css' %}" rel="stylesheet">
 <!-- Hero Start -->
 <div class="container-fluid p-0 m-0 hero bg-overlay-50">  <!--bg-overlay-40?-->
     <img class="bg-video" src="{{ event.image.url }}" id="parallaxVideo"> <!-- change to bg-video-2 to remove fixed position -->
@@ -100,27 +100,30 @@
           </div>
         {% endif %}
         {% if food_and_drinks|length > 0 %}
-        <div class="row">
-          <div class="col-lg-9">
-            <div class="row">
-              {% for item in food_and_drinks %}
-                <div class="col-lg-4">
-                  <div class="card my-2">
-                    <div class="card-body p-0">
-                      <div class="row">
-                        <img src="{{ item.image.url }}" class="img-fluid rounded-img" alt="{{ item.name }}">
-                      </div>
-                      <div class="row p-2">
-                        <div class="d-flex"><h5 class="card-title">{{ item.name }}</h5><b class="ms-auto">${{ item.price }}</b></div>
-                        <p class="card-text">{{ item.description }}</p></div>
+        <div class="container-fluid p-0 m-0 bg-light d-flex">
+          <div class="row d-flex">
+            <div class="col-lg-9">
+              <div class="row d-flex">
+                {% for item in food_and_drinks %}
+                  <div class="col-lg-4">
+                    <div class="card my-2">
+                      <div class="card-body p-0">
+                        <div class="row">
+                          <img src="{{ item.image.url }}" class="img-fluid rounded-img" alt="{{ item.name }}">
+                        </div>
+                        <div class="row p-2">
+                          <div class="d-flex"><h5 class="card-title">{{ item.name }}</h5><b class="ms-auto">${{ item.price }}</b></div>
+                          <p class="card-text">{{ item.description }}</p></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              {% endfor %}
-          </div>
-          <div class="col-lg-3">
-            <h1 class="text-center">Event Food and Drinks</h1>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <h1 class="text-center">Event Food and Drinks</h1>
+              </div>
             </div>
           </div>
         </div>
@@ -128,13 +131,106 @@
         {% if vouchers|length > 0 %}
             <!-- VOUCHERS   -->
         {% endif %}
+        <div class="container-fluid p-0 m-0 bg-light">
+          <h1 class="text-center mb-0">Event Timeline</h1>
+          <div class="timeline mb-0 mt-0">
+            {% if event.creation_time %}
+              <div class="timeline-row">
+                <div class="timeline-time">
+                  {{event.creation_time|date:"d M, Y"}}<small>{{event.creation_time|date:"h:i"}} {% if event.creation_time|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
+                </div>
+                <div class="timeline-content">
+                  <i class="fa fa-calendar p-2 bg-dark text-white rounded-circle"></i>
+                  <h4>{{ event.name }} Was Created!</h4>
+                  <p class="text-center">
+                    Save the date becuase {{ event.name }} is up and coming! Make sure you book your tickets before the sale finishes or they sell out!
+                  </p>    
+                </div>
+              </div>
+            {% endif %}
+            {% if event.sale_release_date %}
+              <div class="timeline-row">
+                <div class="timeline-time">
+                  {{event.sale_release_date|date:"d M, Y"}}<small>{{event.sale_release_date|date:"h:i"}} {% if event.sale_release_date|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
+                </div>
+                <div class="timeline-content">
+                  <i class="fa fa-ticket p-2 bg-dark text-white rounded-circle"></i>
+                  <h4>Tickets Go On Sale</h4>
+                  <p class="text-center">
+                    Tickets go on sale, if you are in the target group you will be able to book it the second it goes on sale.
+                  </p>
+                  <div>
+                    {% if event.available_tickets < 0 %}
+                      <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sold Out!</a>
+                    {% else %}
+                        {% if event.sale_release_date < now and event.sale_end_date > now %}
+                            {% if event.sale_release_date < now %}
+                                {% if event.target_groups.all|length >= 1 %}
+                                    {% if user|in_target_groups:event %}
+                                        {% if event.stripe_price_id %}
+                                            <a href="/events/{{ event.id }}/checkout/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                        {% else %}
+                                            <a href="{% url 'error_404' %}" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Not Available</a>
+                                    {% endif %}
+                                {% else %}
+                                    {% if event.stripe_price_id %}
+                                        <a href="/events/{{ event.id }}/checkout/" class="btn btn-primary py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                    {% else %}
+                                        <a href="{% url 'error_404' %}" class="btn btn-primary py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Book Now!</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% else %}
+                                <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sale Has Ended</a>
+                            {% endif %}
+                        {% else %}
+                            {% if event.sale_release_date > now %}
+                                <a id="countdown-{{event.id}}" class="btn btn-light disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Coming Soon!</a>
+                            {% else %}
+                                <a class="btn btn-danger disabled py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">Sale Has Ended</a>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}   
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if event.sale_end_date %}
+              <div class="timeline-row">
+                <div class="timeline-time">
+                  {{event.sale_end_date|date:"d M, Y"}}<small>{{event.sale_end_date|date:"h:i"}} {% if event.sale_end_date|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
+                </div>
+                <div class="timeline-content">
+                  <i class="fa fa-exclamation-triangle p-2 bg-dark text-white rounded-circle"></i>
+                  <h4>Tickets Sale Ends</h4>
+                  <p>Make sure you book your tickets before this day, once the sale finishes no more tickets can be purchased!</p>
+                </div>
+              </div>
+            {% endif %}
+        
+            {% if event.date %}
+              <div class="timeline-row">
+                <div class="timeline-time">
+                  {{event.date|date:"d M, Y"}}<small>{{event.time|date:"h:i"}} {% if event.time|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
+                </div>
+                <div class="timeline-content">
+                  <i class="fa-regular fa-calendar-xmark p-2 bg-dark text-white rounded-circle"></i>
+                  <h4>Day of Event</h4>
+                  <p class="text-center">The day of the event! please make sure you have your ticket on you when attending {{ event.name }}. Also keep informed of any updates to the event!</p>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
       </div>
     </div>
 </div>
 <!-- Blog End -->
 
 <!-- social Start -->
-<div class="container-fluid py-2 bg-secondary">
+<div class="container-fluid mt-0 py-2 bg-secondary">
     <div class="contaiiner py-2 px-2">
       <div class="row d-flex">
         <div class="col-md-2 my-2" id="child-element">
