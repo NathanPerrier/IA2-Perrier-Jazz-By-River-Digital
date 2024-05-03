@@ -74,9 +74,9 @@
                                                             <div id="expandableSection-{{item.id}}" style="display:none;">
                                                         {% endif %}
                                                         <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
-                                                        {% if forloop.counter == invoice.lines|length %}
+                                                        {% if forloop.counter == item.lines|length %}
                                                             </div>
-                                                            <a class="badge badge-dark bg-primary text-white me-2 mt-1" href="javascript:void(0);" onclick="toggleSection({{item.id}})">Show More</a>
+                                                            <a class="badge badge-dark bg-primary text-white me-2 mt-1" href="javascript:void(0);" onclick="toggleSection('{{item.id}}')">Show More</a>
                                                         {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
@@ -150,7 +150,9 @@
 
   
     function toggleSection(item_id) {
+        console.log(item_id);
         var section = document.getElementById("expandableSection-"+item_id);
+        console.log(section);
         if (section.style.display === "none") {
             section.style.display = "block";
             event.target.textContent = "Show Less";

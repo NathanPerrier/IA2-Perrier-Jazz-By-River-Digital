@@ -137,6 +137,29 @@ def delete_event(request, event_id):
             return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+#* SCHEDULE 
+
+@login_required
+def event_schedule(request, event_id):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//schedule_dashboard.html', {'title': 'Schedule Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': Events.objects.filter(id=event_id).first(), 'schedule': EventSchedule.objects.filter(event=event_id).all()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def delete_schedule_item(request, event_id, schedule_item_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            EventScheduleItem.objects.get(id=schedule_item_id).delete()
+            return redirect('/admin/dashboard/events/')
+        except Exception as e:
+            print(e)
+            return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def edit_schedule(request, event_id):
+    pass
+
 #* VOUCHERS
 
 @login_required
