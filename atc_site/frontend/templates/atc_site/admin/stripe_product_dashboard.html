@@ -11,36 +11,13 @@
                 <div class="card-header pb-0">
                     <div class="d-lg-flex">
                         <div>
-                            <h5 class="mb-0">All Invoices</h5>
+                            <h5 class="mb-0">All Stripe Products</h5>
                             <p class="text-sm mb-0">
-                                All Invoices for all Bookings!
+                                All Products registered with Stripe!
                             </p>
                         </div>
                         <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
-                                <div class="modal fade" id="import" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog mt-lg-10">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalLabel">Import CSV</h5>
-                                                <i class="fas fa-upload ms-3" aria-hidden="true"></i>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>You can browse your computer for a file.</p>
-                                                <div action="/vendor/dashboard/items/upload/" class="form-control dropzone dz-clickable productImg" id="productImg"><div class="dz-default dz-message"><button class="dz-button" type="button">Drop files here to upload</button></div></div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input dropbox" type="checkbox" value="" id="importCheck" checked="">
-                                                    <label class="custom-control-label" for="importCheck">I accept the terms and conditions</label>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn bg-gradient-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                                                <button type="button" class="btn bg-gradient-primary btn-sm">Upload</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv" type="button" name="button">Export</button>
                             </div>
                         </div>
@@ -50,19 +27,19 @@
                     <div class="table-responsive">
                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
                             <thead class="thead-light">
-                                <tr><th data-sortable="" style="width: 21.8413%;"><a href="#" class="dataTable-sorter">Event</a></th><th data-sortable="" style="width: 18.1757%;"><a href="#" class="dataTable-sorter">Customer</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Revenue</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Currency</a></td><th data-sortable="" style="width: 18.2542%;"><a href="#" class="dataTable-sorter">Items</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Creation Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                                <tr><th data-sortable="" style="width: 18.1757%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Revenue</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Currency</a></td><th data-sortable="" style="width: 18.2542%;"><a href="#" class="dataTable-sorter">Items</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Creation Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                             </thead>
                             <tbody>
-                                {% for item, booking in invoices %}
+                                {% for item in products %}
                                     <tr>
                                         <td>
                                             <div class="d-flex">
-                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="{{ booking.event.image.url }}" alt="{{booking.event.name}}">
-                                                <h6 class="ms-3 my-auto">{{booking.event.name}}</h6>
+                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="" alt="">
+                                                <h6 class="ms-3 my-auto">{{item.name}}</h6>
                                             </div>
                                         </td>
-                                        <td class="text-sm">{{item.customer_email}}</td>
-                                        <td class="text-sm">${{item.subtotal|div:100}}</td>
+                                        <td class="text-sm">{{item}}</td>
+                                        <td class="text-sm">${{item.subtotal}}</td>
                                         <td class="text-sm">{{ item.lines.data.0.price.currency|upper }}</td>
                                         <td class="text-sm">
                                             {% if item.lines|length > 2 %}
@@ -100,15 +77,15 @@
                                             <a href="{{item.hosted_invoice_url}}" data-bs-toggle="tooltip" data-bs-original-title="View Order">
                                                 <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
                                             </a>
-                                            <a href="{{item.invoice_pdf}}" class="ms-3" data-bs-toggle="tooltip" data-bs-original-title="View Invoice">
-                                                <i class="fas fa-file-invoice text-secondary" aria-hidden="true"></i>
+                                            <a onclick="confirmDelete('{{item.id}}')" class="ms-3" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
+                                                <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
                                             </a>
                                         </td>
                                     </tr>
                                 {% endfor %}
                             </tbody> 
                         </table></div>
-                        {% if invoices|length == 0 %}
+                        {% if products|length == 0 %}
                             <div class="text-center">
                                 <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
                                 <h5 class="text-center">Their No Items To Display!</h5>
@@ -123,6 +100,38 @@
     </div>
 </div>
 <script>
+    function confirmDelete(item_id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#7367f0',
+            cancelButtonColor: '#28c76f',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (item_id !in '{{active_product_id}}') {
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    ).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.replace('/admin/dashboard/stripe/products/'+item_id+'/delete/');
+                        }
+                    });
+                } else {
+                    Swal.fire(
+                        'Error!',
+                        'You cannot delete an active product!',
+                        'error'
+                    );
+                }
+            }
+        })
+    }
+
     if (document.getElementById('products-list')) {
         const dataTableSearch = new simpleDatatables.DataTable("#products-list", {
             searchable: true,

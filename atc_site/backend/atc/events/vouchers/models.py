@@ -12,6 +12,7 @@ class EventVoucher(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     event = models.ForeignKey(Events, on_delete=models.CASCADE)
     stripe_price_id = models.CharField(max_length=256, blank=True, null=True)
+    stripe_product_id = models.CharField(max_length=256, blank=True, null=True)
     
 class Voucher(models.Model):
     voucher = models.ForeignKey(EventVoucher, on_delete=models.CASCADE)

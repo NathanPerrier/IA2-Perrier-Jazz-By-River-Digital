@@ -164,6 +164,7 @@ class EventsAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 default_price=price.id,
             )
         # link = stripe.PaymentLink.create(line_items=[{"price": price.id, "quantity": 1}])
+        obj.stripe_product_id = product.id
         obj.stripe_price_id = price.id
         obj.save()
         super().save_model(request, obj, form, change)

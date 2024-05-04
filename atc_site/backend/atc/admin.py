@@ -376,8 +376,9 @@ def stripe_invoice_dashboard(request):
 @login_required
 def stripe_products_dashboard(request):
     if request.user.is_staff or request.user.is_superuser:
-        return render(request, 'atc_site//admin//stripe_products_dashboard.html', {'title': 'Stripe Products Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'products': stripe.Product.list()})
+        return render(request, 'atc_site//admin//stripe_product_dashboard.html', {'title': 'Stripe Products Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'products': stripe.Product.list(), 'active_product_id': get_active_products_id()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
 
 #* Other
 
@@ -498,3 +499,8 @@ def get_stripe_invoices():
                 invoices.append([invoice, booking])
     return invoices
 
+def get_active_products_id():
+    event = list(Events.objects.all().values_list('stripe_product_id', flat=True))
+    items = list(FoodAndDrinksItem.objects.all().values_list('stripe_product_id', flat=True))
+    vouchers = list(EventVoucher.objects.all().values_list('stripe_product_id', flat=True))
+    return event.append(items).append(vouchers)
