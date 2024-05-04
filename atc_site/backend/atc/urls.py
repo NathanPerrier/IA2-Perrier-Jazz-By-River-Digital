@@ -71,6 +71,7 @@ urlpatterns = [
     path('admin/dashboard/events/<int:event_id>/delete/', admin.delete_event, name='delete_event'),
     
     path('admin/dashboard/stripe/invoices/', admin.stripe_invoice_dashboard, name='stripe_invoice'),
+    path('admin/dashboard/stripe/products/', admin.stripe_products_dashboard, name='stripe_products'),
     
     path('admin/dashboard/vendors/', admin.vendors_dashboard, name='vendors_dashboard'),
     path('admin/dashboard/vendors/<int:vendor_id>/delete/', admin.delete_vendor, name='delete_vendor'),
