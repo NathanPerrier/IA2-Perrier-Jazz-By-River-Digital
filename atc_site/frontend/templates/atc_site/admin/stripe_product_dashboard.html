@@ -27,59 +27,30 @@
                     <div class="table-responsive">
                         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns"><div class="dataTable-top"><div class="dataTable-dropdown"><label><select class="dataTable-selector"><option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page</label></div><div class="dataTable-search"><input class="dataTable-input" placeholder="Search..." type="text"></div></div><div class="dataTable-container"><table class="table table-flush dataTable-table" id="products-list">
                             <thead class="thead-light">
-                                <tr><th data-sortable="" style="width: 18.1757%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Revenue</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Currency</a></td><th data-sortable="" style="width: 18.2542%;"><a href="#" class="dataTable-sorter">Items</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Status</a></th><th data-sortable="" style="width: 15.4176%;"><a href="#" class="dataTable-sorter">Creation Date</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
+                                <tr><th data-sortable="" style="width: 18.1757%;"><a href="#" class="dataTable-sorter">Product</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Description</a></th><th data-sortable="" style="width: 11.2542%;"><a href="#" class="dataTable-sorter">Shippable</a></td><th data-sortable="" style="width: 18.2542%;"><a href="#" class="dataTable-sorter">Type</a></th><th data-sortable="" style="width: 16.1849%;"><a href="#" class="dataTable-sorter">Action</a></th></tr>
                             </thead>
                             <tbody>
                                 {% for item in products %}
                                     <tr>
-                                        <td>
-                                            <div class="d-flex">
-                                                <img class="w-10 ms-3" style="object-fit:cover; border-radius: 5px" src="" alt="">
-                                                <h6 class="ms-3 my-auto">{{item.name}}</h6>
-                                            </div>
-                                        </td>
-                                        <td class="text-sm">{{item}}</td>
-                                        <td class="text-sm">${{item.subtotal}}</td>
-                                        <td class="text-sm">{{ item.lines.data.0.price.currency|upper }}</td>
+                                        <td><h6 class="ms-3 my-auto">{{item.name}}</h6></td>
+                                        <td class="text-sm">{{item.description}}</td>
                                         <td class="text-sm">
-                                            {% if item.lines|length > 2 %}
-                                                {% for line in item.lines %}
-                                                    {% if forloop.counter <= 2 %}
-                                                        <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
-                                                    {% else %}
-                                                        {% if forloop.counter == 3 %}
-                                                            <div id="expandableSection-{{item.id}}" style="display:none;">
-                                                        {% endif %}
-                                                        <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
-                                                        {% if forloop.counter == item.lines|length %}
-                                                            </div>
-                                                            <a class="badge badge-dark bg-primary text-white me-2 mt-1" href="javascript:void(0);" onclick="toggleSection('{{item.id}}')">Show More</a>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                {% endfor %}
+                                            {% if item.shippable %}
+                                                <span class="badge badge-success badge-sm">Yes</span>
                                             {% else %}
-                                                {% for line in item.lines %}
-                                                    <span class="badge badge-secondary badge-sm">{{ line.quantity }} x {{ line.description }}</span>
-                                                {% endfor %}
+                                                <span class="badge badge-danger badge-sm">No</span>
                                             {% endif %}
                                         </td>
-                                        <td>
-                                            {% if not item.status == 'paid' %}
-                                                <span class="badge badge-warning badge-sm">{{ item.status }}</span>
-                                            {% else %}
-                                                <span class="badge badge-success badge-sm">{{ item.status}}</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {{ booking.creation_time|date:"d M, Y" }}
-                                        </td>
+                                        <td class="text-sm">{{ item.type }}</td>
                                         <td class="text-sm">
                                             <a href="{{item.hosted_invoice_url}}" data-bs-toggle="tooltip" data-bs-original-title="View Order">
                                                 <i class="fas fa-eye text-secondary" aria-hidden="true"></i>
                                             </a>
-                                            <a onclick="confirmDelete('{{item.id}}')" class="ms-3" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
-                                                <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
-                                            </a>
+                                            {% if item.id not in active_product_id %}
+                                                <a onclick="confirmDelete('{{item.id}}')" class="ms-3" data-bs-toggle="tooltip" data-bs-original-title="Delete product">
+                                                    <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
+                                                </a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -101,6 +72,7 @@
 </div>
 <script>
     function confirmDelete(item_id) {
+        var active = '{{active_product_id}}';
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -111,7 +83,7 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                if (item_id !in '{{active_product_id}}') {
+                if (!active.includes(item_id)) {
                     Swal.fire(
                         'Deleted!',
                         'Your file has been deleted.',

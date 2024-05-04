@@ -269,7 +269,7 @@ def activate_item(request, item_id):
             item = FoodAndDrinksItem.objects.get(id=item_id)
             EventFoodAndDrinks.objects.create(event=item.event, food_and_drinks_item=item)
             return redirect('vendor_items_dashboard')
-        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+        except:  return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'There was an erorr processing your request. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -279,7 +279,7 @@ def deactivate_item(request, item_id):
             item = FoodAndDrinksItem.objects.get(id=item_id)
             EventFoodAndDrinks.objects.get(event=item.event, food_and_drinks_item=item).delete()
             return redirect('vendor_items_dashboard')
-        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+        except:  return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'There was an erorr processing your request. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -350,7 +350,7 @@ def edit_item(request, item_id):
                     return JsonResponse({'success': False, 'error': str(e)})
                 return redirect('/vendor/dashboard/items/')
             return render(request, 'atc_site//admin//edit_item.html', {'title': 'Edit Item', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'item': item, 'active_events': Events.objects.filter(date__gte=timezone.now()).all()})
-        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+        except: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': 'There was an erorr processing your request. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -379,6 +379,15 @@ def stripe_products_dashboard(request):
         return render(request, 'atc_site//admin//stripe_product_dashboard.html', {'title': 'Stripe Products Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'products': stripe.Product.list(), 'active_product_id': get_active_products_id()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+
+@login_required
+def delete_stripe_product(request, product_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            stripe.Product.delete(product_id)
+            return redirect('stripe_products_dashboard')
+        except Exception as e:  return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 #* Other
 
@@ -503,4 +512,4 @@ def get_active_products_id():
     event = list(Events.objects.all().values_list('stripe_product_id', flat=True))
     items = list(FoodAndDrinksItem.objects.all().values_list('stripe_product_id', flat=True))
     vouchers = list(EventVoucher.objects.all().values_list('stripe_product_id', flat=True))
-    return event.append(items).append(vouchers)
+    return event+items+vouchers
