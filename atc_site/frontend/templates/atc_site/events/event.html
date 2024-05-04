@@ -132,7 +132,7 @@
         {% if vouchers|length > 0 %}
           <div class="row mb-5" style="min-height: 300px; max-height:450px">
             <div class="col-lg-3 d-flex align-items-center">
-              <h1 class="text-center">Event Schedule</h1>
+              <h1 class="text-center">Event Vouchers</h1>
             </div>
             <div class="col-lg-9 h-100" >
               <div class="row">
@@ -430,10 +430,10 @@
   calendar = new FullCalendar.Calendar(calendarEl,{
       contentHeight: "400px",
       initialView: "timeGridDay",
-      selectable: 1,
+      selectable: !1,
       initialDate: '{{event.date|date:"Y-m-d"}}T{{event.time|date:"H:i"}}',
-      editable: 1,
-      headerToolbar: 1,
+      editable: !1,
+      headerToolbar: !1,
       events: events
   }).render();
 </script>
