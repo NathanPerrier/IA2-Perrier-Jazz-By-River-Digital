@@ -185,8 +185,8 @@ def edit_schedule(request, event_id):
                         schedule_item.end_time = (datetime.datetime.strptime(item['start'], '%H:%M').time() + (datetime.datetime.strptime(schedule_item.end_time.strftime('%H:%M'), '%H:%M') - datetime.datetime.strptime(schedule_item.start_time.strftime('%H:%M'), '%H:%M'))).time()
                         schedule_item.start_time = item['start']
                     except:
-                        schedule_item.end_time = item['start'].split(' - ')[1]
-                        schedule_item.start_time = item['start'].split(' - ')[0]
+                        schedule_item.end_time = datetime.datetime.strptime(item['start'].split(' - ')[1], '%H:%M').time()
+                        schedule_item.start_time = datetime.datetime.strptime(item['start'].split(' - ')[0], '%H:%M').time()
                     schedule_item.save()
                     print(schedule_item.start_time, schedule_item.end_time)
                     print(schedule_item)
