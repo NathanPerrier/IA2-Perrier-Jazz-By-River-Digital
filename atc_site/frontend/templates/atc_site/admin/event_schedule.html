@@ -1,0 +1,302 @@
+{% extends 'atc_site/template/dashboard.html' %} 
+{% load static %} 
+{% load user_filters %}
+{% block content %}
+<div class="container-fluid">
+    <div class="page-header min-height-300 border-radius-xl mt-4" style="background-image: url('{{ event.image.url }}'); background-position-y: 50%;">
+        <span class="mask bg-gradient-primary opacity-6"></span>
+    </div>
+    <div class="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+        <div class="row gx-4">
+            <div class="col-auto">
+                <div class="avatar avatar-xl position-relative">
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="profile_image" class="w-100 border-radius-lg shadow-sm">
+                    {% else %}
+                    <img src="https://api.dicebear.com/6.x/initials/svg?seed={{user.first_name}}&randomizeIds=true" alt="profile_image" class="w-100 border-radius-lg shadow-sm">                       
+                    {% endif %}
+                    
+                </div>
+            </div>
+            <div class="col-auto my-auto">
+                <div class="h-100">
+                    <h5 class="mb-1">
+                        {{ user.first_name }} {{ user.last_name }}
+                    </h5>
+                    <p class="mb-0 font-weight-bold text-sm">
+                        Admin
+                    </p>
+                </div>
+            </div>
+            <div class="col text-end my-auto">
+                <a onclick="addItem()" class="btn bg-gradient-dark mb-0">Add Schedule Item</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="multisteps-form">               
+                <div class="row">
+                    <div class="col-12 col-lg-12 m-auto">
+                        <form class="multisteps-form__form mb-8" method="POST" enctype="multipart/form-data" style="height: 408px;">
+                            {% csrf_token %}
+                            <div class="card multisteps-form__panel p-3 border-radius-xl bg-white js-active" data-animation="FadeIn">
+                                <h5 class="font-weight-bolder mb-0">{{title}}</h5>
+                                <div class="row mt-0">
+                                    <div class="card-body p-3 pt-0">
+                                        <div data-toggle="widget-calendar-schedule"></div>
+                                    </div>
+                                </div>
+                                <div class="row d-flex">
+                                    <div class="col-sm-3">
+                                        <a href="/admin/dashboard/events/" class="btn bg-gradient-secondary mb-0"><div class="d-flex justify-content-center"><i class="fa fa-arrow-circle-left mt-1"></i><div class="ms-2">Back</div></div></a>
+                                    </div>
+                                    <div class="col-sm-2 ms-auto">
+                                        <button class="btn bg-gradient-primary mb-0 js-btn-next" type="button" onclick="submitSchedule()" title="Next">Submit Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function editSchedule(event_id) {
+        const temp_schedule = document.querySelector('[data-toggle="widget-calendar-schedule"]');
+
+        var schedule_items = temp_schedule.querySelectorAll('.fc-event');
+        var schedule = [];
+
+        schedule_items.forEach(item => {
+            var event = item.querySelector('.fc-event-main').querySelector('.fc-event-main-frame');
+            var title = event.querySelector('.fc-event-title-container').querySelector('.fc-event-title').innerText.split('-')[0];
+            var start = event.querySelector('.fc-event-time').innerHTML;
+            var id = event.querySelector('.fc-event-title-container').querySelector('.fc-event-title').innerText.split('-')[1];
+            schedule.push({title: title, start: start, id: id});
+        });
+
+
+        for (var i = 0; i < schedule.length; i++) {
+            var start = new Date(schedule[i].start);
+            var end = new Date(schedule[i].end);
+            if (start > end) {
+                Swal.fire(
+                    'Error Changing Schedule!',
+                    'The event schedule could not be changed, the start time is after the end time.',
+                    'error'
+                )
+                return false;
+            }
+            if (start < new Date('{{event.date|date:"Y-m-d"}}T{{event.time|date:"H:i"}}')) {
+                Swal.fire(
+                    'Error Changing Schedule!',
+                    'The event schedule could not be changed, the event starts before the event starts.',
+                    'error'
+                )
+                return false;
+            }
+        }
+
+        // add validation, all events must start after the event starts
+
+        var itemData = new FormData();
+        itemData.append('items', JSON.stringify(schedule));
+
+        return fetch('/admin/dashboard/events/{{event.id}}/schedule/edit/', {
+            method: 'POST',
+            body: itemData,
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            if (data.success) {
+                console.log('success');
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
+    function submitSchedule() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#7367f0',
+            cancelButtonColor: '#28c76f',
+            confirmButtonText: 'Yes, Change it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var success = false;  
+                Swal.fire({
+                    title: 'Schedule Changing',
+                    text: 'The event schedule is being changed, please wait.',
+                    icon: 'info',
+                    didOpen: async function () {
+                        Swal.showLoading();
+                        success = await editSchedule(); 
+                        console.log(success);
+                        setTimeout(function () {
+                            console.log(success);
+                            Swal.close();
+                            if (success) {
+                                Swal.fire(
+                                    'Schedule Changed!',
+                                    'The event schedule has been changed.',
+                                    'success'
+                                )
+                            } else {
+                                Swal.fire(
+                                    'Error Changing Schedule!',
+                                    'The event schedule could not be changed.',
+                                    'error'
+                                )
+                            }
+                        }, 2000)
+                    }
+                });
+            }
+        })
+    }
+    
+    if (document.getElementById('edit-deschiption')) {
+        var quill = new Quill('#edit-deschiption', {
+            theme: 'snow' // Specify theme in configuration
+        });
+    };
+
+    function addItem() {
+        Swal.fire({
+            title: 'Add Schedule Item',
+            html: `
+                <div class="form-group">
+                    <label for="swal-input1" class="form-label">Title</label>
+                    <input id="swal-input1" class="form-control" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <label for="swal-input2" class="form-label">Description</label>
+                    <textarea id="swal-input2" class="form-control" placeholder="Description"></textarea>
+                </div>
+                <div class="form-row row d-dlex">
+                    <div class="form-group col-md-6">
+                        <label for="swal-input3" class="form-label">Start Time</label>
+                        <input id="swal-input3" class="form-control" placeholder="Start Time" type="time">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="swal-input4" class="form-label">End Time</label>
+                        <input id="swal-input4" class="form-control" placeholder="End Time" type="time">
+                    </div>
+                </div>`,
+            showCancelButton: true,
+            confirmButtonText: 'Add Item',
+            showLoaderOnConfirm: true,
+            preConfirm: () => {
+                var title = document.getElementById('swal-input1').value;
+                var description = document.getElementById('swal-input2').value;
+                var start_time = document.getElementById('swal-input3').value;
+                var end_time = document.getElementById('swal-input4').value;
+
+                console.log(title, description, start_time, end_time)
+
+                if (!title || !description || !start_time || !end_time) {
+                    Swal.showValidationMessage('Please fill in all fields');
+                }
+
+                else if (start_time > end_time) {
+                    Swal.showValidationMessage('The start time is after the end time');
+                }
+
+                else if (start_time < new Date('{{event.date|date:"Y-m-d"}}T{{event.time|date:"H:i"}}')) {
+                    Swal.showValidationMessage('The start time is before the event starts');
+                }
+                else {
+                    var itemData = new FormData();
+                    itemData.append('title', title);
+                    itemData.append('description', description);
+                    itemData.append('start_time', start_time);
+                    itemData.append('end_time', end_time);
+                    return fetch('/admin/dashboard/events/{{event.id}}/schedule/add/', {
+                        method: 'POST',
+                        body: itemData,
+                        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({title: 'Item Added', text: 'The schedule item has been added.', icon: 'success'
+                            }).then((result) => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.showValidationMessage('Error Creating Schedule Item');
+                        }
+                    });
+                }
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log(result.value);
+            } else {
+                console.log('error');
+            }
+        });
+    }
+    
+
+</script>
+{% endblock %}
+
+
+{% block scripts2 %}
+  <script>
+    calendarEl = document.querySelector('[data-toggle="widget-calendar-schedule"]');
+    var events = [
+      {% for event_item in schedule %}
+        {% get_random 'bg-gradient-primary' 'bg-gradient-secondary' 'bg-gradient-success' 'bg-gradient-danger' 'bg-gradient-warning' 'bg-gradient-info'  'bg-gradient-dark' as random_style %}
+        {
+            title: '{{ event_item.event_item.title }}-{{ event_item.id}}',
+            start: '{{event.date|date:"Y-m-d"}}T{{ event_item.event_item.start_time|date:"H:i" }}',
+            end: '{{event.date|date:"Y-m-d"}}T{{ event_item.event_item.end_time|date:"H:i" }}',
+            className: '{{random_style}}'
+        },
+      {% endfor %}
+    ];
+
+    calendar = new FullCalendar.Calendar(calendarEl,{
+        contentHeight: "auto",
+        initialView: "timeGridDay",
+        selectable: 1,
+        initialDate: '{{event.date|date:"Y-m-d"}}T{{event.time|date:"H:i"}}',
+        editable: 1,
+        headerToolbar: 1,
+        events: events
+    }).render();
+  </script>
+{% endblock %}
+

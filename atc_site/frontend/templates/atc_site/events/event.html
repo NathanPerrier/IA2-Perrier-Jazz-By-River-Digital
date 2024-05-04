@@ -1,9 +1,11 @@
 {% extends 'atc_site/template/main-template.html' %}
 {% load static %}
 {% load user_filters %}
+{% block styles %}<link rel="stylesheet" id="pagestyle" href="{% static 'soft-ui-pro/css/soft-ui-dashboard-lite.min.css' %}">{% endblock %}
 {% block content %}
 <link type="text/css" href="{% static 'atc_site/css/blog/blog.css' %}" rel="stylesheet">
 <link type="text/css" href="{% static 'atc_site/css/events/timeline.css' %}" rel="stylesheet">
+
 <!-- Hero Start -->
 <div class="container-fluid p-0 m-0 hero bg-overlay-50">  <!--bg-overlay-40?-->
     <img class="bg-video" src="{{ event.image.url }}" id="parallaxVideo"> <!-- change to bg-video-2 to remove fixed position -->
@@ -63,7 +65,7 @@
 <!-- Hero End -->
 
 <!-- Blog Start -->
-<div class="container-fluid py-5 bg-light" id="blog">
+<div class="container-fluid py-0 pt-5 bg-light" id="blog">
     <div class="container">
         <div class="text-center my-2">
             <h2 class="fw-bold mb-1">{{event.name}}</h2>
@@ -77,48 +79,50 @@
             <hr style="margin-left:10%" width="80%">
         </div>
         {% if schedule|length > 0 %}
-          <div class="row">
+          <div class="row mb-5">
             <div class="col-lg-3 d-flex align-items-center">
               <h1 class="text-center">Event Schedule</h1>
             </div>
             <div class="col-lg-9">
               <div class="row">
-                {% for item in schedule %}
-                  <div class="col-lg-4">
-                    <div class="card my-2">
-                      <div class="card-body">
-                        <h5 class="card-title">{{ item.title }}</h5>
-                        <div><p class="card-text">{{ item.start_time }}  -  {{item.end_time}}</p></div>
-                        <div class="border-bottom pt-1 my-2"></div>
-                        <p class="card-text">{{ item.description }}</p></div>
-                      </div>
-                    </div>
-                  </div>
-                {% endfor %}
+                <div class="card bg-white">
+
+                  <div class="card-body p-0">
+
+                    <div data-toggle="widget-calendar-schedule"></div>
+              
+                  </div> 
+                </div>
               </div>
             </div>
           </div>
         {% endif %}
         {% if food_and_drinks|length > 0 %}
-        <div class="container-fluid p-0 m-0 bg-white d-flex p-5">
+        <div class="container-fluid p-0 m-0 d-flex p-5">
           <div class="row">
             <div class="col-lg-9">
-              <div class="row d-flex">
-                {% for item in food_and_drinks %}
-                  <div class="col-sm-3 d-flex" style="max-height: 300px;min-width:250px">
-                    <div class="card my-2">
-                      <div class="card-body p-0">
-                        <div class="row" style="height:45%">
-                          <img src="{{ item.image.url }}" class="img-fluid rounded-img h-100 image-cover" alt="{{ item.name }}">
+              <div class="row">
+                <div class="card bg-white">
+                  <div class="card-body p-0">
+                    <div class="row d-flex">
+                      {% for item in food_and_drinks %}
+                        <div class="col-sm-3 d-flex" style="max-height: 300px;min-width:250px">
+                          <div class="card my-2">
+                            <div class="card-body p-0">
+                              <div class="row" style="height:45%">
+                                <img src="{{ item.image.url }}" class="img-fluid rounded-img h-100 image-cover" alt="{{ item.name }}">
+                              </div>
+                              <div class="row p-2">
+                                <div class="d-flex"><h5 class="card-title">{{ item.name }}</h5><b class="ms-auto">${{ item.price }}</b></div>
+                                <p class="card-text">{{ item.description }}</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div class="row p-2">
-                          <div class="d-flex"><h5 class="card-title">{{ item.name }}</h5><b class="ms-auto">${{ item.price }}</b></div>
-                          <p class="card-text">{{ item.description }}</p>
-                        </div>
-                      </div>
+                      {% endfor %}
                     </div>
-                  </div>
-                {% endfor %}
+                  </div>  
+                </div>
               </div>
             </div>
             <div class="col-lg-3 d-flex align-items-center">
@@ -130,15 +134,16 @@
         {% if vouchers|length > 0 %}
             <!-- VOUCHERS   -->
         {% endif %}
-        <div class="container-fluid p-0 bg-light mt-4 pt-3">
-          <h1 class="text-center mb-0 mt-5 pt-3">Event Timeline</h1>
+        
+        <div class="container-fluid p-0 bg-light m-0">
+          <h1 class="text-center mb-0">Event Timeline</h1>
           <div class="timeline mb-0 mt-0">
             {% if event.creation_time %}
               <div class="timeline-row">
                 <div class="timeline-time">
                   {{event.creation_time|date:"d M, Y"}}<small>{{event.creation_time|date:"h:i"}} {% if event.creation_time|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
                 </div>
-                <div class="timeline-content">
+                <div class="timeline-content" style="width:84.75%">
                   <i class="fa fa-calendar p-2 bg-dark text-white rounded-circle"></i>
                   <h4>{{ event.name }} Was Created!</h4>
                   <p class="text-center">
@@ -152,7 +157,7 @@
                 <div class="timeline-time">
                   {{event.sale_release_date|date:"d M, Y"}}<small>{{event.sale_release_date|date:"h:i"}} {% if event.sale_release_date|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
                 </div>
-                <div class="timeline-content">
+                <div class="timeline-content" style="width:84.75%">
                   <i class="fa fa-ticket p-2 bg-dark text-white rounded-circle"></i>
                   <h4>Tickets Go On Sale</h4>
                   <p class="text-center">
@@ -201,7 +206,7 @@
                 <div class="timeline-time">
                   {{event.sale_end_date|date:"d M, Y"}}<small>{{event.sale_end_date|date:"h:i"}} {% if event.sale_end_date|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
                 </div>
-                <div class="timeline-content">
+                <div class="timeline-content" style="width:84.75%">
                   <i class="fa fa-exclamation-triangle p-2 bg-dark text-white rounded-circle"></i>
                   <h4>Tickets Sale Ends</h4>
                   <p>Make sure you book your tickets before this day, once the sale finishes no more tickets can be purchased!</p>
@@ -214,7 +219,7 @@
                 <div class="timeline-time">
                   {{event.date|date:"d M, Y"}}<small>{{event.time|date:"h:i"}} {% if event.time|date:"h" >= 12 %}PM{%else%}AM{%endif%}</small>
                 </div>
-                <div class="timeline-content">
+                <div class="timeline-content" style="width:84.75%">
                   <i class="fa-regular fa-calendar-xmark p-2 bg-dark text-white rounded-circle"></i>
                   <h4>Day of {{event.name}}!</h4>
                   <p class="text-center">The day of the event! please make sure you have your ticket on you when attending {{ event.name }}. Also keep informed of any updates to the event!</p>
@@ -367,5 +372,41 @@
     link();
 
     
+</script>
+<script src="{% static '/soft-ui-pro/js/core/popper.min.js' %}"></script>
+<script src="{% static '/soft-ui-pro/js/core/bootstrap.min.js' %}"></script>
+<script src="{% static '/soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
+<script src="{% static '/soft-ui-pro/js/plugins/chartjs.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/threejs.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/flatpickr.min.js' %}"></script>
+<script src="{% static 'soft-ui-pro/js/plugins/fullcalendar.min.js' %}"></script>
+<script src="{% static '/soft-ui-pro/js/plugins/dragula/dragula.min.js' %}"></script>
+<script src="{% static '/soft-ui-pro/js/plugins/jkanban/jkanban.js' %}"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="{% static 'soft-ui-pro/js/soft-ui-dashboard.min.js' %}"></script>
+
+<script>
+  calendarEl = document.querySelector('[data-toggle="widget-calendar-schedule"]');
+  var events = [
+    {% for event_item in schedule %}
+      {% get_random 'bg-gradient-primary' 'bg-gradient-secondary' 'bg-gradient-success' 'bg-gradient-danger' 'bg-gradient-warning' 'bg-gradient-info'  'bg-gradient-dark' as random_style %}
+      {
+          title: '{{ event_item.event_item.title }}-{{ event_item.id}}',
+          start: '{{event.date|date:"Y-m-d"}}T{{ event_item.event_item.start_time|date:"H:i" }}',
+          end: '{{event.date|date:"Y-m-d"}}T{{ event_item.event_item.end_time|date:"H:i" }}',
+          className: '{{random_style}}'
+      },
+    {% endfor %}
+  ];
+
+  calendar = new FullCalendar.Calendar(calendarEl,{
+      contentHeight: "400px",
+      initialView: "timeGridDay",
+      selectable: 1,
+      initialDate: '{{event.date|date:"Y-m-d"}}T{{event.time|date:"H:i"}}',
+      editable: 1,
+      headerToolbar: 1,
+      events: events
+  }).render();
 </script>
 {% endblock %}

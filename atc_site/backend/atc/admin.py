@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from .main import *
 from django.db.models import Count
 from django.utils import timezone
-import time, datetime
+import time, datetime, json
 from .events.food_and_drinks.models import FoodAndDrinksItem, FoodAndDrinks, BookingFoodAndDrinks, EventFoodAndDrinks
 from .events.vouchers.models import Voucher, BookingVouchers
 from .events.models import Events, EventSchedule, EventScheduleItem
@@ -142,7 +142,8 @@ def delete_event(request, event_id):
 @login_required
 def event_schedule(request, event_id):
     if request.user.is_staff or request.user.is_superuser:
-        return render(request, 'atc_site//admin//schedule_dashboard.html', {'title': 'Schedule Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': Events.objects.filter(id=event_id).first(), 'schedule': EventSchedule.objects.filter(event=event_id).all()})
+        event = Events.objects.filter(id=event_id).first()
+        return render(request, 'atc_site//admin//event_schedule.html', {'title': f'{event.name} Schedule', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': event, 'schedule': EventSchedule.objects.filter(event=event_id).all()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
@@ -157,8 +158,44 @@ def delete_schedule_item(request, event_id, schedule_item_id):
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 @login_required
+def add_schedule_item(request, event_id):
+    if request.user.is_staff or request.user.is_superuser:
+        event = Events.objects.filter(id=event_id).first()
+        if request.method == 'POST':
+            try:
+                item = EventScheduleItem.objects.create(title=request.POST['title'], description=request.POST['description'], start_time=request.POST['start_time'], end_time=request.POST['end_time'])
+                EventSchedule.objects.create(event=event, event_item=item)
+                return JsonResponse({'success': True})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'success': False, 'error': str(e)})
+        return render(request, 'atc_site//admin//add_schedule_item.html', {'title': f'Add Schedule Item for {event.name}', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': event})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
 def edit_schedule(request, event_id):
-    pass
+    if request.user.is_staff or request.user.is_superuser:
+        event = Events.objects.filter(id=event_id).first()
+        if request.method == 'POST':
+            try:
+                for item in json.loads(request.POST['items']):
+                    print(item)
+                    schedule_item = EventScheduleItem.objects.get(id=int(item['id']))
+                    try:
+                        schedule_item.end_time = (datetime.datetime.strptime(item['start'], '%H:%M') + (datetime.datetime.strptime(schedule_item.end_time.strftime('%H:%M'), '%H:%M') - datetime.datetime.strptime(schedule_item.start_time.strftime('%H:%M'), '%H:%M'))).time()
+                        schedule_item.start_time = item['start']
+                    except:
+                        schedule_item.end_time = item['start'].split(' - ')[1]
+                        schedule_item.start_time = item['start'].split(' - ')[0]
+                    schedule_item.save()
+                    print(schedule_item.start_time, schedule_item.end_time)
+                    print(schedule_item)
+                return JsonResponse({'success': True})
+            except Exception as e:
+                print(e)
+                return JsonResponse({'success': False, 'error': str(e)})
+        return render(request, 'atc_site//admin//edit_schedule.html', {'title': f'Edit Schedule for {event.name}', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event': event})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
 #* VOUCHERS
 

@@ -65,8 +65,9 @@ urlpatterns = [
     
     path('admin/dashboard/events/', admin.events_dashboard, name='users_dashboard'),
     path('admin/dashboard/events/<int:event_id>/schedule/', admin.event_schedule, name='event_schedule'),
-    path('admin/dashboard/events/<int:event_id>/schedule/edit/', admin.edit_schedule, name='edit_event'),
-    path('admin/dashboard/events/<int:event_id>/schedule/<int:item_id>/delete/', admin.delete_schedule_item, name='create_event'),
+    path('admin/dashboard/events/<int:event_id>/schedule/edit/', admin.edit_schedule, name='edit_item_event'),
+    path('admin/dashboard/events/<int:event_id>/schedule/add/', admin.add_schedule_item, name='create_item_event'),
+    path('admin/dashboard/events/schedule/<int:item_id>/delete/', admin.delete_schedule_item, name='delete_item_event'),
     path('admin/dashboard/events/<int:event_id>/delete/', admin.delete_event, name='delete_event'),
     
     path('admin/dashboard/stripe/invoices/', admin.stripe_invoice_dashboard, name='stripe_invoice'),

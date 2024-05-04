@@ -209,6 +209,29 @@
 </div>
 
 
-{% block scripts %}
-
+{% block scripts2 %}
+  <script>
+    calendarEl = document.querySelector('[data-toggle="widget-calendar"]');
+    var events = [
+      {% for event in events %}
+        {% get_random 'bg-gradient-primary' 'bg-gradient-secondary' 'bg-gradient-success' 'bg-gradient-danger' 'bg-gradient-warning' 'bg-gradient-info'  'bg-gradient-dark' as random_style %}
+        {
+          title: '{{ event.name }}',
+          start: '{{ event.sale_release_date|date:"Y-m-d" }}',
+          end: '{{ event.sale_end_date|date:"Y-m-d" }}',
+          className: '{{random_style}}'
+        },
+      {% endfor %}
+    ];
+    calendar = new FullCalendar.Calendar(calendarEl,{
+        contentHeight: "auto",
+        initialView: "dayGridMonth",
+        selectable: !1,
+        initialDate: moment().tz("Australia/Sydney").format('YYYY-MM-DD'),
+        editable: !1,
+        headerToolbar: !1,
+        events: events
+      }).render();
+    console.log(events)
+  </script>
 {% endblock %}
