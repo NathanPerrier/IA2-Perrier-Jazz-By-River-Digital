@@ -182,7 +182,7 @@ def edit_schedule(request, event_id):
                     print(item)
                     schedule_item = EventScheduleItem.objects.get(id=int(item['id']))
                     try:
-                        schedule_item.end_time = (datetime.datetime.strptime(item['start'], '%H:%M') + (datetime.datetime.strptime(schedule_item.end_time.strftime('%H:%M'), '%H:%M') - datetime.datetime.strptime(schedule_item.start_time.strftime('%H:%M'), '%H:%M'))).time()
+                        schedule_item.end_time = (datetime.datetime.strptime(item['start'], '%H:%M').time() + (datetime.datetime.strptime(schedule_item.end_time.strftime('%H:%M'), '%H:%M') - datetime.datetime.strptime(schedule_item.start_time.strftime('%H:%M'), '%H:%M'))).time()
                         schedule_item.start_time = item['start']
                     except:
                         schedule_item.end_time = item['start'].split(' - ')[1]
