@@ -7,6 +7,7 @@ from django.contrib.auth.models import Group
 from ....models import CustomUser
 from .models import Events, EventSchedule, EventScheduleItem
 from .food_and_drinks.models import FoodAndDrinks, FoodAndDrinksItem, EventFoodAndDrinks
+from .vouchers.models import EventVoucher
 from decouple import config
 import datetime
 from django.db.models import Count
@@ -27,7 +28,7 @@ def create_event(request):
 def view_event(request, event_id):
     event = Events.objects.get(id=event_id)
     if event.date > timezone.now():
-        return render(request, 'atc_site//events//event.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event' : event, 'days_to_go': days_to_go(Events.objects.get(id=event_id).date, datetime.datetime.now()), 'schedule': EventSchedule.objects.filter(event=event_id).all(), 'food_and_drinks': get_event_food_and_drinks(event_id), 'now': timezone.now(), 'event_target_groups': event.target_groups.all(), 'user_groups': request.user.groups.all()})
+        return render(request, 'atc_site//events//event.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'event' : event, 'days_to_go': days_to_go(Events.objects.get(id=event_id).date, datetime.datetime.now()), 'schedule': EventSchedule.objects.filter(event=event_id).all(), 'food_and_drinks': get_event_food_and_drinks(event_id), 'now': timezone.now(), 'event_target_groups': event.target_groups.all(), 'user_groups': request.user.groups.all(), 'vouchers': EventVoucher.objects.filter(event=event_id).all()})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'This event is no longer available. Please contact the administrator if you believe this is an error.'})
 
 @staff_member_required
