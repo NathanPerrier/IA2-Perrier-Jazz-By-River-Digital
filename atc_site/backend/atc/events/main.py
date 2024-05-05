@@ -20,7 +20,7 @@ def events(request):
 
 @staff_member_required  
 def create_event(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser or request.user.groups.filter(name='Organizer').exists() or request.user.is_staff:
         return render(request, 'atc_site//events//create.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY'), 'vendors' : CustomUser.objects.filter(groups__name='Vendor'), 'groups': Group.objects.all()}) #, 'vendors': Group.objects.get(name='Vendors').user_set.all()
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.'})
 
@@ -33,10 +33,12 @@ def view_event(request, event_id):
 
 @staff_member_required
 def edit_event(request, event_id):
-    if request.user.is_superuser:
-        return render(request, 'atc_site//events//edit.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY')})
-    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.', 'groups': Group.objects.all()})
-
+    try:
+        event = Events.objects.get(id=event_id)
+        if request.user.is_superuser or request.user.groups.filter(name='Organizer').exists() or request.user.is_staff or request.user == event.organizer:
+            return render(request, 'atc_site//events//edit.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'google_places_api_key': config('GOOGLE_PLACES_API_KEY'), 'vendors' : CustomUser.objects.filter(groups__name='Vendor'), 'groups': Group.objects.all(), 'event': event, 'food_and_drinks': get_event_food_and_drinks(event_id), 'vouchers': EventVoucher.objects.filter(event=event_id).all()})
+        return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '403', 'title' : 'Access Forbidden', 'desc' : 'You do not have permission to access this page. Please contact the administrator if you believe this is an error.', 'groups': Group.objects.all()})
+    except Exception as e: return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error' : '404', 'title' : 'Event Not Found', 'desc' : 'The event you are trying to edit does not exist. Please contact the administrator if you believe this is an error.'})
 
 def days_to_go(date1, date2):
     date1 = date1.replace(tzinfo=None)

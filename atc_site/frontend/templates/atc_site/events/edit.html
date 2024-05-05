@@ -3,7 +3,8 @@
 {% block content %}
     <link type="text/css" href="{% static 'atc_site/css/blog/create-edit.css' %}" rel="stylesheet">
     <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-
+    <link type="text/css" href="{% static 'atc_site/css/blog/checkbox.css' %}" rel="stylesheet">
+    
     <!-- Hero Start -->
     <div class="container-fluid pt-5 bg-primary hero-header">
         <div class="container pt-5">
@@ -27,19 +28,19 @@
     <!-- Hero End -->
 
     <div class="container-fluid py-5 px-3 bg-light">
-        <h1 class="text-center mb-4">Edit Your Blog!</h1>
-        <hr class="text-center mb-2" style="width:30%;margin-left:35%">
-
+        <h1 class="text-center mb-4">Edit Event!</h1>
+        <hr class="text-center mb-2" style="width:30%;margin-left:35%"> 
         <div class="row justify-content-center bg-light">
             <div class="col-md-12 bg-light">
                 <div class="card px-4 bg-light">
                     <p class="text-center mt-2">Fill out all form fields to go to next step</p>
     
                     <form id="msform" id="multiStepForm" action="#" method="POST">
+                        {% csrf_token %}
                         <!-- progressbar -->
                         <ul id="progressbar">
-                            <li class="active step" id="account"><strong>Title</strong></li>
-                            <li class="step" id="personal"><strong>Content</strong></li>
+                            <li class="active step" id="account"><strong>About</strong></li>
+                            <li class="step" id="personal"><strong>Tickets</strong></li>
                             <li class="step" id="payment"><strong>Image</strong></li>
                             <li class="step" id="confirm"><strong>Confirm</strong></li>
                         </ul>
@@ -52,20 +53,182 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">What is Your Blog About?</h2>
+                                        <h2 class="fs-title">Event Detials:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 1 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Title <span style="color:red">*</span></label>
-                                <input type="text" name="title" maxlength="75" minlength="10" placeholder="What is the title of your blog?" value="{{blog.title}}" />
+                                <label class="fieldlabels">Name <span style="color:red">*</span></label>
+                                <input type="text" name="name" id='event-name' maxlength="75" minlength="10" placeholder="What is the name of the event?" value="{{event.name}}" />
                                 <label class="fieldlabels">Description <span style="color:red">*</span></label>
-                                <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What your blog about?">{{blog.description}}</textarea>
-                                <!--<small id="char_count">100/100</small>-->
+                                <textarea id="textbox" name="description" maxlength="150" rows="3" minlength="10" placeholder="Describe What the event is about?">{{event.description}}</textarea>
+                                <label class="fieldlabels">Location <span style="color:red">*</span></label>
+                                <input type="text" name="name" maxlength="200" minlength="5" id="location-input" placeholder="Where will the event be held?" value="{{event.location}}" />
+                                <div class="row">
+                                    <div class="d-flex col-md-12">
+                                        <div class="form-field col-sm-6">
+                                            <label class="fieldlabels">Date of Event <span style="color:red">*</span></label>
+                                            <input type="date" name="date" id="date" value="{{ event.date|date:'Y-m-d' }}" />
+                                        </div>
+                                        <div class="form-field col-sm-6 ms-auto ps-2">
+                                            <label class="fieldlabels">Start Time of Event <span style="color:red">*</span></label>
+                                            <input type="time" name="time" id="time" value="{{ event.time|time:'H:i' }}" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="fieldlabels">Target Groups</label>
+                                    <select class="form-select" multiple aria-label="multiple select">
+                                        {% for group in groups %}
+                                            <option value="{{ group.id }}" {% if group in event.target_groups.all %}selected{%endif%}>{{ group.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                </div>
+                                <label class="fieldlabels">Extras:</label> <!-- dynamically add additional fields based on selected extras -->
+                                <div class="d-flex justify-content-between form-group mb-3">
+                                    <div class="form-field inline d-flex">
+                                        <div class="checkbox">
+                                            <input class="checkbox-flip" id="event-vouchers" type="checkbox">
+                                            <label for="event-vouchers"><span></span>Event Vouchers</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-field  inline d-flex">
+                                        <div class="checkbox">
+                                            <input class="checkbox-flip" id="event-food-and-drink" type="checkbox">
+                                            <label for="event-food-and-drink"><span></span>Food and Drink</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-field  inline d-flex">  
+                                        <div class="checkbox">
+                                            <input class="checkbox-flip" id="event-schedule" type="checkbox">
+                                            <label for="event-schedule"><span></span>Event Schedule</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Vouchers -->
+                                <div class=" justify-content-between d-none" id="event-vouchers-form">
+                                    <label class="mb-1">Event Vouchers</label>
+                                    <div class="container-fluid form-field">
+                                        <div id="voucherContainer">
+                                            <div id="voucher0">
+                                                <div class="container-fluid">
+                                                    <div class="row voucher">
+                                                        <p class="m-0 p-0">Voucher 1</p>
+                                                        <div class="col-md-4 form-group">
+                                                            <label for="name-voucher0">Name <span style="color:red">*</span></label>
+                                                            <input type="text" class="form-control" id="name-voucher0" name="name-voucher0">
+                                                        </div>
+                                                        <div class="col-md-8 form-group">
+                                                            <label for="description-voucher0">Description <span style="color:red">*</span></label>
+                                                            <input type="text" class="form-control" id="description-voucher0" name="description-voucher0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="addVoucher" class="btn btn-primary mb-3">Add Voucher</button>
+                                    </div>
+                                </div>
+
+                                <!-- Food and Drink -->
+                                <div class="justify-content-between d-none" id="event-foodAndDrink-form">
+                                    <label>Food and Drink</label>
+                                    <div class="container-fluid form-field">
+                                        <div id="foodAndDrinkContainer">
+                                            <div id="foodAndDrink0">
+                                                <div class="container-fluid">
+                                                    <div class="row foodAndDrink">
+                                                        <p class="m-0 p-0">Item 1</p>
+                                                        <div class="row">
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="name-foodAndDrink0">Name <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="name-foodAndDrink0" name="name-foodAndDrink0">
+                                                            </div>
+                                                            <div class="col-md-8 form-group">
+                                                                <label for="description-foodAndDrink0">Description <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="description-foodAndDrink0" name="description-foodAndDrink0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="price-foodAndDrink0">Price <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="price-foodAndDrink0" name="price-foodAndDrink0">
+                                                            </div>
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="quantity-foodAndDrink0">Quantity <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="quantity-foodAndDrink0" name="quantity-foodAndDrink0">
+                                                            </div>
+                                                            <div class="col-md-4 form-group mb-3">
+                                                                <label for="vendor-foodAndDrink0">Vendor <span style="color:red">*</span></label>
+                                                                <select class="form-select" id="vendor-foodAndDrink0" name="vendor-foodAndDrink0">
+                                                                    {% for vendor in vendors %}
+                                                                        <option value="{{ vendor.id }}">{{ vendor.email }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row align-self-end  mb-4">
+                                                            <div class="d-flex col-md-12">
+                                                                <div class="col-md-8 form-group">
+                                                                    <label for="image-foodAndDrink${foodAndDrinkIndex}">Image <span style="color:red">*</span></label>
+                                                                    <input type="file" id="image-foodAndDrink${foodAndDrinkIndex}" name="image-foodAndDrink${foodAndDrinkIndex}" accept="image/*">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="addFoodAndDrink" class="btn btn-primary mb-3">Add Item</button>
+                                    </div>
+                                </div>
+                                
+
+                                <!-- Schedule -->
+                                <div class="justify-content-between d-none" id="event-schedule-form">
+                                    <label>Event Schedule</label>
+                                    <div class="container-fluid form-field">
+                                        <div id="scheduleContainer">
+                                            <div id="schedule0">
+                                                <div class="container-fluid">
+                                                    <div class="row schedule">
+                                                        <p class="m-0 p-0">Event 1</p>
+                                                        <div class="row">
+                                                            <div class="col-md-4 form-group">
+                                                                <label for="title-schedule0">Title <span style="color:red">*</span></label>   <!-- title not name!! -->
+                                                                <input type="text" class="form-control" id="title-schedule0" name="title-schedule0">
+                                                            </div>
+                                                            <div class="col-md-8 form-group">
+                                                                <label for="description-schedule0">Description <span style="color:red">*</span></label>
+                                                                <input type="text" class="form-control" id="description-schedule0" name="description-schedule0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6 form-group">
+                                                                <label for="start-schedule0">Start Time <span style="color:red">*</span></label>
+                                                                <input type="time" name="time" class="form-control" id="start-schedule0" name="start-schedule0" />
+                                                            </div>
+                                                            <div class="col-md-6 form-group">
+                                                                <label for="end-schedule0">End Time <span style="color:red">*</span></label>
+                                                                <input type="time" name="time"  class="form-control" id="end-schedule0" name="end-schedule0" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <button id="addSchedule" class="btn btn-primary mb-3">Add Event</button>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="button" name="delete" class="go_back btn btn-danger px-5 py-3" onclick="deleteBlog()">Delete</button>
-                            <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepOne()">
+                            <!--<input type="button" name="next" onclick="next()" class="next action-button" value="Next"/>-->
+                            <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3" onclick="submitStepOne()">
                                 <span class="buttton__text">Next</span>
                             </button>
                         </div>
@@ -73,15 +236,35 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">Write Your Blog!</h2>
+                                        <h2 class="fs-title">Event Tickets:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 2 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Blog Content <span style="color:red">*</span></label>
-                                <textarea id="textbox-2" name="content" rows="15" minlength="250" placeholder="What is your blog?">{{blog.content}}</textarea>
-                                <!--<small id="char_count">100/100</small>-->
+                                <div class="d-flex justify-content-between form-group">
+                                    <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                        <div class="d-flex justify-content-between form-group">
+                                            <label class="fieldlabels">Ticket Price<span style="color:red">*</span></label>
+                                            <input type="text" name="price" id="price" placeholder="How much will the tickets cost?"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                        <div class="d-flex justify-content-between form-group">
+                                            <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                                <label class="fieldlabels">Sale Start Date<span style="color:red">*</span></label>
+                                                <input type="date" name="start-date" id="start-date"/> <!--! CANNOT BE LATER OR EQUAL TO EVENT DATE -->
+                                            </div>
+                                            <div class="form-field justify-content-between" style="flex: 0 1 49%;">
+                                                <label class="fieldlabels">Sale End Date<span style="color:red">*</span></label> <!--! CANNOT BE LATER OR EQUAL THAN EVENT DATE OR EIRLIER OR EQUAL THAN START DATE -->
+                                                <input type="date" name="end-date" id="end-date"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="fieldlabels">Number of Tickets (Max. 2000)<span style="color:red">*</span></label>
+                                <input type="range" class="form-range" min="1" max="2000" id="number-tickets">    
+                                <small id="char_count">1/2000</small>                      
                             </div>
                             <!--<input type="button" name="next" class="next action-button" value="Next"/>
                             <input type="button" name="previous" class="previous action-button-previous" value="Previous"/>-->
@@ -94,16 +277,14 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">Add Additonal Content:</h2>
+                                        <h2 class="fs-title">Add an Image:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 3 - 4</h2>
                                     </div>
                                 </div>
                                 <label class="fieldlabels">Upload Cover Photo (optional)</label>
-                                <input type="file" id="file-input" name="image" accept="image/*" />
-                                <label class="fieldlabels">Current Photo</label>
-                                <input type="text" name="image-current" id="image-current" value="{{event.image.url}}" readonly />
+                                <input type="file" id='file-input' name="image" accept="image/*">
                             </div>
                             <button type="button" name="previous" class="go_back btn btn-primary px-5 py-3" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
                             <button type="button" id="nextBtn" class="button btn btn-secondary text-white px-5 py-3 ms-3" onclick="submitStepThree()">
@@ -114,19 +295,20 @@
                             <div class="form-card">
                                 <div class="row">
                                     <div class="col-7">
-                                        <h2 class="fs-title">Confirm Blog Post</h2>
+                                        <h2 class="fs-title">Confirm Event:</h2>
                                     </div>
                                     <div class="col-5">
                                         <h2 class="steps">Step 4 - 4</h2>
                                     </div>
                                 </div>
-                                <label class="fieldlabels">Title:</label>
-                                <input type="text" name="title-confirm" id="title-confirm" readonly/>
+                                <label class="fieldlabels">Name:</label>
+                                <input type="text" name="name-confirm" id="name-confirm" readonly/>
                                 <label class="fieldlabels">Description:</label>
                                 <textarea id="description-confirm" name="description-confirm" rows="3" readonly></textarea>
-                                <label class="fieldlabels">Content:</label>
-                                <textarea id="content-confirm" name="content-confirm" rows="15" readonly></textarea>
-                                <label class="fieldlabels">Cover Photo:</label><br>
+                                
+                                <!-- Other fields, add once can access!! -->
+
+                                <label class="fieldlabels">Event Image:</label><br>
                                 <input type="text" name="image-confirm" id="image-confirm" readonly />
                                 <br><br>
                                 <div class="text-center">
@@ -142,60 +324,246 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'atc_site/js/blogs/create-edit.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_places_api_key }}&libraries=places"></script>
     <script>
-        function deleteBlog() {
-            if (confirm("Are you sure you want to delete this blog?")) {
-                fetch('/blog/{{blog.id}}/delete', {
-                    method: 'POST'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.replace("/account");
-                    } else {
-                        alert(data.error);
-                    }
-                });
-                window.location.replace("/account");
-            }
-        }
-
         function submitStepFour() {
             var blogData = new FormData();
-            blogData.append('title', document.querySelector('input[name="title"]').value);
+            blogData.append('name', document.querySelector('input[name="name"]').value);
             blogData.append('description', document.getElementById('textbox').value);
             blogData.append('content', document.getElementById('textbox-2').value);
-            if (document.querySelector('input[name="image"]').files[0] == undefined) {
-                var image = "{{blog.image}}";  
-            } else {
-                var image = document.getElementById('file-input').files[0];
-            }
-            blogData.append('image', image);
+            blogData.append('image', document.getElementById('file-input').files[0]);
             
-        
-            fetch('/blog/{{blog.id}}/edit/post', {
+            fetch('/blog/events/post', {
                 method: 'POST',
                 body: blogData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.replace("/blog/"+{{blog.id}});
+                    window.location.replace("/events/"+data.id);
                 } else {
                     alert(data.error);
                 }
             });
         }
 
-        const fileInput = document.getElementById("file-input");
-        const imageInput = document.getElementById("image-current");
+        window.onload = function() {
+            var searchInput = document.getElementById('location-input');
+            
+            var options = {
+                componentRestrictions: {country: 'au'},
+                types: ['street_address', 'landmark', 'school', 'church', 'city_hall']
+            };
 
-        fileInput.addEventListener("change", () => {
-            const file = fileInput.files[0].name;
-            imageInput.value = file;
+            var autocomplete = new google.maps.places.Autocomplete(searchInput, options);   
+        };
+
+        if (document.getElementById('event-vouchers')) {
+            document.getElementById('event-vouchers').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('event-vouchers-form').classList.remove('d-none');
+                } else {
+                    document.getElementById('event-vouchers-form').classList.add('d-none');
+                }
+            });
+        }
+
+        if (document.getElementById('event-food-and-drink')) {
+            document.getElementById('event-food-and-drink').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('event-foodAndDrink-form').classList.remove('d-none');
+                } else {
+                    document.getElementById('event-foodAndDrink-form').classList.add('d-none');
+                }
+            });
+        }
+
+        if (document.getElementById('event-schedule')) {
+            document.getElementById('event-schedule').addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('event-schedule-form').classList.remove('d-none');
+                } else {
+                    document.getElementById('event-schedule-form').classList.add('d-none');
+                }
+            });
+        }
+
+
+
+        const rangeInput = document.getElementById('number-tickets');
+        const displayElement = document.getElementById('char_count');
+
+        rangeInput.addEventListener('input', function() {
+            displayElement.textContent = this.value + "/2000";
         });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            const day = String(today.getDate()+1).padStart(2, '0'); // Add one day to current date
+            const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0
+            const year = today.getFullYear();
+        
+            dateInput.min = `${year}-${month}-${day}`;
+        });
+
+        $(document).ready(function() {
+            var maxVouchers = 3;
+            var voucherIndex = 1; //already one there
+
+            $('#addVoucher').click(function(event) {
+                event.preventDefault();
+                if (voucherIndex < maxVouchers) {
+                    $('#voucherContainer').append(`
+                        <div id="voucher${voucherIndex}">
+                            <div class="container-fluid">
+                                <div class="row voucher">
+                                    <p class="m-0 p-0">Voucher ${voucherIndex + 1}</p>
+                                    <div class="col-md-4 form-group">
+                                        <label for="name-voucher${voucherIndex}">Name <span style="color:red">*</span></label>
+                                        <input type="text" class="form-control" id="name-voucher${voucherIndex}" name="name-voucher${voucherIndex}">
+                                    </div>
+                                    <div class="col-md-6 form-group">
+                                        <label for="description-voucher${voucherIndex}">Description <span style="color:red">*</span></label>
+                                        <input type="text" class="form-control" id="description-voucher${voucherIndex}" name="description-voucher${voucherIndex}">
+                                    </div>
+                                    <div class="col-md-2 form-group align-self-end">
+                                        <button class="btn btn-danger removeVoucher mb-4">Remove Voucher</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    voucherIndex++;
+                }
+            });
+
+            $('#voucherContainer').on('click', '.removeVoucher', function(event) {
+                event.preventDefault();
+                $(this).closest('.voucher').remove();
+                voucherIndex--;
+            });
+        });
+
+        
+        $(document).ready(function() {
+            var maxFoodAndDrink = 10;
+            var foodAndDrinkIndex = 1; //already one there
+
+            $('#addFoodAndDrink').click(function(event) {
+                event.preventDefault();
+                if (foodAndDrinkIndex < maxFoodAndDrink) {
+                    $('#foodAndDrinkContainer').append(`
+                        <div id="foodAndDrink${foodAndDrinkIndex}">
+                            <div class="container-fluid">
+                                <div class="row foodAndDrink">
+                                    <p class="m-0 p-0">Item ${foodAndDrinkIndex + 1}</p>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="name-foodAndDrink${foodAndDrinkIndex}">Name <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="name-foodAndDrink${foodAndDrinkIndex}" name="name-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                        <div class="col-md-8 form-group">
+                                            <label for="description-foodAndDrink${foodAndDrinkIndex}">Description <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="description-foodAndDrink${foodAndDrinkIndex}" name="description-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="price-foodAndDrink${foodAndDrinkIndex}">Price <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="price-foodAndDrink${foodAndDrinkIndex}" name="price-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                        <div class="col-md-4 form-group">
+                                            <label for="quantity-foodAndDrink${foodAndDrinkIndex}">Quantity <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="quantity-foodAndDrink${foodAndDrinkIndex}" name="quantity-foodAndDrink${foodAndDrinkIndex}">
+                                        </div>
+                                        <div class="col-md-4 form-group mb-3">
+                                            <label for="vendor-foodAndDrink${foodAndDrinkIndex}">Vendor <span style="color:red">*</span></label>
+                                            <select class="form-select" id="vendor-foodAndDrink${foodAndDrinkIndex}" name="vendor-foodAndDrink${foodAndDrinkIndex}">
+                                                {% for vendor in vendors %}
+                                                    <option value="{{ vendor.id }}">{{ vendor.email }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row align-self-end mb-4 d-flex">
+                                        <div class="col-md-8 form-group">
+                                            <label for="image-foodAndDrink${foodAndDrinkIndex}">Image <span style="color:red">*</span></label>
+                                            <input type="file" id="image-foodAndDrink${foodAndDrinkIndex}" name="image-foodAndDrink${foodAndDrinkIndex}" accept="image/*">
+                                        </div>
+                                        <div class="col-lg-1 ms-auto mb-0">
+                                            <button class="btn btn-danger removeFoodAndDrink mt-3">Remove Item</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    foodAndDrinkIndex++;
+                }
+            });
+
+            $('#foodAndDrinkContainer').on('click', '.removeFoodAndDrink', function(event) {
+                event.preventDefault();
+                $(this).closest('.foodAndDrink').remove();
+                foodAndDrinkIndex--;
+            });
+        });
+
+        $(document).ready(function() {
+            var maxSchedule = 15;
+            var scheduleIndex = 1; //already one there
+
+            $('#addSchedule').click(function(event) {
+                event.preventDefault();
+                if (scheduleIndex < maxSchedule) {
+                    $('#scheduleContainer').append(`
+                        <div id="schedule${scheduleIndex}">
+                            <div class="container-fluid">
+                                <div class="row schedule">
+                                    <p class="m-0 p-0">Event ${scheduleIndex + 1}</p>
+                                    <div class="row">
+                                        <div class="col-md-4 form-group">
+                                            <label for="title-schedule${scheduleIndex}">Title <span style="color:red">*</span></label>   <!-- title not name!! -->
+                                            <input type="text" class="form-control" id="title-schedule${scheduleIndex}" name="title-schedule${scheduleIndex}">
+                                        </div>
+                                        <div class="col-md-8 form-group">
+                                            <label for="description-schedule${scheduleIndex}">Description <span style="color:red">*</span></label>
+                                            <input type="text" class="form-control" id="description-schedule${scheduleIndex}" name="description-schedule${scheduleIndex}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 form-group">
+                                            <label for="start-schedule${scheduleIndex}">Start Time <span style="color:red">*</span></label>
+                                            <input type="time" name="time" id="time" class="form-control" min="document.getElementById('end-schedule${scheduleIndex-1}').value" id="start-schedule${scheduleIndex}" name="start-schedule${scheduleIndex}" />
+                                        </div>
+                                        <div class="col-md-6 form-group">
+                                            <label for="end-schedule${scheduleIndex}">End Time <span style="color:red">*</span></label>
+                                            <input type="time" name="time" id="time" class="form-control" id="end-schedule${scheduleIndex}" name="end-schedule${scheduleIndex}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 form-group align-self-end">
+                                        <button class="btn btn-danger removeSchedule mb-4">Remove Event</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    scheduleIndex++;
+                }
+            });
+
+            $('#scheduleContainer').on('click', '.removeSchedule', function(event) {
+                event.preventDefault();
+                $(this).closest('.schedule').remove();
+                scheduleIndex--;
+            });
+        });
+    
+
     </script>
 {% endblock %}
