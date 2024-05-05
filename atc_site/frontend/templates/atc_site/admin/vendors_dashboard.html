@@ -54,16 +54,20 @@
                                                             <div id="expandableSection-{{item.id}}" style="display:none;">
                                                         {% endif %}
                                                         <span class="badge badge-secondary badge-sm">{{ vendor_item.name }}</span>
-                                                        {% if forloop.counter == invoice.lines|length %}
+                                                        {% if forloop.counter == items|length %}
                                                             </div>
                                                             <a class="badge badge-dark bg-primary text-white me-2 mt-1" href="javascript:void(0);" onclick="toggleSection({{item.id}})">Show More</a>
                                                         {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             {% else %}
-                                                {% for vendor_item in items %}
-                                                    <span class="badge badge-secondary badge-sm">{{ vendor_item.name }}</span>
-                                                {% endfor %}
+                                                {% if items|length > 0 %}
+                                                    {% for vendor_item in items %}
+                                                        <span class="badge badge-secondary badge-sm">{{ vendor_item.name }}</span>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    NONE
+                                                {% endif %}
                                             {% endif %}
                                         </td>
                                         <td class="text-sm">
