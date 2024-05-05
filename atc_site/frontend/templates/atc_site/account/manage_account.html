@@ -27,7 +27,7 @@
 	</div>
 </div>
 
-<div class="bg-white shadow d-block d-sm-flex" style="border-radius: 0;">
+<div class="bg-white shadow d-block d-sm-flex w-100" style="border-radius: 0;">
 	<div class="profile-tab-nav border-right">
 		<div class="p-4">
 			<div class="img-circle text-primary text-center mb-3">
@@ -59,7 +59,7 @@
 			</a>
 		</div>
 	</div>
-	<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+	<div class="tab-content p-4 p-md-5 " id="v-pills-tabContent">
 		<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
 			<h3 class="mb-4">Account Details</h3>
 			<form action="{{ url_for('account.validate_account_update' %}" method="POST" enctype="multipart/form-data">
@@ -205,12 +205,6 @@
 						<div class="form-group">
 							<div class="fallback">
 								<input name="file" type="file" id="file-upload" />
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="checkbox" id="defaultCheck2" >
-								<label class="form-check-label" for="defaultCheck2">
-								Use AI image Instead
-								</label>
 							</div>
 						</div>
 					</div>
