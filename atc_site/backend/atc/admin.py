@@ -389,6 +389,22 @@ def delete_stripe_product(request, product_id):
         except Exception as e:  return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
     return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
 
+
+@login_required
+def stripe_customer_dashboard(request):
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, 'atc_site//admin//stripe_customer_dashboard.html', {'title': 'Stripe Customer Dashboard', 'user': request.user, 'is_authenticated': request.user.is_authenticated, 'customers': get_stripe_customers(), 'active_customer': get_active_customers()})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
+@login_required
+def delete_stripe_customer(request, customer_id):
+    if request.user.is_staff or request.user.is_superuser:
+        try:
+            stripe.Customer.delete(customer_id)
+            return redirect('stripe_customer_dashboard')
+        except Exception as e:  return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '403', 'title': 'Bad Request', 'desc': f'{e}. If you believe this is an error, please contact the site administrator.'})
+    return render(request, 'atc_site//error.html', {'user': request.user, 'is_authenticated': request.user.is_authenticated, 'error': '400', 'title': 'Forbidden Access', 'desc': 'You do not have permission to access this page. If you believe this is an error, please contact the site administrator.'})
+
 #* Other
 
 def get_customers_percentage_increase():
@@ -513,3 +529,17 @@ def get_active_products_id():
     items = list(FoodAndDrinksItem.objects.all().values_list('stripe_product_id', flat=True))
     vouchers = list(EventVoucher.objects.all().values_list('stripe_product_id', flat=True))
     return event+items+vouchers
+
+def get_stripe_customers():
+    customers = []
+    for customer in stripe.Customer.list():
+        print(customer.id)
+        try:
+            if CustomUser.objects.filter(email=customer.email, id=customer.id.split('-')[1]).exists():
+                customers.append([customer, CustomUser.objects.get(email=customer.email)])
+            else: customer.delete()
+        except: customer.delete()
+    return customers
+
+def get_active_customers():
+    return list(CustomUser.objects.all().values_list('email', flat=True))

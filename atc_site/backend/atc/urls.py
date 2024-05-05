@@ -73,6 +73,7 @@ urlpatterns = [
     path('admin/dashboard/stripe/invoices/', admin.stripe_invoice_dashboard, name='stripe_invoice'),
     path('admin/dashboard/stripe/products/', admin.stripe_products_dashboard, name='stripe_products'),
     path('admin/dashboard/stripe/products/<str:product_id>/delete/', admin.delete_stripe_product, name='delete_stripe_product'),
+    path('admin/dashboard/stripe/customers/', admin.stripe_customer_dashboard, name='stripe_customers'),
     
     path('admin/dashboard/vendors/', admin.vendors_dashboard, name='vendors_dashboard'),
     path('admin/dashboard/vendors/<int:vendor_id>/delete/', admin.delete_vendor, name='delete_vendor'),
