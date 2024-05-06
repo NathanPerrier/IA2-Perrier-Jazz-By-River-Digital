@@ -113,6 +113,29 @@ class CustomUserManager(BaseUserManager):
         
     
 class CustomUser(AbstractBaseUser):
+    """
+    CustomUser class represents a custom user model in the application.
+
+    Attributes:
+        first_name (str): The first name of the user.
+        last_name (str): The last name of the user.
+        email (str): The email address of the user.
+        password (str): The password of the user.
+        is_staff (bool): Indicates if the user is a staff member.
+        is_superuser (bool): Indicates if the user is a superuser.
+        is_active (bool): Indicates if the user is active.
+        avatar (ImageField): The avatar image of the user.
+        USERNAME_FIELD (str): The field used as the unique identifier for the user (email).
+        REQUIRED_FIELDS (list): The list of required fields for creating a user.
+        objects (CustomUserManager): The manager for the CustomUser model.
+        groups (ManyToManyField): The groups the user belongs to.
+        user_permissions (ManyToManyField): The specific permissions for the user.
+
+    Methods:
+        __str__(): Returns the string representation of the user (email).
+        has_perm(perm, obj=None): Checks if the user has a specific permission.
+        has_module_perms(app_label): Checks if the user has permissions to view the app 'atc_site'.
+    """
     first_name = models.CharField(max_length=30, blank=False)
     last_name = models.CharField(max_length=150, blank=False)
     email = models.EmailField(max_length=254, unique=True)
@@ -140,7 +163,7 @@ class CustomUser(AbstractBaseUser):
         # True if the user is a superuser, else False
         return self.is_superuser
     
-
+    # Many-to-many relationships for user groups and permissions
     groups = models.ManyToManyField(
         'auth.Group',
         verbose_name='groups',
@@ -150,6 +173,7 @@ class CustomUser(AbstractBaseUser):
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
     )
 
+    # Many-to-many relationships for user permissions
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name='user permissions',
