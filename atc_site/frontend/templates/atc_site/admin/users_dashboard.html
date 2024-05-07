@@ -94,9 +94,11 @@
                                             <a href="/adminatc_site/customuser/{{item.id}}/change/" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Edit user">
                                                 <i class="fas fa-user-edit text-secondary" aria-hidden="true"></i>
                                             </a>
-                                            <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete user">
-                                                <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
-                                            </a>
+                                            {% if item != user %}
+                                                <a onclick="confirmDelete({{item.id}})" data-bs-toggle="tooltip" data-bs-original-title="Delete user">
+                                                    <i class="fas fa-trash text-secondary" aria-hidden="true"></i>
+                                                </a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
