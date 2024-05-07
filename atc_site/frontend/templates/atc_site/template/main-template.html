@@ -102,6 +102,7 @@
                                     {% if user.is_superuser %}
                                         <a href="/admin" class="dropdown-item">Admin Panel</a>
                                         <a href="/admin/dashboard/" class="dropdown-item">Admin Dashboard</a>
+                                        <a href="/admin/dashboard/users/" class="dropdown-item">Manage Users</a>
                                         <a href="/events/create/" class="dropdown-item">Create An Event</a>
                                     {% endif %}
                                     {% if user|is_vendor %}
