@@ -1,8 +1,22 @@
-# ATC BOOKING SITE
+<div align="center">
+    <a href="https://www.atc.qld.edu.au/">
+        <img src="./weather_app/frontend/static/images/logos/atc/atc-main.png" width="64" height="64" alt="ATC Logo">
+    </a>
+    <h1>
+        <a href="https://github.com/NathanPerrier/IA3-Perrier-Fishing-Website-Digital">
+            Jazz By The River Website
+        </a>
+    </h1>
+    <p>
+        Created by <a href="https://github.com/nathan-perrier23">Nathan Perrier</a> of <a href="https://www.atc.qld.edu.au/">Ambrose Treacy College</a>
+    </p>
+</div>
 
-Created by [Nathan Perrier](https://github.com/nathan-perrier23) of [Ambrose Treacy College](https://www.atc.qld.edu.au/)
+<br />
 
-IA2 - Digital Solutions - Year 12 - QCAA
+<div align="center">
+    <img src="./DEMO.gif" alt="IA1 Demo GIF">
+</div>
 
 ## Description
 

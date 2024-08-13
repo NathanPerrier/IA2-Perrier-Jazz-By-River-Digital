@@ -188,8 +188,6 @@ def edit_schedule(request, event_id):
                         schedule_item.end_time = datetime.datetime.strptime(item['start'].split(' - ')[1], '%H:%M').time()
                         schedule_item.start_time = datetime.datetime.strptime(item['start'].split(' - ')[0], '%H:%M').time()
                     schedule_item.save()
-                    print(schedule_item.start_time, schedule_item.end_time)
-                    print(schedule_item)
                 return JsonResponse({'success': True})
             except Exception as e:
                 print(e)
